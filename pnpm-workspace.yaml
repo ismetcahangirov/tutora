@@ -1,0 +1,9 @@
+packages:
+  - apps/*
+  - packages/*
+
+# Dependencies allowed to run install/build scripts (pnpm blocks these by default).
+# sharp: Next.js image optimization (native). unrs-resolver: oxlint/import resolver (native).
+allowBuilds:
+  sharp: true
+  unrs-resolver: true
