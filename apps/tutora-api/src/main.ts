@@ -4,15 +4,17 @@ import { i18nValidationErrorFactory } from 'nestjs-i18n';
 import { AppModule } from './app.module';
 import { appConfig } from '@config/app.config';
 import { createI18nValidationExceptionFilter } from '@common/filters/i18n-validation-exception.filter';
+import { AllExceptionsFilter } from '@common/filters/all-exceptions.filter';
+import { setupSwagger } from './swagger';
+
+// Kept in sync with apps/tutora-api/package.json "version".
+const API_VERSION = '0.0.1';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.setGlobalPrefix('api');
   app.enableVersioning({ type: VersioningType.URI });
-  // `exceptionFactory` routes validation errors through nestjs-i18n so DTO
-  // messages are translated to the request language; the filter shapes them
-  // into the standard error envelope.
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -20,10 +22,15 @@ async function bootstrap() {
       exceptionFactory: i18nValidationErrorFactory,
     }),
   );
-  app.useGlobalFilters(createI18nValidationExceptionFilter());
+  // Order matters: the specific i18n validation filter is registered first so it
+  // owns localized validation errors; the catch-all handles everything else.
+  app.useGlobalFilters(createI18nValidationExceptionFilter(), new AllExceptionsFilter());
+
+  setupSwagger(app, API_VERSION);
 
   const port = process.env.PORT ?? 3000;
   await app.listen(port);
   Logger.log(`${appConfig.name} running on port ${port}`, 'Bootstrap');
+  Logger.log(`Swagger docs at http://localhost:${port}/docs`, 'Bootstrap');
 }
 void bootstrap();
