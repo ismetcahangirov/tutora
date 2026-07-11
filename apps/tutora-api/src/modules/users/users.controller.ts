@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Patch, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '@modules/auth/decorators/current-user.decorator';
 import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 import type { AuthenticatedUser } from '@modules/auth/types/auth.types';
@@ -6,6 +7,8 @@ import { UpdateMeDto } from './dto/update-me.dto';
 import { UsersService } from './users.service';
 import type { UserSummary } from './users.types';
 
+@ApiTags('users')
+@ApiBearerAuth('bearer')
 @Controller({ path: 'users', version: '1' })
 @UseGuards(JwtAuthGuard)
 export class UsersController {
