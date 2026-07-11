@@ -14,6 +14,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { ToastProvider } from '@/components/ui';
+import { AuthProvider } from '@features/auth';
 import { ThemeProvider, useAppFonts } from '@/theme';
 
 SplashScreen.preventAutoHideAsync();
@@ -35,10 +36,12 @@ export default function RootLayout() {
     <GestureHandlerRootView style={styles.root}>
       <SafeAreaProvider>
         <ThemeProvider>
-          <ToastProvider>
-            <StatusBar style="auto" />
-            <Stack screenOptions={{ headerShown: false }} />
-          </ToastProvider>
+          <AuthProvider>
+            <ToastProvider>
+              <StatusBar style="auto" />
+              <Stack screenOptions={{ headerShown: false }} />
+            </ToastProvider>
+          </AuthProvider>
         </ThemeProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>

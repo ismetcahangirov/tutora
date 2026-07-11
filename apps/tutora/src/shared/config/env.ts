@@ -7,10 +7,23 @@ import { z } from 'zod';
  */
 const schema = z.object({
   EXPO_PUBLIC_API_URL: z.url().default('http://localhost:3000'),
+  /**
+   * Google OAuth client IDs for native Google sign-in (issue #22). Optional with
+   * empty-string defaults so CI/dev builds never fail on a missing var; the
+   * sign-in gateway surfaces a clear error at runtime when a required id is
+   * absent. Web client id is the one whose `idToken` audience the backend
+   * verifies; iOS/Android ids are used by the platform-specific OAuth clients.
+   */
+  EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID: z.string().default(''),
+  EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID: z.string().default(''),
+  EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID: z.string().default(''),
 });
 
 export type Env = z.infer<typeof schema>;
 
 export const env: Env = schema.parse({
   EXPO_PUBLIC_API_URL: process.env.EXPO_PUBLIC_API_URL,
+  EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+  EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
+  EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID,
 });
