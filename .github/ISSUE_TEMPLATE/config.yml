@@ -1,0 +1,9 @@
+blank_issues_enabled: false
+
+contact_links:
+  - name: Tutora Discussions
+    url: https://github.com/ismetcahangirov/tutora/discussions
+    about: >
+      Ask questions, share ideas, and start conversations with the Tutora
+      community. Use Discussions for anything that is not a concrete bug report,
+      feature request, or task.

@@ -1,0 +1,59 @@
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+
+# Environment & secrets — NEVER commit these
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*-service-account*.json
+google-services.json
+GoogleService-Info.plist
+
+# Builds & output
+dist/
+build/
+out/
+.next/
+.expo/
+.expo-shared/
+web-build/
+*.tsbuildinfo
+
+# Native
+android/
+ios/
+*.apk
+*.aab
+*.ipa
+*.keystore
+
+# Prisma
+prisma/*.db
+prisma/*.db-journal
+
+# Logs & caches
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.cache/
+coverage/
+.turbo/
+.vercel/
+
+# Editors & OS
+.DS_Store
+Thumbs.db
+.idea/
+*.swp
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json

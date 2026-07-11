@@ -1,0 +1,51 @@
+# CODEOWNERS — Tutora monorepo
+#
+# Format: <pattern>  <owner> [<owner> ...]
+#
+# - Patterns follow .gitignore rules; more specific patterns override broader ones.
+# - Owners can be GitHub usernames (@user) or team slugs (@org/team).
+# - When a PR modifies a file matching a pattern, the listed owner(s) are
+#   automatically added as required reviewers.
+#
+# Docs: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# ─── Default owner for everything not matched below ──────────────────────────
+*                               @ismetcahangirov
+
+# ─── Mobile app (React Native / Expo) ────────────────────────────────────────
+/apps/mobile/                   @ismetcahangirov
+# Example team override (uncomment and replace with real team slug):
+# /apps/mobile/                 @tutora-org/mobile-team
+
+# ─── Backend API (NestJS — tutora-api) ───────────────────────────────────────
+/apps/api/                      @ismetcahangirov
+# /apps/api/                    @tutora-org/backend-team
+
+# ─── Admin panel (React + Vite — tutora-admin) ───────────────────────────────
+/apps/admin/                    @ismetcahangirov
+# /apps/admin/                  @tutora-org/frontend-team
+
+# ─── Landing page (Next.js — tutora-web) ─────────────────────────────────────
+/apps/web/                      @ismetcahangirov
+# /apps/web/                    @tutora-org/frontend-team
+
+# ─── Shared packages / libs ───────────────────────────────────────────────────
+/packages/                      @ismetcahangirov
+# /packages/                    @tutora-org/platform-team
+
+# ─── GitHub configuration & CI/CD ────────────────────────────────────────────
+/.github/                       @ismetcahangirov
+# /.github/                     @tutora-org/devops-team
+
+# ─── Database migrations ─────────────────────────────────────────────────────
+/apps/api/src/migrations/       @ismetcahangirov
+# /apps/api/src/migrations/     @tutora-org/backend-team @tutora-org/dba-team
+
+# ─── Documentation ───────────────────────────────────────────────────────────
+/docs/                          @ismetcahangirov
+# /docs/                        @tutora-org/docs-team
+
+# ─── Infrastructure / DevOps ─────────────────────────────────────────────────
+/infra/                         @ismetcahangirov
+/docker-compose*.yml            @ismetcahangirov
+# /infra/                       @tutora-org/devops-team
