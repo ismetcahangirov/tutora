@@ -20,6 +20,19 @@ export const envSchema = z.object({
 
   // Google OAuth — audience the mobile idToken is verified against.
   GOOGLE_CLIENT_ID: z.string().min(1, 'GOOGLE_CLIENT_ID is required'),
+
+  // Mailer (localized transactional email — #84). All optional: when SMTP_HOST
+  // is unset the mailer uses a no-network transport so the API runs without
+  // credentials in dev/test/CI.
+  SMTP_HOST: z.string().optional(),
+  SMTP_PORT: z.coerce.number().int().positive().default(587),
+  SMTP_SECURE: z
+    .enum(['true', 'false'])
+    .default('false')
+    .transform((value) => value === 'true'),
+  SMTP_USER: z.string().optional(),
+  SMTP_PASS: z.string().optional(),
+  MAIL_FROM: z.string().default('Tutora <no-reply@tutora.app>'),
 });
 
 export type Env = z.infer<typeof envSchema>;

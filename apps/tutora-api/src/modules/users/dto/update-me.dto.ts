@@ -1,5 +1,6 @@
 import { UserRole } from '@prisma/client';
 import { IsIn } from 'class-validator';
+import { i18nValidationMessage } from 'nestjs-i18n';
 
 /**
  * Roles a user may assign to themselves during onboarding (#23). ADMIN is
@@ -11,7 +12,7 @@ export const SELECTABLE_ROLES: readonly UserRole[] = [UserRole.STUDENT, UserRole
 /** Body of `PATCH /api/v1/users/me` — the onboarding role choice. */
 export class UpdateMeDto {
   @IsIn(SELECTABLE_ROLES as UserRole[], {
-    message: `role must be one of the following values: ${SELECTABLE_ROLES.join(', ')}`,
+    message: i18nValidationMessage('validation.role.invalid'),
   })
   role!: UserRole;
 }

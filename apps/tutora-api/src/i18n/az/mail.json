@@ -1,0 +1,13 @@
+{
+  "welcome": {
+    "subject": "Tutora-ya xoş gəlmisiniz!",
+    "greeting": "Salam, {name}!",
+    "intro": "Tutora-ya qoşulduğunuz üçün təşəkkür edirik.",
+    "body": "Büdcə, rayon, fənn və formata görə etibarlı repetitorları dəqiqələr içində tapın.",
+    "cta": "Repetitor axtarışına başlayın",
+    "signature": "Tutora komandası"
+  },
+  "common": {
+    "defaultName": "dostum"
+  }
+}

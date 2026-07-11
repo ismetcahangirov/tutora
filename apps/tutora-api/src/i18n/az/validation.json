@@ -1,0 +1,9 @@
+{
+  "idToken": {
+    "required": "idToken tələb olunur.",
+    "notString": "idToken mətn tipində olmalıdır."
+  },
+  "role": {
+    "invalid": "Rol yalnız icazə verilən dəyərlərdən biri olmalıdır."
+  }
+}

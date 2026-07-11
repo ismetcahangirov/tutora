@@ -1,6 +1,7 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { PrismaService } from '@/prisma/prisma.service';
+import { MailService } from '@modules/mail/mail.service';
 import { UsersService } from './users.service';
 import type { GoogleProfile } from './users.types';
 
@@ -33,11 +34,19 @@ const summaryUser = {
   googleId: 'g1',
 };
 
-async function buildService(prisma: ReturnType<typeof buildPrismaMock>) {
+function buildMailMock() {
+  return { sendWelcomeEmail: jest.fn().mockResolvedValue(undefined) };
+}
+
+async function buildService(prisma: ReturnType<typeof buildPrismaMock>, mail = buildMailMock()) {
   const moduleRef = await Test.createTestingModule({
-    providers: [UsersService, { provide: PrismaService, useValue: prisma }],
+    providers: [
+      UsersService,
+      { provide: PrismaService, useValue: prisma },
+      { provide: MailService, useValue: mail },
+    ],
   }).compile();
-  return moduleRef.get(UsersService);
+  return { service: moduleRef.get(UsersService), mail };
 }
 
 describe('UsersService.upsertFromGoogle', () => {
@@ -46,12 +55,13 @@ describe('UsersService.upsertFromGoogle', () => {
     const existing = { id: 'u1', email: profile.email, googleId: profile.googleId };
     prisma.user.findUnique.mockResolvedValueOnce(existing);
 
-    const service = await buildService(prisma);
+    const { service, mail } = await buildService(prisma);
     const result = await service.upsertFromGoogle(profile);
 
     expect(result).toBe(existing);
     expect(prisma.user.create).not.toHaveBeenCalled();
     expect(prisma.user.update).not.toHaveBeenCalled();
+    expect(mail.sendWelcomeEmail).not.toHaveBeenCalled();
   });
 
   it('links googleId to an existing user found by email', async () => {
@@ -60,7 +70,7 @@ describe('UsersService.upsertFromGoogle', () => {
     prisma.user.findUnique.mockResolvedValueOnce(null).mockResolvedValueOnce(byEmail);
     prisma.user.update.mockResolvedValueOnce({ ...byEmail, googleId: profile.googleId });
 
-    const service = await buildService(prisma);
+    const { service, mail } = await buildService(prisma);
     const result = await service.upsertFromGoogle(profile);
 
     expect(prisma.user.update).toHaveBeenCalledWith({
@@ -69,15 +79,24 @@ describe('UsersService.upsertFromGoogle', () => {
     });
     expect(result.googleId).toBe(profile.googleId);
     expect(prisma.user.create).not.toHaveBeenCalled();
+    expect(mail.sendWelcomeEmail).not.toHaveBeenCalled();
   });
 
-  it('creates a new user with null role when none exists', async () => {
+  it('creates a new user with null role and sends the welcome email when none exists', async () => {
     const prisma = buildPrismaMock();
     prisma.user.findUnique.mockResolvedValue(null);
-    const created = { id: 'u3', email: profile.email, role: null, onboardingCompleted: false };
+    const created = {
+      id: 'u3',
+      email: profile.email,
+      name: profile.name,
+      avatarUrl: profile.picture,
+      locale: profile.locale,
+      role: null,
+      onboardingCompleted: false,
+    };
     prisma.user.create.mockResolvedValueOnce(created);
 
-    const service = await buildService(prisma);
+    const { service, mail } = await buildService(prisma);
     const result = await service.upsertFromGoogle(profile);
 
     expect(prisma.user.create).toHaveBeenCalledWith({
@@ -92,6 +111,11 @@ describe('UsersService.upsertFromGoogle', () => {
       },
     });
     expect(result).toBe(created);
+    expect(mail.sendWelcomeEmail).toHaveBeenCalledWith({
+      email: profile.email,
+      name: profile.name,
+      locale: profile.locale,
+    });
   });
 });
 
@@ -108,7 +132,7 @@ describe('UsersService.getSummaryById', () => {
       googleId: 'g1',
     });
 
-    const service = await buildService(prisma);
+    const { service } = await buildService(prisma);
     const result = await service.getSummaryById('u1');
 
     expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { id: 'u1' } });
@@ -126,7 +150,7 @@ describe('UsersService.getSummaryById', () => {
     const prisma = buildPrismaMock();
     prisma.user.findUnique.mockResolvedValueOnce(null);
 
-    const service = await buildService(prisma);
+    const { service } = await buildService(prisma);
     await expect(service.getSummaryById('missing')).rejects.toBeInstanceOf(NotFoundException);
   });
 });
@@ -140,7 +164,7 @@ describe('UsersService.completeOnboarding', () => {
       onboardingCompleted: true,
     });
 
-    const service = await buildService(prisma);
+    const { service } = await buildService(prisma);
     const result = await service.completeOnboarding('u1', 'TUTOR');
 
     expect(prisma.user.update).toHaveBeenCalledWith({
