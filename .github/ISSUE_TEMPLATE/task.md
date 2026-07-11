@@ -1,9 +1,9 @@
 ---
 name: Task
 about: A discrete engineering, design, or operational task
-title: "task: "
+title: 'task: '
 labels: task
-assignees: ""
+assignees: ''
 ---
 
 ## Summary

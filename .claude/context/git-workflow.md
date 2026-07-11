@@ -15,10 +15,10 @@ main        ← production-ready code; deployed to production
 
 ### Protected Branches
 
-| Branch | Protection Rules |
-|---|---|
-| `main` | Require PR. Require 1 approval. No direct push. No force push. CI must pass. |
-| `develop` | Require PR. Require 1 approval. No direct push. CI must pass. |
+| Branch    | Protection Rules                                                             |
+| --------- | ---------------------------------------------------------------------------- |
+| `main`    | Require PR. Require 1 approval. No direct push. No force push. CI must pass. |
+| `develop` | Require PR. Require 1 approval. No direct push. CI must pass.                |
 
 **Hotfixes** targeting `main` must also be cherry-picked or merged back into `develop` immediately after.
 
@@ -30,20 +30,21 @@ Format: `<type>/<short-kebab-description>`
 
 Optionally prefix with a task/ticket ID: `<type>/<ticket-id>-<short-description>`
 
-| Prefix | When to use | Example |
-|---|---|---|
-| `feature/` | New user-facing functionality | `feature/search-district-filter` |
-| `bugfix/` | Bug fix on `develop` | `bugfix/refresh-token-race-condition` |
-| `hotfix/` | Critical fix targeting `main` | `hotfix/login-crash-ios-17` |
-| `refactor/` | Internal code improvement | `refactor/extract-tutor-availability-hook` |
-| `docs/` | Documentation-only change | `docs/update-architecture-diagram` |
-| `chore/` | Maintenance (deps, config, tooling) | `chore/upgrade-expo-sdk-52` |
-| `style/` | Formatting / visual only | `style/unify-card-border-radius` |
-| `test/` | Tests only | `test/add-search-filter-unit-tests` |
-| `ci/` | CI/CD config only | `ci/add-e2e-test-workflow` |
-| `release/` | Release preparation | `release/v1.2.0` |
+| Prefix      | When to use                         | Example                                    |
+| ----------- | ----------------------------------- | ------------------------------------------ |
+| `feature/`  | New user-facing functionality       | `feature/search-district-filter`           |
+| `bugfix/`   | Bug fix on `develop`                | `bugfix/refresh-token-race-condition`      |
+| `hotfix/`   | Critical fix targeting `main`       | `hotfix/login-crash-ios-17`                |
+| `refactor/` | Internal code improvement           | `refactor/extract-tutor-availability-hook` |
+| `docs/`     | Documentation-only change           | `docs/update-architecture-diagram`         |
+| `chore/`    | Maintenance (deps, config, tooling) | `chore/upgrade-expo-sdk-52`                |
+| `style/`    | Formatting / visual only            | `style/unify-card-border-radius`           |
+| `test/`     | Tests only                          | `test/add-search-filter-unit-tests`        |
+| `ci/`       | CI/CD config only                   | `ci/add-e2e-test-workflow`                 |
+| `release/`  | Release preparation                 | `release/v1.2.0`                           |
 
 **Rules:**
+
 - Lowercase only. Hyphens as separators. No underscores. No spaces.
 - Maximum 60 characters in the branch name.
 - Delete branches promptly after merge.
@@ -52,18 +53,18 @@ Optionally prefix with a task/ticket ID: `<type>/<ticket-id>-<short-description>
 
 ## Conventional Commit Types (Reference)
 
-| Type | Description |
-|---|---|
-| `feat` | New feature visible to end users |
-| `fix` | Bug fix |
+| Type       | Description                                             |
+| ---------- | ------------------------------------------------------- |
+| `feat`     | New feature visible to end users                        |
+| `fix`      | Bug fix                                                 |
 | `refactor` | Code change that neither fixes a bug nor adds a feature |
-| `docs` | Documentation changes |
-| `test` | Adding or updating tests |
-| `style` | Formatting, whitespace (no logic change) |
-| `build` | Build system or dependency changes |
-| `ci` | CI configuration changes |
-| `perf` | Performance improvement |
-| `chore` | Maintenance, version bumps, tooling |
+| `docs`     | Documentation changes                                   |
+| `test`     | Adding or updating tests                                |
+| `style`    | Formatting, whitespace (no logic change)                |
+| `build`    | Build system or dependency changes                      |
+| `ci`       | CI configuration changes                                |
+| `perf`     | Performance improvement                                 |
+| `chore`    | Maintenance, version bumps, tooling                     |
 
 Commit format: `<type>(<scope>): <imperative description>`
 
@@ -77,6 +78,7 @@ chore(deps): upgrade @tanstack/react-query to 5.28.0
 ```
 
 Breaking changes:
+
 ```
 feat(api-applications)!: rename status values to uppercase
 
@@ -180,22 +182,27 @@ git push origin develop
 
 ```markdown
 ## Summary
+
 <!-- What does this PR do? One paragraph. -->
 
 ## Changes
-- 
-- 
+
+-
+-
 
 ## Test Plan
+
 - [ ] Manual test on iOS simulator
 - [ ] Manual test on Android emulator
 - [ ] Unit tests added / updated
 - [ ] No hardcoded strings (all UI text uses i18n keys)
 
 ## Screenshots / Recordings
+
 <!-- Attach if UI changes are included -->
 
 ## Checklist
+
 - [ ] Code follows the coding standards
 - [ ] No console.log left in code
 - [ ] TypeScript compiles with no errors
@@ -210,64 +217,64 @@ git push origin develop
 
 ### Type Labels
 
-| Label | Color | Description |
-|---|---|---|
-| `type: feature` | `#0075CA` | New functionality |
-| `type: bugfix` | `#D73A4A` | Bug fix |
-| `type: hotfix` | `#B60205` | Critical production fix |
+| Label            | Color     | Description               |
+| ---------------- | --------- | ------------------------- |
+| `type: feature`  | `#0075CA` | New functionality         |
+| `type: bugfix`   | `#D73A4A` | Bug fix                   |
+| `type: hotfix`   | `#B60205` | Critical production fix   |
 | `type: refactor` | `#E4E669` | Internal code improvement |
-| `type: docs` | `#0075CA` | Documentation |
-| `type: chore` | `#BFDADC` | Maintenance |
-| `type: test` | `#BFDADC` | Tests only |
-| `type: ci` | `#BFDADC` | CI/CD |
+| `type: docs`     | `#0075CA` | Documentation             |
+| `type: chore`    | `#BFDADC` | Maintenance               |
+| `type: test`     | `#BFDADC` | Tests only                |
+| `type: ci`       | `#BFDADC` | CI/CD                     |
 
 ### Status Labels
 
-| Label | Color | Description |
-|---|---|---|
-| `status: in-progress` | `#FEF2C0` | Active development |
-| `status: needs-review` | `#0075CA` | Ready for code review |
-| `status: changes-requested` | `#D93F0B` | Reviewer requested changes |
-| `status: approved` | `#0E8A16` | Approved, ready to merge |
-| `status: blocked` | `#B60205` | Cannot proceed — dependency |
-| `status: on-hold` | `#E4E669` | Paused intentionally |
+| Label                       | Color     | Description                 |
+| --------------------------- | --------- | --------------------------- |
+| `status: in-progress`       | `#FEF2C0` | Active development          |
+| `status: needs-review`      | `#0075CA` | Ready for code review       |
+| `status: changes-requested` | `#D93F0B` | Reviewer requested changes  |
+| `status: approved`          | `#0E8A16` | Approved, ready to merge    |
+| `status: blocked`           | `#B60205` | Cannot proceed — dependency |
+| `status: on-hold`           | `#E4E669` | Paused intentionally        |
 
 ### Priority Labels
 
-| Label | Color | Description |
-|---|---|---|
-| `priority: critical` | `#B60205` | Production down / data loss risk |
-| `priority: high` | `#D93F0B` | Blocks release or important user flow |
-| `priority: medium` | `#FEF2C0` | Should be in next release |
-| `priority: low` | `#C2E0C6` | Nice to have |
+| Label                | Color     | Description                           |
+| -------------------- | --------- | ------------------------------------- |
+| `priority: critical` | `#B60205` | Production down / data loss risk      |
+| `priority: high`     | `#D93F0B` | Blocks release or important user flow |
+| `priority: medium`   | `#FEF2C0` | Should be in next release             |
+| `priority: low`      | `#C2E0C6` | Nice to have                          |
 
 ### Component Labels
 
-| Label | Description |
-|---|---|
-| `component: mobile` | Mobile app (React Native) |
-| `component: api` | Backend API (NestJS) |
-| `component: admin` | Admin panel (React + Vite) |
-| `component: landing` | Landing page (Next.js) |
-| `component: auth` | Authentication module |
-| `component: search` | Search and discovery |
-| `component: chat` | Messaging |
-| `component: payments` | Payment flows |
-| `component: notifications` | Push notifications |
-| `component: design-system` | Shared UI components |
+| Label                      | Description                |
+| -------------------------- | -------------------------- |
+| `component: mobile`        | Mobile app (React Native)  |
+| `component: api`           | Backend API (NestJS)       |
+| `component: admin`         | Admin panel (React + Vite) |
+| `component: landing`       | Landing page (Next.js)     |
+| `component: auth`          | Authentication module      |
+| `component: search`        | Search and discovery       |
+| `component: chat`          | Messaging                  |
+| `component: payments`      | Payment flows              |
+| `component: notifications` | Push notifications         |
+| `component: design-system` | Shared UI components       |
 
 ### Miscellaneous Labels
 
-| Label | Description |
-|---|---|
-| `good first issue` | Suitable for new contributors |
-| `help wanted` | Extra attention needed |
-| `duplicate` | Already reported or being worked on |
-| `wontfix` | Will not be addressed |
-| `breaking-change` | Introduces a breaking API or behavior change |
-| `needs-migration` | Requires a database migration |
-| `security` | Security-related issue |
-| `performance` | Performance improvement |
+| Label              | Description                                  |
+| ------------------ | -------------------------------------------- |
+| `good first issue` | Suitable for new contributors                |
+| `help wanted`      | Extra attention needed                       |
+| `duplicate`        | Already reported or being worked on          |
+| `wontfix`          | Will not be addressed                        |
+| `breaking-change`  | Introduces a breaking API or behavior change |
+| `needs-migration`  | Requires a database migration                |
+| `security`         | Security-related issue                       |
+| `performance`      | Performance improvement                      |
 
 ---
 

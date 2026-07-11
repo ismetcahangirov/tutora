@@ -44,6 +44,7 @@ src/
 ```
 
 **Rules:**
+
 - A feature may import from `shared/`. Features must not import from other features directly.
 - Cross-feature communication happens via navigation params, shared state (Zustand store), or events.
 - Every feature exposes a single `index.ts` barrel; consumers import from `@features/auth`, not from internal paths.
@@ -58,8 +59,8 @@ Configure path aliases via `tsconfig.json` and `babel.config.js` / `metro.config
 // tsconfig.json (paths)
 {
   "@features/*": ["src/features/*"],
-  "@shared/*":   ["src/shared/*"],
-  "@app/*":      ["src/app/*"]
+  "@shared/*": ["src/shared/*"],
+  "@app/*": ["src/app/*"]
 }
 ```
 
@@ -73,8 +74,8 @@ Every directory that is a public module boundary must have an `index.ts`:
 
 ```ts
 // src/features/auth/index.ts
-export { LoginScreen }  from './screens/LoginScreen';
-export { useLogin }     from './hooks/useLogin';
+export { LoginScreen } from './screens/LoginScreen';
+export { useLogin } from './hooks/useLogin';
 export type { AuthUser } from './types';
 ```
 
@@ -84,26 +85,26 @@ Do not re-export private internals. If it is not in `index.ts`, it is internal t
 
 ## Naming Conventions
 
-| Entity | Convention | Example |
-|---|---|---|
-| Files (components) | PascalCase | `TutorCard.tsx` |
-| Files (hooks) | camelCase, `use` prefix | `useTutorProfile.ts` |
-| Files (services) | camelCase | `tutorService.ts` |
-| Files (types) | camelCase | `tutor.types.ts` |
-| Files (constants) | camelCase | `tutor.constants.ts` |
-| Files (utils) | camelCase | `formatPrice.ts` |
-| Files (screens) | PascalCase, `Screen` suffix | `TutorDetailScreen.tsx` |
-| React components | PascalCase | `TutorCard` |
-| Hooks | camelCase, `use` prefix | `useTutorProfile` |
-| Types / Interfaces | PascalCase | `TutorProfile`, `SearchFilters` |
-| Enums | PascalCase | `ApplicationStatus` |
-| Enum values | SCREAMING_SNAKE_CASE | `ApplicationStatus.PENDING` |
-| Constants | SCREAMING_SNAKE_CASE | `MAX_SEARCH_RESULTS` |
-| Variables / functions | camelCase | `formatRating`, `tutorList` |
-| NestJS controllers | PascalCase, `Controller` suffix | `TutorsController` |
-| NestJS services | PascalCase, `Service` suffix | `TutorsService` |
-| NestJS DTOs | PascalCase, `Dto` suffix | `CreateApplicationDto` |
-| Prisma models | PascalCase (match schema) | `User`, `Tutor`, `Application` |
+| Entity                | Convention                      | Example                         |
+| --------------------- | ------------------------------- | ------------------------------- |
+| Files (components)    | PascalCase                      | `TutorCard.tsx`                 |
+| Files (hooks)         | camelCase, `use` prefix         | `useTutorProfile.ts`            |
+| Files (services)      | camelCase                       | `tutorService.ts`               |
+| Files (types)         | camelCase                       | `tutor.types.ts`                |
+| Files (constants)     | camelCase                       | `tutor.constants.ts`            |
+| Files (utils)         | camelCase                       | `formatPrice.ts`                |
+| Files (screens)       | PascalCase, `Screen` suffix     | `TutorDetailScreen.tsx`         |
+| React components      | PascalCase                      | `TutorCard`                     |
+| Hooks                 | camelCase, `use` prefix         | `useTutorProfile`               |
+| Types / Interfaces    | PascalCase                      | `TutorProfile`, `SearchFilters` |
+| Enums                 | PascalCase                      | `ApplicationStatus`             |
+| Enum values           | SCREAMING_SNAKE_CASE            | `ApplicationStatus.PENDING`     |
+| Constants             | SCREAMING_SNAKE_CASE            | `MAX_SEARCH_RESULTS`            |
+| Variables / functions | camelCase                       | `formatRating`, `tutorList`     |
+| NestJS controllers    | PascalCase, `Controller` suffix | `TutorsController`              |
+| NestJS services       | PascalCase, `Service` suffix    | `TutorsService`                 |
+| NestJS DTOs           | PascalCase, `Dto` suffix        | `CreateApplicationDto`          |
+| Prisma models         | PascalCase (match schema)       | `User`, `Tutor`, `Application`  |
 
 ---
 
@@ -185,7 +186,9 @@ function TutorCard(props: any) {
 import { api } from '@shared/lib/axios';
 import type { TutorProfile, SearchFilters, PaginatedResponse } from '../types';
 
-export async function searchTutors(filters: SearchFilters): Promise<PaginatedResponse<TutorProfile>> {
+export async function searchTutors(
+  filters: SearchFilters,
+): Promise<PaginatedResponse<TutorProfile>> {
   const { data } = await api.get('/search', { params: filters });
   return data;
 }
@@ -202,8 +205,8 @@ export async function searchTutors(filters: SearchFilters): Promise<PaginatedRes
 - Define a shared `AppError` type:
   ```ts
   interface AppError {
-    code: string;       // machine-readable, e.g. 'TUTOR_NOT_FOUND'
-    message: string;    // human-readable (localized)
+    code: string; // machine-readable, e.g. 'TUTOR_NOT_FOUND'
+    message: string; // human-readable (localized)
     statusCode?: number;
   }
   ```
@@ -214,14 +217,15 @@ export async function searchTutors(filters: SearchFilters): Promise<PaginatedRes
 
 ## State Management
 
-| State Type | Tool | Notes |
-|---|---|---|
-| Server data (API responses) | **TanStack Query** | Caching, background refresh, optimistic updates |
-| Local / UI state | **useState / useReducer** | Form state (via React Hook Form), toggles, modals |
-| Cross-feature shared state | **Zustand** (or React Context for small cases) | Auth user, theme, notification count |
-| Persisted client state | **MMKV** (via zustand-persist or direct) | Tokens (use expo-secure-store for refresh token), locale preference, onboarding seen |
+| State Type                  | Tool                                           | Notes                                                                                |
+| --------------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------ |
+| Server data (API responses) | **TanStack Query**                             | Caching, background refresh, optimistic updates                                      |
+| Local / UI state            | **useState / useReducer**                      | Form state (via React Hook Form), toggles, modals                                    |
+| Cross-feature shared state  | **Zustand** (or React Context for small cases) | Auth user, theme, notification count                                                 |
+| Persisted client state      | **MMKV** (via zustand-persist or direct)       | Tokens (use expo-secure-store for refresh token), locale preference, onboarding seen |
 
 **Rules:**
+
 - Do not store server data in Zustand — let TanStack Query own it.
 - Do not use Redux. Do not use MobX.
 - Zustand stores must be typed and use the `immer` middleware for mutations on nested objects.
@@ -294,18 +298,18 @@ Pre-commit hook runs lint-staged. Pre-push hook runs `tsc --noEmit` and tests.
 
 Format: `<type>(<scope>): <description>`
 
-| Type | When to use |
-|---|---|
-| `feat` | New feature visible to users |
-| `fix` | Bug fix |
-| `refactor` | Code change with no behavior change |
-| `docs` | Documentation only |
-| `test` | Adding or updating tests |
-| `style` | Formatting, whitespace (no logic change) |
-| `build` | Build system or dependency changes |
-| `ci` | CI/CD configuration changes |
-| `perf` | Performance improvement |
-| `chore` | Maintenance tasks (version bumps, config) |
+| Type       | When to use                               |
+| ---------- | ----------------------------------------- |
+| `feat`     | New feature visible to users              |
+| `fix`      | Bug fix                                   |
+| `refactor` | Code change with no behavior change       |
+| `docs`     | Documentation only                        |
+| `test`     | Adding or updating tests                  |
+| `style`    | Formatting, whitespace (no logic change)  |
+| `build`    | Build system or dependency changes        |
+| `ci`       | CI/CD configuration changes               |
+| `perf`     | Performance improvement                   |
+| `chore`    | Maintenance tasks (version bumps, config) |
 
 **Scope examples:** `auth`, `search`, `tutor-profile`, `chat`, `api-users`, `admin-dashboard`.
 

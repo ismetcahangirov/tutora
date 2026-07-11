@@ -26,6 +26,7 @@ This plan is only #2.
 ## File Structure
 
 **Root (created this plan):**
+
 - `pnpm-workspace.yaml` — workspace globs
 - `.npmrc` — pnpm settings (`node-linker=hoisted`, `auto-install-peers=true`)
 - `turbo.json` — task pipeline
@@ -34,12 +35,14 @@ This plan is only #2.
 - `.nvmrc` — `22`
 
 **Apps (scaffolded, then integrated):**
+
 - `apps/tutora/` — `@tutora/mobile` (Expo + expo-router)
 - `apps/tutora-api/` — `@tutora/api` (NestJS, strict)
 - `apps/tutora-admin/` — `@tutora/admin` (Vite react-ts)
 - `apps/tutora-web/` — `@tutora/web` (Next.js App Router, `@/*` alias)
 
 **Feature-first skeleton (`.gitkeep` placeholders):**
+
 - mobile/admin/web: `src/features/`, `src/shared/{components,hooks,lib,types,utils,constants}`
 - api: `src/modules/`, `src/common/{decorators,filters,guards,interceptors,pipes,utils}`, `src/config/`
 
@@ -205,15 +208,18 @@ git commit -m "chore(setup): scaffold mobile/api/admin/web via official CLIs (re
 - [ ] **Step 1: Remove nested VCS and lockfiles**
 
 Run:
+
 ```bash
 rm -rf apps/*/.git
 rm -f apps/*/package-lock.json apps/*/pnpm-lock.yaml apps/*/yarn.lock
 ```
+
 Expected: no nested `.git` or lockfiles remain under `apps/*`.
 
 - [ ] **Step 2: Rename each app package**
 
 Edit `name` field:
+
 - `apps/tutora/package.json` → `"@tutora/mobile"`
 - `apps/tutora-api/package.json` → `"@tutora/api"`
 - `apps/tutora-admin/package.json` → `"@tutora/admin"`
@@ -223,6 +229,7 @@ Edit `name` field:
 
 Each `apps/*/package.json` must expose `dev`, `build`, `lint`, `typecheck`, `test`.
 Add any missing ones:
+
 - Add `"typecheck": "tsc --noEmit"` where absent (all four).
 - Vite admin: add `"lint"` if missing (`eslint .`), and a placeholder
   `"test": "echo \"no tests yet\" && exit 0"` until #-testing lands.
@@ -258,6 +265,7 @@ git commit -m "chore(setup): integrate apps into pnpm workspace (rename, scripts
 - [ ] **Step 1: Create skeleton directories**
 
 Run:
+
 ```bash
 # mobile / admin / web (React apps)
 for app in tutora tutora-admin tutora-web; do
@@ -277,6 +285,7 @@ find apps/*/src/features apps/*/src/shared apps/tutora-api/src/modules \
      apps/tutora-api/src/common apps/tutora-api/src/config -type d -empty \
      -exec touch {}/.gitkeep \;
 ```
+
 Expected: `.gitkeep` files created in each empty leaf directory.
 
 - [ ] **Step 2: Commit skeleton**
@@ -326,10 +335,12 @@ Run: `git push -u origin chore/scaffold-monorepo`
 - [ ] **Step 2: Open Draft PR against main**
 
 Run:
+
 ```bash
 gh pr create --draft --base main --title "chore: scaffold pnpm + turborepo monorepo (#2)" \
   --body "Closes #2. Part of #1. pnpm workspaces + Turborepo; mobile/api/admin/web scaffolded via official CLIs; feature-first skeleton; workspace typecheck/lint/build green."
 ```
+
 Expected: PR URL printed.
 
 ---

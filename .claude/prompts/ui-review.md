@@ -19,18 +19,21 @@ Use this checklist when reviewing any UI change — whether in a PR, a design im
 Verify that no values are hardcoded that should reference design tokens.
 
 **Colors:**
+
 - [ ] No hardcoded color hex values in styles (e.g., `color: '#4F46E5'` should be `colors.primary`)
 - [ ] No gradients used anywhere (background, button fill, text, icon, illustration)
 - [ ] All color references map to a token in the palette (check `.claude/context/ui-guidelines.md`)
 - [ ] Danger/Success/Warning/Info colors only used for their semantic meaning
 
 **Spacing:**
+
 - [ ] All padding and margin values are multiples of 4 pt (4, 8, 12, 16, 20, 24, 32, 40, 48, 64)
 - [ ] No arbitrary spacing values (e.g., `paddingTop: 7`, `marginLeft: 13`)
 - [ ] Screen horizontal padding is 16 px (compact) or 24 px (comfortable)
 - [ ] Card internal padding is 16 px
 
 **Border Radius:**
+
 - [ ] All `borderRadius` values come from the radius scale: 6, 8, 12, 16, 20, 24, or 999
 - [ ] Cards use radius 16 (lg)
 - [ ] Buttons use radius 12 (md) for standard or 999 (full) for pill
@@ -38,12 +41,14 @@ Verify that no values are hardcoded that should reference design tokens.
 - [ ] Bottom sheets use radius 24 (2xl) on top corners only
 
 **Typography:**
+
 - [ ] Font family is Plus Jakarta Sans (not system default, not another font)
 - [ ] Font sizes come from the type scale: 12, 13, 14, 15, 16, 18, 22, 28, 32
 - [ ] Font weights are correct per role: Display/Headline = 700, Title/Subtitle = 600, Body = 400, Label = 500, Button = 600
 - [ ] No text below 12 px
 
 **Shadows:**
+
 - [ ] Shadow values match one of the four defined elevation levels (0–3)
 - [ ] No heavy drop shadows with large blur or spread
 - [ ] In dark mode: borders used instead of shadows for surface separation
@@ -53,6 +58,7 @@ Verify that no values are hardcoded that should reference design tokens.
 ## Section 2 — Component Patterns (Must Fix)
 
 **Buttons:**
+
 - [ ] Primary button fill is `#4F46E5` (Primary), not a gradient
 - [ ] Disabled button uses `#CBD5E1` fill and `#94A3B8` text
 - [ ] Button text uses Button type scale (15 px / 600 weight)
@@ -61,6 +67,7 @@ Verify that no values are hardcoded that should reference design tokens.
 - [ ] Minimum button height: 48 pt (standard), 40 pt (compact)
 
 **Inputs:**
+
 - [ ] Input has a visible label (not just placeholder)
 - [ ] Border changes to `#4F46E5` (Primary) on focus
 - [ ] Border changes to `#DC2626` (Danger) on error
@@ -68,6 +75,7 @@ Verify that no values are hardcoded that should reference design tokens.
 - [ ] Placeholder text uses Muted color (`#94A3B8`)
 
 **Cards:**
+
 - [ ] Card background is `Card` token (white in light, `#1E293B` in dark)
 - [ ] Card border is 1 px `Border` token
 - [ ] Card radius is 16 px
@@ -75,11 +83,13 @@ Verify that no values are hardcoded that should reference design tokens.
 - [ ] Card has Level 1 shadow (light mode only)
 
 **Lists:**
+
 - [ ] Uses FlashList, not FlatList or ScrollView with map()
 - [ ] List item has correct vertical padding (12 px)
 - [ ] Dividers use the `Divider` color token (`#EEF2F6`)
 
 **Bottom Sheet:**
+
 - [ ] Uses `@gorhom/bottom-sheet`
 - [ ] Backdrop uses `Overlay` color
 - [ ] Has a visible handle indicator (4 × 32 px)
@@ -133,6 +143,7 @@ For every data-driven screen or list component:
 - [ ] `allowFontScaling={true}` not overridden to `false` on any `<Text>` component
 
 **Contrast check:**
+
 - [ ] Body text: ≥ 4.5:1 contrast ratio against background
 - [ ] Large text (≥ 18 pt or bold 14 pt): ≥ 3:1 contrast ratio
 - [ ] Use the WebAIM Contrast Checker or Figma's built-in accessibility plugin to verify
@@ -184,12 +195,12 @@ Compare the new screen/component against existing screens that are already appro
 
 ## Review Decision
 
-| Finding | Category | Resolution Required Before Merge |
-|---|---|---|
-| Design token violation | Must Fix | Yes |
-| Missing UI state | Must Fix | Yes |
-| Dark mode broken | Must Fix | Yes |
-| Accessibility missing | Must Fix | Yes |
-| Wrong animation duration | Should Fix | Recommended; can follow up |
-| Inconsistency with existing screens | Should Fix | Recommended; can follow up |
-| Performance concern | Nice to Have | Can create a ticket for later |
+| Finding                             | Category     | Resolution Required Before Merge |
+| ----------------------------------- | ------------ | -------------------------------- |
+| Design token violation              | Must Fix     | Yes                              |
+| Missing UI state                    | Must Fix     | Yes                              |
+| Dark mode broken                    | Must Fix     | Yes                              |
+| Accessibility missing               | Must Fix     | Yes                              |
+| Wrong animation duration            | Should Fix   | Recommended; can follow up       |
+| Inconsistency with existing screens | Should Fix   | Recommended; can follow up       |
+| Performance concern                 | Nice to Have | Can create a ticket for later    |

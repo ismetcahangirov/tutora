@@ -14,39 +14,39 @@
 
 ### Light Mode
 
-| Token | HEX | Usage |
-|---|---|---|
-| Primary | `#4F46E5` | Primary actions, active states, links |
-| Primary Dark | `#4338CA` | Primary button pressed state |
-| Primary Light | `#EEF2FF` | Primary tinted backgrounds, chips |
-| Secondary | `#0EA5E9` | Secondary actions, info chips |
-| Accent | `#F59E0B` | Ratings (stars), highlights, badges |
-| Background | `#FFFFFF` | App / screen background |
-| Surface | `#F8FAFC` | Page sections, list backgrounds |
-| Card | `#FFFFFF` | Card backgrounds |
-| Border | `#E2E8F0` | Card borders, dividers, input borders |
-| Divider | `#EEF2F6` | Subtle separators within lists |
-| Text Primary | `#0F172A` | Headings, primary body copy |
-| Text Secondary | `#64748B` | Labels, secondary descriptors |
-| Muted | `#94A3B8` | Placeholder text, disabled labels |
-| Success | `#16A34A` | Confirmed, accepted, verified |
-| Warning | `#F59E0B` | Pending, attention needed |
-| Danger | `#DC2626` | Errors, destructive actions |
-| Info | `#2563EB` | Informational banners |
-| Disabled | `#CBD5E1` | Disabled control fills |
-| Overlay | `rgba(15, 23, 42, 0.5)` | Modal / sheet backdrop |
+| Token          | HEX                     | Usage                                 |
+| -------------- | ----------------------- | ------------------------------------- |
+| Primary        | `#4F46E5`               | Primary actions, active states, links |
+| Primary Dark   | `#4338CA`               | Primary button pressed state          |
+| Primary Light  | `#EEF2FF`               | Primary tinted backgrounds, chips     |
+| Secondary      | `#0EA5E9`               | Secondary actions, info chips         |
+| Accent         | `#F59E0B`               | Ratings (stars), highlights, badges   |
+| Background     | `#FFFFFF`               | App / screen background               |
+| Surface        | `#F8FAFC`               | Page sections, list backgrounds       |
+| Card           | `#FFFFFF`               | Card backgrounds                      |
+| Border         | `#E2E8F0`               | Card borders, dividers, input borders |
+| Divider        | `#EEF2F6`               | Subtle separators within lists        |
+| Text Primary   | `#0F172A`               | Headings, primary body copy           |
+| Text Secondary | `#64748B`               | Labels, secondary descriptors         |
+| Muted          | `#94A3B8`               | Placeholder text, disabled labels     |
+| Success        | `#16A34A`               | Confirmed, accepted, verified         |
+| Warning        | `#F59E0B`               | Pending, attention needed             |
+| Danger         | `#DC2626`               | Errors, destructive actions           |
+| Info           | `#2563EB`               | Informational banners                 |
+| Disabled       | `#CBD5E1`               | Disabled control fills                |
+| Overlay        | `rgba(15, 23, 42, 0.5)` | Modal / sheet backdrop                |
 
 ### Dark Mode
 
-| Token | HEX | Usage |
-|---|---|---|
-| Background | `#0B1120` | App background |
-| Surface | `#111827` | Section backgrounds |
-| Card | `#1E293B` | Card backgrounds |
-| Border | `#334155` | Borders and dividers |
-| Text Primary | `#F8FAFC` | Headings, primary body copy |
-| Text Secondary | `#94A3B8` | Secondary descriptors |
-| Primary | `#6366F1` | Primary actions (lighter for dark bg) |
+| Token          | HEX       | Usage                                 |
+| -------------- | --------- | ------------------------------------- |
+| Background     | `#0B1120` | App background                        |
+| Surface        | `#111827` | Section backgrounds                   |
+| Card           | `#1E293B` | Card backgrounds                      |
+| Border         | `#334155` | Borders and dividers                  |
+| Text Primary   | `#F8FAFC` | Headings, primary body copy           |
+| Text Secondary | `#94A3B8` | Secondary descriptors                 |
+| Primary        | `#6366F1` | Primary actions (lighter for dark bg) |
 
 All other semantic tokens (Success, Warning, Danger, etc.) remain the same in dark mode unless contrast ratio falls below 4.5:1, in which case a lighter tint is used.
 
@@ -60,19 +60,20 @@ All other semantic tokens (Success, Warning, Danger, etc.) remain the same in da
 
 ### Type Scale
 
-| Style | Size (px) | Line Height (px) | Weight | Usage |
-|---|---|---|---|---|
-| Display | 32 | 40 | 700 | Hero headlines, onboarding titles |
-| Headline | 28 | 36 | 700 | Screen headings (H1) |
-| Title | 22 | 28 | 600 | Section headings (H2), card titles |
-| Subtitle | 18 | 26 | 600 | Sub-section headings, modal titles |
-| Body | 16 | 24 | 400 | Primary body copy |
-| Body Small | 14 | 20 | 400 | Secondary descriptions, helper text |
-| Caption | 12 | 16 | 400 | Timestamps, metadata, footnotes |
-| Label | 13 | 16 | 500 | Form labels, tab labels, tags |
-| Button | 15 | 20 | 600 | Button text only |
+| Style      | Size (px) | Line Height (px) | Weight | Usage                               |
+| ---------- | --------- | ---------------- | ------ | ----------------------------------- |
+| Display    | 32        | 40               | 700    | Hero headlines, onboarding titles   |
+| Headline   | 28        | 36               | 700    | Screen headings (H1)                |
+| Title      | 22        | 28               | 600    | Section headings (H2), card titles  |
+| Subtitle   | 18        | 26               | 600    | Sub-section headings, modal titles  |
+| Body       | 16        | 24               | 400    | Primary body copy                   |
+| Body Small | 14        | 20               | 400    | Secondary descriptions, helper text |
+| Caption    | 12        | 16               | 400    | Timestamps, metadata, footnotes     |
+| Label      | 13        | 16               | 500    | Form labels, tab labels, tags       |
+| Button     | 15        | 20               | 600    | Button text only                    |
 
 **Rules:**
+
 - Never render body text below 12 px.
 - Headings use weight 600–700. Body copy uses 400. Emphasis uses 500–600 (never bold on body).
 - Letter spacing: Headlines −0.5px, Display −1px, Body/Caption 0.
@@ -82,15 +83,15 @@ All other semantic tokens (Success, Warning, Danger, etc.) remain the same in da
 
 ## Border Radius Scale
 
-| Token | Value (px) | Usage |
-|---|---|---|
-| xs | 6 | Tags, badges, tooltips |
-| sm | 8 | Input fields, small chips |
-| md | 12 | Buttons, smaller cards, search bars |
-| lg | 16 | Standard card (default) |
-| xl | 20 | Modals, large cards |
-| 2xl | 24 | Bottom sheets, profile cards |
-| full | 999 | Pills, avatar bubbles, toggles |
+| Token | Value (px) | Usage                               |
+| ----- | ---------- | ----------------------------------- |
+| xs    | 6          | Tags, badges, tooltips              |
+| sm    | 8          | Input fields, small chips           |
+| md    | 12         | Buttons, smaller cards, search bars |
+| lg    | 16         | Standard card (default)             |
+| xl    | 20         | Modals, large cards                 |
+| 2xl   | 24         | Bottom sheets, profile cards        |
+| full  | 999        | Pills, avatar bubbles, toggles      |
 
 Default card radius is **16 px** (lg).
 
@@ -115,12 +116,12 @@ All spacing values must align to the 4pt grid. Allowed values:
 
 No heavy drop shadows. Use soft, low-elevation shadows only.
 
-| Level | Usage | iOS Shadow | Android Elevation |
-|---|---|---|---|
-| 0 | Flat surface (no elevation) | none | 0 |
-| 1 | Cards on white background | `0 1px 3px rgba(15,23,42,0.06)` | 2 |
-| 2 | Floating action buttons, active sheets | `0 4px 12px rgba(15,23,42,0.08)` | 4 |
-| 3 | Modals, bottom sheets | `0 8px 24px rgba(15,23,42,0.12)` | 8 |
+| Level | Usage                                  | iOS Shadow                       | Android Elevation |
+| ----- | -------------------------------------- | -------------------------------- | ----------------- |
+| 0     | Flat surface (no elevation)            | none                             | 0                 |
+| 1     | Cards on white background              | `0 1px 3px rgba(15,23,42,0.06)`  | 2                 |
+| 2     | Floating action buttons, active sheets | `0 4px 12px rgba(15,23,42,0.08)` | 4                 |
+| 3     | Modals, bottom sheets                  | `0 8px 24px rgba(15,23,42,0.12)` | 8                 |
 
 Dark mode shadows are invisible — use `Card` border (`#334155`) to separate surfaces instead.
 
@@ -128,14 +129,14 @@ Dark mode shadows are invisible — use `Card` border (`#334155`) to separate su
 
 ## Icon Sizes
 
-| Context | Size |
-|---|---|
-| Navigation tab icons | 24 × 24 pt |
+| Context                 | Size       |
+| ----------------------- | ---------- |
+| Navigation tab icons    | 24 × 24 pt |
 | List item leading icons | 20 × 20 pt |
-| Inline / body icons | 16 × 16 pt |
-| Button leading icons | 18 × 18 pt |
-| FAB icon | 24 × 24 pt |
-| Header action icons | 24 × 24 pt |
+| Inline / body icons     | 16 × 16 pt |
+| Button leading icons    | 18 × 18 pt |
+| FAB icon                | 24 × 24 pt |
+| Header action icons     | 24 × 24 pt |
 
 Icon library: `react-native-svg` with custom icon components. Never use emoji as icons in UI.
 
@@ -145,17 +146,18 @@ Icon library: `react-native-svg` with custom icon components. Never use emoji as
 
 Library: **React Native Reanimated 3** + **React Native Gesture Handler**.
 
-| Motion Type | Duration | Easing |
-|---|---|---|
-| Micro-interactions (press, toggle) | 100–150 ms | `Easing.out(Easing.quad)` |
-| Screen transitions | 280–350 ms | `Easing.inOut(Easing.cubic)` |
-| Bottom sheet open/close | 300 ms | Spring (`damping: 20, stiffness: 300`) |
-| Skeleton shimmer loop | 1200 ms | Linear |
-| Toast in/out | 200 ms | `Easing.out(Easing.ease)` |
-| FAB expansion | 200 ms | Spring (`damping: 15, stiffness: 200`) |
-| List item enter (staggered) | 250 ms | `Easing.out(Easing.cubic)` |
+| Motion Type                        | Duration   | Easing                                 |
+| ---------------------------------- | ---------- | -------------------------------------- |
+| Micro-interactions (press, toggle) | 100–150 ms | `Easing.out(Easing.quad)`              |
+| Screen transitions                 | 280–350 ms | `Easing.inOut(Easing.cubic)`           |
+| Bottom sheet open/close            | 300 ms     | Spring (`damping: 20, stiffness: 300`) |
+| Skeleton shimmer loop              | 1200 ms    | Linear                                 |
+| Toast in/out                       | 200 ms     | `Easing.out(Easing.ease)`              |
+| FAB expansion                      | 200 ms     | Spring (`damping: 15, stiffness: 200`) |
+| List item enter (staggered)        | 250 ms     | `Easing.out(Easing.cubic)`             |
 
 **Rules:**
+
 - All animations respect `useReducedMotion`. If reduced motion is on, snap to final state with zero duration.
 - Never block interaction while an animation is running.
 - Use `withSpring` for natural feel on gesture-driven transitions; use `withTiming` for explicit UI state changes.
@@ -166,13 +168,13 @@ Library: **React Native Reanimated 3** + **React Native Gesture Handler**.
 
 ### Buttons
 
-| Variant | Fill | Text Color | Border | Usage |
-|---|---|---|---|---|
-| Primary | `#4F46E5` | White | none | Main CTA |
-| Primary Outline | Transparent | `#4F46E5` | `#4F46E5` 1.5 px | Secondary CTA |
-| Ghost | Transparent | `#4F46E5` | none | Tertiary / text action |
-| Danger | `#DC2626` | White | none | Destructive action |
-| Disabled | `#CBD5E1` | `#94A3B8` | none | Any disabled state |
+| Variant         | Fill        | Text Color | Border           | Usage                  |
+| --------------- | ----------- | ---------- | ---------------- | ---------------------- |
+| Primary         | `#4F46E5`   | White      | none             | Main CTA               |
+| Primary Outline | Transparent | `#4F46E5`  | `#4F46E5` 1.5 px | Secondary CTA          |
+| Ghost           | Transparent | `#4F46E5`  | none             | Tertiary / text action |
+| Danger          | `#DC2626`   | White      | none             | Destructive action     |
+| Disabled        | `#CBD5E1`   | `#94A3B8`  | none             | Any disabled state     |
 
 - Height: **48 pt** (standard), **40 pt** (compact), **56 pt** (large / hero).
 - Border radius: **md (12 px)** for standard, **full (999)** for pill variant.
@@ -273,13 +275,13 @@ Library: `@gorhom/bottom-sheet`.
 
 Every data-driven screen must implement all five states:
 
-| State | UI |
-|---|---|
-| **Loading** | Skeleton shimmer matching content layout |
-| **Empty** | Illustration + headline + helper text + optional CTA |
-| **Error** | Error icon + message + "Retry" button |
-| **Success / Populated** | The actual content |
-| **Partial / Pagination loading** | Inline spinner at bottom of list (FlashList footer) |
+| State                            | UI                                                   |
+| -------------------------------- | ---------------------------------------------------- |
+| **Loading**                      | Skeleton shimmer matching content layout             |
+| **Empty**                        | Illustration + headline + helper text + optional CTA |
+| **Error**                        | Error icon + message + "Retry" button                |
+| **Success / Populated**          | The actual content                                   |
+| **Partial / Pagination loading** | Inline spinner at bottom of list (FlashList footer)  |
 
 ---
 
@@ -294,17 +296,17 @@ Every data-driven screen must implement all five states:
 
 ## Accessibility (WCAG AA)
 
-| Rule | Requirement |
-|---|---|
-| Color contrast — body text | ≥ 4.5 : 1 |
-| Color contrast — large text (≥ 18 pt bold) | ≥ 3 : 1 |
-| Tap target size | Minimum 44 × 44 pt |
-| Focus indicators | Visible on all interactive elements |
-| Screen reader labels | `accessibilityLabel` on every icon button, image, and non-text element |
-| Hints | `accessibilityHint` for non-obvious interactions |
-| Dynamic Type | All text scales with system font size (use `allowFontScaling`) |
-| Motion | Respect `useReducedMotion` — disable or simplify all animations |
-| Error messages | Announced to screen reader on form validation failure |
-| Loading states | Announce "Loading" then "Loaded" via `accessibilityLiveRegion` |
+| Rule                                       | Requirement                                                            |
+| ------------------------------------------ | ---------------------------------------------------------------------- |
+| Color contrast — body text                 | ≥ 4.5 : 1                                                              |
+| Color contrast — large text (≥ 18 pt bold) | ≥ 3 : 1                                                                |
+| Tap target size                            | Minimum 44 × 44 pt                                                     |
+| Focus indicators                           | Visible on all interactive elements                                    |
+| Screen reader labels                       | `accessibilityLabel` on every icon button, image, and non-text element |
+| Hints                                      | `accessibilityHint` for non-obvious interactions                       |
+| Dynamic Type                               | All text scales with system font size (use `allowFontScaling`)         |
+| Motion                                     | Respect `useReducedMotion` — disable or simplify all animations        |
+| Error messages                             | Announced to screen reader on form validation failure                  |
+| Loading states                             | Announce "Loading" then "Loaded" via `accessibilityLiveRegion`         |
 
 **Never convey information through color alone.** Always pair color with an icon or text label.

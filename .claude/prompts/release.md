@@ -6,11 +6,11 @@ Use this process for every production release of Tutora. A release touches multi
 
 ## Release Types
 
-| Type | Trigger | Version Bump |
-|---|---|---|
-| **Patch** | Bug fixes only; no new features; no DB migrations | `1.2.3 → 1.2.4` |
-| **Minor** | New features added in a backward-compatible way | `1.2.3 → 1.3.0` |
-| **Major** | Breaking API changes, major UI overhaul, significant workflow changes | `1.2.3 → 2.0.0` |
+| Type         | Trigger                                                                            | Version Bump                                       |
+| ------------ | ---------------------------------------------------------------------------------- | -------------------------------------------------- |
+| **Patch**    | Bug fixes only; no new features; no DB migrations                                  | `1.2.3 → 1.2.4`                                    |
+| **Minor**    | New features added in a backward-compatible way                                    | `1.2.3 → 1.3.0`                                    |
+| **Major**    | Breaking API changes, major UI overhaul, significant workflow changes              | `1.2.3 → 2.0.0`                                    |
 | **OTA-only** | JS-layer bug fix with no native changes; can be delivered without store submission | No version bump (use build number / OTA update ID) |
 
 ---
@@ -20,18 +20,21 @@ Use this process for every production release of Tutora. A release touches multi
 Confirm the codebase is ready before starting the release process.
 
 ### Branch State
+
 - [ ] All planned PRs for this release are merged to `develop`
 - [ ] No PRs in "in-progress" state that were intended for this release
 - [ ] `develop` CI is fully green (all checks pass)
 - [ ] No known critical or high-priority bugs open for this release scope
 
 ### API / Database
+
 - [ ] All database migrations are written, reviewed, and tested in staging
 - [ ] Migrations are backward-compatible with the previous API version (or a cutover plan exists)
 - [ ] New API endpoints are documented in Swagger
 - [ ] Deprecated endpoints (if any) have been communicated to client teams
 
 ### Mobile
+
 - [ ] All new features have been tested on a physical iOS device
 - [ ] All new features have been tested on a physical Android device
 - [ ] No native dependency changes require a new binary build (if OTA only)
@@ -53,15 +56,16 @@ npm version patch   # or minor / major
 ### Mobile (`tutora`)
 
 Update `app.json`:
+
 ```json
 {
   "expo": {
     "version": "1.3.0",
     "ios": {
-      "buildNumber": "42"   // increment by 1 each build
+      "buildNumber": "42" // increment by 1 each build
     },
     "android": {
-      "versionCode": 42     // increment by 1 each build
+      "versionCode": 42 // increment by 1 each build
     }
   }
 }
@@ -102,24 +106,30 @@ git log v1.2.3..HEAD --oneline --no-decorate
 ## [1.3.0] — 2026-07-11
 
 ### Features
+
 - **search:** Add district filter with multi-select support (#PR-42)
 - **tutor-profile:** Add portfolio image upload (#PR-38)
 
 ### Bug Fixes
+
 - **chat:** Fix message ordering on slow network connections (#PR-45)
 - **auth:** Prevent duplicate refresh token requests on 401 (#PR-41)
 
 ### Performance
+
 - **search:** Cache search results in Redis; p95 reduced from 280 ms to 45 ms (#PR-39)
 
 ### Breaking Changes
+
 - None
 
 ### Database Migrations
+
 - `20260711_add_district_to_tutors`: Adds `district` column to `tutors` table (non-breaking, nullable with default)
 ```
 
 Review the changelog carefully:
+
 - [ ] All user-facing features are listed
 - [ ] All bug fixes relevant to users are listed
 - [ ] Breaking changes are explicitly called out
@@ -132,6 +142,7 @@ Review the changelog carefully:
 Test the full release candidate in the **staging environment** against the staging API.
 
 ### Authentication
+
 - [ ] Registration (Student) — email + phone
 - [ ] Registration (Tutor) — email + phone
 - [ ] Login with correct credentials
@@ -141,6 +152,7 @@ Test the full release candidate in the **staging environment** against the stagi
 - [ ] Google OAuth login (if implemented)
 
 ### Search & Discovery
+
 - [ ] Search returns results for valid subject
 - [ ] District filter applies correctly
 - [ ] Price range filter applies correctly
@@ -151,11 +163,13 @@ Test the full release candidate in the **staging environment** against the stagi
 - [ ] Pagination loads next page correctly
 
 ### Tutor Profile
+
 - [ ] Tutor profile displays all fields correctly
 - [ ] Reviews section shows correctly
 - [ ] "Apply" button visible and functional for students
 
 ### Applications
+
 - [ ] Student submits application
 - [ ] Tutor receives push notification
 - [ ] Tutor accepts application — student notified
@@ -163,30 +177,36 @@ Test the full release candidate in the **staging environment** against the stagi
 - [ ] Student can cancel pending application
 
 ### Chat
+
 - [ ] Messages send and receive in real time
 - [ ] Message history loads correctly on reopen
 - [ ] Long messages display without overflow
 
 ### Notifications
+
 - [ ] Push notifications arrive for all application state changes
 - [ ] Notification tap opens the correct screen
 
 ### Profile
+
 - [ ] Student can update profile
 - [ ] Tutor can update profile and subjects
 - [ ] Avatar upload works (image selected, uploaded, displayed)
 
 ### Localization
+
 - [ ] Test in Azerbaijani (default)
 - [ ] Test in English
 - [ ] Test in Russian
 - [ ] No missing translation keys (check for fallback keys showing raw i18n key strings)
 
 ### Accessibility
+
 - [ ] Core flows navigable with VoiceOver (iOS) or TalkBack (Android)
 - [ ] No focus traps
 
 ### Dark Mode
+
 - [ ] All major screens tested in dark mode
 - [ ] No white boxes or illegible text
 
@@ -212,6 +232,7 @@ npx prisma migrate status
 - [ ] Rollback script prepared and tested (see Step 9)
 
 **Migration deployment order for production:**
+
 1. Deploy the new API version (it must be compatible with the old schema — use backward-compatible migrations)
 2. Run migrations
 3. Verify application health
@@ -262,6 +283,7 @@ eas update --channel production --message "v1.3.0: search district filter, portf
 - [ ] Smoke test the updated feature on the OTA-updated app
 
 **When OTA is NOT sufficient (requires store build):**
+
 - New native dependencies added (e.g., new Expo module with native code)
 - Changes to `app.json` (version, bundle ID, permissions)
 - Changes to `ios/` or `android/` directories
@@ -294,17 +316,20 @@ eas submit --platform android --latest
 ### Store Submission Notes
 
 **iOS (App Store):**
+
 - Update "What's New" text in App Store Connect (in Azerbaijani, English, Russian)
 - Screenshots: update if major UI changes
 - Review notes: explain any new permissions requested
 - Phased release: enable phased release (7 days) for all releases except critical hotfixes
 
 **Android (Google Play):**
+
 - Update release notes in all three languages
 - Review target API level compliance
 - Phased rollout: start at 10%, monitor crash rate, expand to 100% over 3–5 days
 
 **Review preparation:**
+
 - [ ] All new permissions have a clear justification
 - [ ] No test accounts or debug features accessible in the production build
 - [ ] Privacy policy updated if new data is collected
@@ -336,12 +361,14 @@ eas update:rollback --channel production --group <previous-update-group-id>
 ```
 
 ### Store Build Rollback
+
 - iOS: halt phased release, or push a new expedited build (App Store does not support binary rollback)
 - Android: use Google Play Console to halt the rollout and re-activate the previous release
 
 ### Decision Criteria for Rollback
 
 Roll back immediately if any of the following occur within 1 hour of deployment:
+
 - Error rate increases by > 5% above pre-release baseline
 - p95 API latency exceeds 2× pre-release baseline
 - App crash rate exceeds 1% of sessions

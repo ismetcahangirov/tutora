@@ -11,6 +11,7 @@ Mindset: **Understand before fixing. Test before shipping.**
 Before touching any code, establish a reliable reproduction.
 
 **Document:**
+
 - Exact steps to reproduce (numbered, copy-pasteable)
 - Expected behavior
 - Actual behavior
@@ -19,11 +20,13 @@ Before touching any code, establish a reliable reproduction.
 - When first observed: (after which commit or release?)
 
 **Can you reproduce it locally?**
+
 - If yes: proceed to Step 2.
 - If intermittent: add temporary logging to capture the conditions, then reproduce.
 - If only in production: check API logs (pino), Sentry / crash reports, and Redis state.
 
 **Can you reproduce it in a minimal test case?**
+
 - Strip away unrelated code until you have the smallest possible reproduction.
 - This often reveals the root cause by itself.
 
@@ -34,6 +37,7 @@ Before touching any code, establish a reliable reproduction.
 Do not guess. Read the code.
 
 **Questions to answer:**
+
 1. What is the exact line / function where the unexpected behavior originates?
 2. What is the data state at that point? (Log it or use a debugger breakpoint)
 3. Why does the code do what it does? (Read the logic — do not assume)
@@ -41,6 +45,7 @@ Do not guess. Read the code.
 5. Is this a local bug (one component / function) or a systemic bug (wrong model, wrong data flow, incorrect contract between layers)?
 
 **Common root cause categories:**
+
 - Off-by-one / boundary condition not handled
 - Race condition (async not awaited, concurrent requests)
 - State mutation (direct mutation of React state or Zustand store)
@@ -61,6 +66,7 @@ Do not guess. Read the code.
 ## Step 3 — Write a Failing Test First
 
 Before writing the fix, write a test that:
+
 1. Reproduces the exact bug
 2. Currently **fails** (proving the bug exists)
 3. Will **pass** after the fix
@@ -87,6 +93,7 @@ If the bug is on the backend, write an integration test targeting the controller
 With the failing test as your guide, implement the minimal fix.
 
 **Rules:**
+
 - Fix the root cause — not the symptom.
 - Make the smallest possible change that makes the failing test pass without breaking other tests.
 - Do not refactor or add unrelated improvements in the same commit as the fix.
@@ -95,7 +102,7 @@ With the failing test as your guide, implement the minimal fix.
 ```ts
 // Before
 function formatPrice(price: number) {
-  return price / 100;  // Bug: not handling undefined price
+  return price / 100; // Bug: not handling undefined price
 }
 
 // After
@@ -112,6 +119,7 @@ function formatPrice(price: number | undefined): string {
 Run all tests and perform manual verification.
 
 **Automated checks:**
+
 - [ ] The previously failing test now passes
 - [ ] All existing unit tests still pass
 - [ ] All existing integration tests still pass
@@ -119,6 +127,7 @@ Run all tests and perform manual verification.
 - [ ] ESLint passes
 
 **Manual verification:**
+
 - [ ] Bug cannot be reproduced following the original reproduction steps
 - [ ] Happy path still works correctly
 - [ ] Test on iOS and Android if mobile change
@@ -132,6 +141,7 @@ Run all tests and perform manual verification.
 Actively look for related areas that might have the same bug.
 
 **Questions:**
+
 1. Is this bug pattern repeated elsewhere in the codebase? Search for similar code.
 2. Does this fix have any side effects on other features? Think through the call graph.
 3. Are there other entry points to the same bug? (Other screens, API endpoints, user roles)
@@ -164,6 +174,7 @@ Closes #<issue-number> (if applicable)
 ```
 
 **Example:**
+
 ```
 fix(search): prevent stale results when district filter changes rapidly
 

@@ -3,12 +3,14 @@
 ## Security Rules
 
 ### Secrets Management
+
 - **Never commit secrets to version control.** No API keys, JWT secrets, database URLs, Firebase credentials, or service account files in source code.
 - All secrets must live in environment variables (`.env` files for local, secret managers for production).
 - `.env` files must be in `.gitignore`. Provide `.env.example` with placeholder values only.
 - Rotate any secret that is accidentally committed immediately.
 
 ### Authentication & Authorization
+
 - JWT access tokens expire in **15 minutes**. Refresh tokens expire in **7 days**.
 - Refresh tokens are stored hashed in the database. Plain tokens are never persisted server-side.
 - Access tokens are stored in MMKV (in-memory; not written to encrypted disk). Refresh tokens are stored in `expo-secure-store` (device keychain).
@@ -18,18 +20,21 @@
 - Token blacklisting via Redis for logout and token rotation.
 
 ### Input Validation
+
 - All incoming data on the backend is validated via `class-validator` DTOs (Prisma layer) and `Zod` schemas (application layer).
 - Never trust client-provided IDs to scope data. Always scope queries by the authenticated user's ID.
 - Sanitize all string inputs that will be displayed to other users (prevent XSS in chat messages, review text, etc.).
 - File uploads: validate MIME type and file size server-side (not just on client). Reject executables.
 
 ### Rate Limiting
+
 - Authentication endpoints (`/auth/login`, `/auth/register`, `/auth/refresh`): max **5 requests per minute per IP**.
 - Search endpoint: max **30 requests per minute per user**.
 - General API endpoints: max **100 requests per minute per user**.
 - Implement with NestJS `ThrottlerModule` + Redis store.
 
 ### RBAC
+
 - Three roles: `STUDENT`, `TUTOR`, `ADMIN`.
 - Role permissions:
   - `STUDENT`: view tutors, submit applications, leave reviews, use chat.
@@ -38,6 +43,7 @@
 - Principle of least privilege: grant only the minimum permissions required.
 
 ### API Security
+
 - CORS: whitelist only known client origins.
 - Helmet: enforce security headers.
 - No stack traces in production error responses.
@@ -49,34 +55,34 @@
 
 ### Mobile App
 
-| Metric | Budget |
-|---|---|
-| Cold start (JS bundle load) | < 2 seconds |
-| Time to interactive (first screen) | < 3 seconds |
-| Search results render (after API response) | < 100 ms |
-| List scroll (60 fps target) | No frames dropped during fast scroll |
-| App bundle size (JS) | < 5 MB uncompressed |
-| Image load (CDN) | Blurhash shown immediately; full image < 1 second on LTE |
+| Metric                                     | Budget                                                   |
+| ------------------------------------------ | -------------------------------------------------------- |
+| Cold start (JS bundle load)                | < 2 seconds                                              |
+| Time to interactive (first screen)         | < 3 seconds                                              |
+| Search results render (after API response) | < 100 ms                                                 |
+| List scroll (60 fps target)                | No frames dropped during fast scroll                     |
+| App bundle size (JS)                       | < 5 MB uncompressed                                      |
+| Image load (CDN)                           | Blurhash shown immediately; full image < 1 second on LTE |
 
 ### API
 
-| Metric | Budget |
-|---|---|
-| Search endpoint (cached) | p95 < 50 ms |
+| Metric                       | Budget       |
+| ---------------------------- | ------------ |
+| Search endpoint (cached)     | p95 < 50 ms  |
 | Search endpoint (cache miss) | p95 < 300 ms |
-| Auth endpoints | p95 < 200 ms |
-| Chat message send | p95 < 100 ms |
-| File upload initiation | p95 < 500 ms |
+| Auth endpoints               | p95 < 200 ms |
+| Chat message send            | p95 < 100 ms |
+| File upload initiation       | p95 < 500 ms |
 
 ### Landing Page (Next.js)
 
-| Metric | Target |
-|---|---|
-| Lighthouse Performance | ≥ 95 |
-| Lighthouse Accessibility | ≥ 95 |
-| First Contentful Paint | < 1.2 s |
+| Metric                   | Target  |
+| ------------------------ | ------- |
+| Lighthouse Performance   | ≥ 95    |
+| Lighthouse Accessibility | ≥ 95    |
+| First Contentful Paint   | < 1.2 s |
 | Largest Contentful Paint | < 2.5 s |
-| Cumulative Layout Shift | < 0.1 |
+| Cumulative Layout Shift  | < 0.1   |
 
 ---
 
@@ -99,22 +105,24 @@
 
 ### What must be tested
 
-| Scope | Minimum |
-|---|---|
-| Pure utility functions | 100% unit test coverage |
-| Custom hooks | Unit tests with `renderHook` |
-| API service functions | Integration tests against a test DB (or mocked Axios) |
-| NestJS controllers | Unit tests (mocked service) |
-| NestJS services | Unit tests (mocked repository) |
-| Critical user flows (auth, search, apply) | E2E test (Detox or Maestro) |
-| Search filter logic | Parametric unit tests for all filter combinations |
+| Scope                                     | Minimum                                               |
+| ----------------------------------------- | ----------------------------------------------------- |
+| Pure utility functions                    | 100% unit test coverage                               |
+| Custom hooks                              | Unit tests with `renderHook`                          |
+| API service functions                     | Integration tests against a test DB (or mocked Axios) |
+| NestJS controllers                        | Unit tests (mocked service)                           |
+| NestJS services                           | Unit tests (mocked repository)                        |
+| Critical user flows (auth, search, apply) | E2E test (Detox or Maestro)                           |
+| Search filter logic                       | Parametric unit tests for all filter combinations     |
 
 ### What does not need tests
+
 - Pure UI presentational components with no logic.
 - Boilerplate configuration files.
 - Third-party SDK wrappers (they are tested by the library authors).
 
 ### Testing rules
+
 - Tests live alongside the code: `src/features/auth/hooks/__tests__/useLogin.test.ts`.
 - Test file names: `<name>.test.ts` or `<name>.spec.ts`.
 - Never assert on implementation details; assert on behavior and output.
@@ -166,6 +174,7 @@
 A feature, bugfix, or change is **Done** only when all of the following are true:
 
 ### Code Quality
+
 - [ ] Code compiles with `tsc --noEmit` (zero type errors)
 - [ ] ESLint passes with zero errors
 - [ ] Prettier formatting applied
@@ -174,6 +183,7 @@ A feature, bugfix, or change is **Done** only when all of the following are true
 - [ ] No commented-out code committed
 
 ### Behavior
+
 - [ ] Feature works correctly on iOS (tested on simulator or device)
 - [ ] Feature works correctly on Android (tested on emulator or device)
 - [ ] All five UI states handled: loading, empty, error, success, pagination
@@ -181,32 +191,38 @@ A feature, bugfix, or change is **Done** only when all of the following are true
 - [ ] Edge cases handled (empty input, network error, very long strings, etc.)
 
 ### Localization
+
 - [ ] All user-visible strings use i18n keys
 - [ ] Keys present in `az.json`, `en.json`, `ru.json`
 
 ### Accessibility
+
 - [ ] All interactive elements have `accessibilityLabel`
 - [ ] Tap targets are ≥ 44 × 44 pt
 - [ ] Feature tested with VoiceOver or TalkBack (for UI changes)
 
 ### Design
+
 - [ ] Matches the design spec (spacing, colors, typography, radius)
 - [ ] No hardcoded colors — design tokens used
 - [ ] No gradients
 - [ ] Consistent with existing patterns in the design system
 
 ### Security
+
 - [ ] No secrets in source code
 - [ ] Input validated (client and server)
 - [ ] Authorization checked (not just authentication)
 - [ ] No data exposed that the current user should not see
 
 ### Testing
+
 - [ ] Unit tests written for new utility functions and hooks
 - [ ] Existing tests still pass
 - [ ] New API endpoints have at least controller-level unit tests
 
 ### Git / Process
+
 - [ ] Branch named correctly (`feature/`, `bugfix/`, etc.)
 - [ ] Commits follow Conventional Commits format
 - [ ] PR description filled out

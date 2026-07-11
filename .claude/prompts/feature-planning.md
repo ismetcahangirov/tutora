@@ -45,6 +45,7 @@ so that <outcome / benefit>.
 ```
 
 **Example:**
+
 ```
 As a Student,
 I want to filter tutors by district,
@@ -72,6 +73,7 @@ And   [additional outcome if needed]
 ```
 
 List criteria for all stories. Be specific about:
+
 - What the UI shows in each state (loading, empty, error, success)
 - What data is returned or persisted
 - What validations are enforced
@@ -84,19 +86,23 @@ List criteria for all stories. Be specific about:
 List every module and file that will be created or modified:
 
 ### Mobile (`tutora`)
+
 - New files:
 - Modified files:
 
 ### API (`tutora-api`)
+
 - New files:
 - Modified files:
 - New Prisma models or fields:
 
 ### Admin (`tutora-admin`)
+
 - New files:
 - Modified files:
 
 ### Landing (`tutora-web`)
+
 - New files:
 - Modified files:
 
@@ -131,6 +137,7 @@ Errors:
 ```
 
 For each endpoint, also define:
+
 - Cache behavior (cached? TTL? invalidation trigger?)
 - Rate limiting requirements
 - Background job triggered (if any)
@@ -149,6 +156,7 @@ List all Prisma schema changes:
 - Rollback plan: (how to revert the migration if deployment fails)
 
 **Flag any migration that:**
+
 - Adds a NOT NULL column without a default (requires backfill)
 - Drops a column or table
 - Changes a column type
@@ -160,15 +168,16 @@ List all Prisma schema changes:
 
 For each screen or component introduced by this feature, specify the visual and behavioral design for all five required states:
 
-| State | What the user sees | What triggers it |
-|---|---|---|
-| Loading | Skeleton shimmer (match content shape) | Initial data fetch |
-| Empty | [Illustration + message + optional CTA] | API returns empty array |
-| Error | [Error message + Retry button] | API request fails |
-| Success | [Actual content] | Data loaded successfully |
-| Pagination loading | Inline spinner at list bottom | User scrolls to last item |
+| State              | What the user sees                      | What triggers it          |
+| ------------------ | --------------------------------------- | ------------------------- |
+| Loading            | Skeleton shimmer (match content shape)  | Initial data fetch        |
+| Empty              | [Illustration + message + optional CTA] | API returns empty array   |
+| Error              | [Error message + Retry button]          | API request fails         |
+| Success            | [Actual content]                        | Data loaded successfully  |
+| Pagination loading | Inline spinner at list bottom           | User scrolls to last item |
 
 Also specify:
+
 - Navigation: where can the user come from, where can they go next?
 - Bottom sheet usage (if any): snap points, dismissible?
 - Modals: when shown, what triggers them, how dismissed?
@@ -193,15 +202,19 @@ Keys must be added to `az.json`, `en.json`, and `ru.json` before the feature is 
 ## Step 10 — Test Plan
 
 ### Unit Tests
+
 - [ ] List each utility function and hook that needs a unit test.
 
 ### Integration Tests
+
 - [ ] List each API endpoint that needs an integration test.
 
 ### E2E Tests
+
 - [ ] Describe the happy-path E2E scenario to automate (Detox or Maestro).
 
 ### Manual Test Checklist
+
 - [ ] iOS simulator
 - [ ] Android emulator
 - [ ] Dark mode
