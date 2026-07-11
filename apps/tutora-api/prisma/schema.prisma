@@ -7,6 +7,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ---------- Enums ----------
+
 enum UserRole {
   STUDENT
   TUTOR
@@ -17,20 +19,89 @@ enum AuthProvider {
   GOOGLE
 }
 
+enum LessonFormat {
+  ONLINE
+  AT_STUDENT_HOME
+  AT_TUTOR_PLACE
+}
+
+enum EducationLevel {
+  SCHOOL
+  UNIVERSITY
+  EXAM_PREP
+  OTHER
+}
+
+enum VerificationStatus {
+  UNVERIFIED
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum CertificateStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum ApplicationStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  CANCELLED
+  COMPLETED
+  EXPIRED
+}
+
+enum ReviewStatus {
+  PUBLISHED
+  HIDDEN
+  REMOVED
+}
+
+enum PlanTier {
+  FREE
+  PRO
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  EXPIRED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCEEDED
+  FAILED
+  REFUNDED
+}
+
+// ---------- Identity ----------
+
 model User {
-  id                  String         @id @default(cuid())
-  email               String         @unique
-  emailVerified       Boolean        @default(false)
+  id                  String       @id @default(cuid())
+  email               String       @unique
+  emailVerified       Boolean      @default(false)
   name                String?
   avatarUrl           String?
   locale              String?
-  provider            AuthProvider   @default(GOOGLE)
-  googleId            String?        @unique
+  provider            AuthProvider @default(GOOGLE)
+  googleId            String?      @unique
   role                UserRole?
-  onboardingCompleted Boolean        @default(false)
-  createdAt           DateTime       @default(now())
-  updatedAt           DateTime       @updatedAt
-  refreshTokens       RefreshToken[]
+  onboardingCompleted Boolean      @default(false)
+  deletedAt           DateTime?
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  refreshTokens  RefreshToken[]
+  tutorProfile   TutorProfile?
+  studentProfile StudentProfile?
+  chatMessages   ChatMessage[]
+  subscriptions  Subscription[]
+  payments       Payment[]
 }
 
 model RefreshToken {
@@ -44,4 +115,291 @@ model RefreshToken {
 
   @@index([userId])
   @@index([expiresAt])
+}
+
+// ---------- Taxonomy ----------
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String
+  slug      String    @unique
+  subjects  Subject[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Subject {
+  id            String         @id @default(cuid())
+  name          String
+  slug          String         @unique
+  categoryId    String?
+  category      Category?      @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  tutorSubjects TutorSubject[]
+  applications  Application[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([categoryId])
+}
+
+model District {
+  id             String          @id @default(cuid())
+  name           String
+  slug           String          @unique
+  tutorDistricts TutorDistrict[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+model Language {
+  id             String          @id @default(cuid())
+  name           String
+  code           String          @unique
+  tutorLanguages TutorLanguage[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+// ---------- Profiles ----------
+
+model TutorProfile {
+  id                 String             @id @default(cuid())
+  userId             String             @unique
+  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bio                String?
+  experienceYears    Int                @default(0)
+  hourlyRate         Decimal            @db.Decimal(10, 2)
+  currency           String             @default("AZN")
+  formats            LessonFormat[]
+  verificationStatus VerificationStatus @default(UNVERIFIED)
+  ratingAvg          Decimal            @default(0) @db.Decimal(3, 2)
+  ratingCount        Int                @default(0)
+  profileViews       Int                @default(0)
+  isPublished        Boolean            @default(false)
+  deletedAt          DateTime?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  subjects     TutorSubject[]
+  districts    TutorDistrict[]
+  languages    TutorLanguage[]
+  certificates Certificate[]
+  favorites    Favorite[]
+  applications Application[]
+  reviews      Review[]
+  chatThreads  ChatThread[]
+
+  @@index([hourlyRate])
+  @@index([ratingAvg])
+  @@index([verificationStatus, isPublished])
+  @@index([deletedAt])
+}
+
+model StudentProfile {
+  id             String          @id @default(cuid())
+  userId         String          @unique
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bio            String?
+  educationLevel EducationLevel?
+  deletedAt      DateTime?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  favorites    Favorite[]
+  applications Application[]
+  reviews      Review[]
+  chatThreads  ChatThread[]
+
+  @@index([deletedAt])
+}
+
+// ---------- Tutor owned / joins ----------
+
+model TutorSubject {
+  id            String       @id @default(cuid())
+  tutorId       String
+  tutor         TutorProfile @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  subjectId     String
+  subject       Subject      @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  priceOverride Decimal?     @db.Decimal(10, 2)
+  createdAt     DateTime     @default(now())
+
+  @@unique([tutorId, subjectId])
+  @@index([subjectId])
+}
+
+model TutorDistrict {
+  tutorId    String
+  tutor      TutorProfile @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  districtId String
+  district   District     @relation(fields: [districtId], references: [id], onDelete: Cascade)
+
+  @@id([tutorId, districtId])
+  @@index([districtId])
+}
+
+model TutorLanguage {
+  tutorId    String
+  tutor      TutorProfile @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  languageId String
+  language   Language     @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@id([tutorId, languageId])
+  @@index([languageId])
+}
+
+model Certificate {
+  id           String            @id @default(cuid())
+  tutorId      String
+  tutor        TutorProfile      @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  title        String
+  fileUrl      String
+  status       CertificateStatus @default(PENDING)
+  issuedBy     String?
+  reviewedById String?
+  reviewedAt   DateTime?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  @@index([tutorId])
+  @@index([status])
+}
+
+model Favorite {
+  id        String         @id @default(cuid())
+  studentId String
+  student   StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  tutorId   String
+  tutor     TutorProfile   @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  createdAt DateTime       @default(now())
+
+  @@unique([studentId, tutorId])
+  @@index([tutorId])
+}
+
+// ---------- Marketplace ----------
+
+model Application {
+  id          String            @id @default(cuid())
+  studentId   String
+  student     StudentProfile    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  tutorId     String
+  tutor       TutorProfile      @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  subjectId   String?
+  subject     Subject?          @relation(fields: [subjectId], references: [id], onDelete: SetNull)
+  format      LessonFormat?
+  message     String?
+  status      ApplicationStatus @default(PENDING)
+  respondedAt DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  reviews Review[]
+
+  @@index([tutorId, status])
+  @@index([studentId])
+  @@index([subjectId])
+}
+
+model Review {
+  id            String         @id @default(cuid())
+  studentId     String
+  student       StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  tutorId       String
+  tutor         TutorProfile   @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  applicationId String?
+  application   Application?   @relation(fields: [applicationId], references: [id], onDelete: SetNull)
+  rating        Int
+  comment       String?
+  status        ReviewStatus   @default(PUBLISHED)
+  hiddenReason  String?
+  moderatedById String?
+  moderatedAt   DateTime?
+  deletedAt     DateTime?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@unique([studentId, applicationId])
+  @@index([tutorId, status])
+}
+
+// ---------- Chat (lean foundation; realtime transport is #34) ----------
+
+model ChatThread {
+  id            String         @id @default(cuid())
+  studentId     String
+  student       StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  tutorId       String
+  tutor         TutorProfile   @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  lastMessageAt DateTime?
+  messages      ChatMessage[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@unique([studentId, tutorId])
+  @@index([tutorId])
+}
+
+model ChatMessage {
+  id        String     @id @default(cuid())
+  threadId  String
+  thread    ChatThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  senderId  String
+  sender    User       @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  body      String
+  readAt    DateTime?
+  createdAt DateTime   @default(now())
+
+  @@index([threadId, createdAt])
+  @@index([senderId])
+}
+
+// ---------- Payments (lean foundation; flows are #36) ----------
+
+model Plan {
+  id            String         @id @default(cuid())
+  name          String
+  tier          PlanTier       @unique
+  priceMonthly  Decimal        @db.Decimal(10, 2)
+  currency      String         @default("AZN")
+  entitlements  Json?
+  isActive      Boolean        @default(true)
+  subscriptions Subscription[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Subscription {
+  id                 String             @id @default(cuid())
+  userId             String
+  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planId             String
+  plan               Plan               @relation(fields: [planId], references: [id], onDelete: Restrict)
+  status             SubscriptionStatus @default(ACTIVE)
+  currentPeriodStart DateTime?
+  currentPeriodEnd   DateTime?
+  payments           Payment[]
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  @@index([userId])
+  @@index([planId])
+}
+
+model Payment {
+  id             String        @id @default(cuid())
+  userId         String
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscriptionId String?
+  subscription   Subscription? @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
+  amount         Decimal       @db.Decimal(10, 2)
+  currency       String        @default("AZN")
+  status         PaymentStatus @default(PENDING)
+  provider       String?
+  providerRef    String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([userId, status])
+  @@index([subscriptionId])
 }
