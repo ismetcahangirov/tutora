@@ -5,31 +5,45 @@
  * The continue action is disabled until a role is picked; on success the routing
  * gate takes over. Cards are exposed as radios for assistive tech.
  */
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button, Card, Icon, Text } from '@/components/ui';
 import { spacing, useColors } from '@/theme';
 
-import { ONBOARDING_COPY, ROLE_OPTIONS } from '../constants';
+import { SELECTABLE_ONBOARDING_ROLES } from '../constants';
 import { useRoleSelection } from '../hooks/useRoleSelection';
+import type { RoleOption } from '../types';
 
 export function RoleSelectionScreen() {
   const colors = useColors();
+  const { t } = useTranslation();
   const { selectedRole, selectRole, submit, isSubmitting, error } = useRoleSelection();
+
+  const options = useMemo<RoleOption[]>(
+    () =>
+      SELECTABLE_ONBOARDING_ROLES.map((role) => ({
+        role,
+        title: t(`onboarding.roles.${role}.title`),
+        description: t(`onboarding.roles.${role}.description`),
+      })),
+    [t],
+  );
 
   return (
     <SafeAreaView style={[styles.screen, { backgroundColor: colors.background }]}>
       <View style={styles.content}>
         <View style={styles.header}>
-          <Text variant="headline">{ONBOARDING_COPY.role.title}</Text>
+          <Text variant="headline">{t('onboarding.role.title')}</Text>
           <Text variant="body" color="textSecondary">
-            {ONBOARDING_COPY.role.subtitle}
+            {t('onboarding.role.subtitle')}
           </Text>
         </View>
 
         <View style={styles.options}>
-          {ROLE_OPTIONS.map((option) => {
+          {options.map((option) => {
             const isSelected = option.role === selectedRole;
             return (
               <Card
@@ -63,13 +77,13 @@ export function RoleSelectionScreen() {
 
       <View style={styles.footer}>
         <Button
-          label={ONBOARDING_COPY.role.continue}
+          label={t('onboarding.role.continue')}
           size="large"
           fullWidth
           disabled={!selectedRole}
           loading={isSubmitting}
           onPress={submit}
-          accessibilityLabel={ONBOARDING_COPY.role.continue}
+          accessibilityLabel={t('onboarding.role.continue')}
         />
       </View>
     </SafeAreaView>

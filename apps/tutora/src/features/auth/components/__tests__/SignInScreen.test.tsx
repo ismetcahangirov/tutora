@@ -13,7 +13,7 @@ import { renderWithProviders } from '@/test-utils';
 import { signInWithGoogleIdToken } from '@features/auth/api/auth.api';
 import { AuthProvider } from '@features/auth/context/AuthProvider';
 import { googleAuthGateway } from '@features/auth/services/google-auth.gateway';
-import { AUTH_COPY } from '@features/auth/constants';
+import en from '@/shared/i18n/locales/en.json';
 
 import { SignInScreen } from '../SignInScreen';
 
@@ -55,7 +55,7 @@ describe('SignInScreen (#22)', () => {
   it('renders the Continue with Google button', async () => {
     await renderScreen();
 
-    expect(screen.getByRole('button', { name: AUTH_COPY.screen.continueWithGoogle })).toBeTruthy();
+    expect(screen.getByRole('button', { name: en.auth.screen.continueWithGoogle })).toBeTruthy();
   });
 
   it('shows a loading state while signing in', async () => {
@@ -68,7 +68,7 @@ describe('SignInScreen (#22)', () => {
     await renderScreen();
     // Not awaited: the handler stays suspended on the in-flight backend call, so
     // awaiting `press` would block the test. The busy state flips synchronously.
-    void fireEvent.press(screen.getByRole('button', { name: AUTH_COPY.screen.continueWithGoogle }));
+    void fireEvent.press(screen.getByRole('button', { name: en.auth.screen.continueWithGoogle }));
 
     await waitFor(() => expect(screen.getByRole('button')).toBeBusy());
   });
@@ -77,11 +77,9 @@ describe('SignInScreen (#22)', () => {
     mockedGateway.signIn.mockRejectedValue(new Error('boom'));
 
     await renderScreen();
-    await fireEvent.press(
-      screen.getByRole('button', { name: AUTH_COPY.screen.continueWithGoogle }),
-    );
+    await fireEvent.press(screen.getByRole('button', { name: en.auth.screen.continueWithGoogle }));
 
-    await waitFor(() => expect(screen.getByText(AUTH_COPY.error.title)).toBeTruthy());
+    await waitFor(() => expect(screen.getByText(en.auth.error.title)).toBeTruthy());
     expect(mockedApi).not.toHaveBeenCalled();
   });
 });

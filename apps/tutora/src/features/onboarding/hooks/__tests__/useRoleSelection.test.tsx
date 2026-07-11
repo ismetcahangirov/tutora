@@ -9,7 +9,7 @@ import { act, renderHook, waitFor } from '@testing-library/react-native';
 
 import type { AuthUser } from '@features/auth';
 import { completeOnboarding } from '@features/onboarding/api/onboarding.api';
-import { ONBOARDING_COPY } from '@features/onboarding/constants';
+import en from '@/shared/i18n/locales/en.json';
 
 import { useRoleSelection } from '../useRoleSelection';
 
@@ -76,7 +76,7 @@ describe('useRoleSelection (#23)', () => {
       await result.current.submit();
     });
 
-    await waitFor(() => expect(result.current.error).toBe(ONBOARDING_COPY.role.error));
+    await waitFor(() => expect(result.current.error).toBe(en.onboarding.role.error));
     expect(mockUpdateUser).not.toHaveBeenCalled();
     expect(result.current.isSubmitting).toBe(false);
   });

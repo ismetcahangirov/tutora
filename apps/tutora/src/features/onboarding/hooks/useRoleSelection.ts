@@ -7,11 +7,11 @@
  * here, so the hook stays pure and testable.
  */
 import { useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useAuth } from '@features/auth';
 
 import { completeOnboarding } from '../api/onboarding.api';
-import { ONBOARDING_COPY } from '../constants';
 import type { SelectableRole } from '../types';
 
 export type UseRoleSelection = {
@@ -24,6 +24,7 @@ export type UseRoleSelection = {
 
 export function useRoleSelection(): UseRoleSelection {
   const { updateUser } = useAuth();
+  const { t } = useTranslation();
   const [selectedRole, setSelectedRole] = useState<SelectableRole | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -44,11 +45,11 @@ export function useRoleSelection(): UseRoleSelection {
       updateUser(user);
     } catch (submitError) {
       console.warn('[onboarding] Failed to save role', submitError);
-      setError(ONBOARDING_COPY.role.error);
+      setError(t('onboarding.role.error'));
     } finally {
       setIsSubmitting(false);
     }
-  }, [selectedRole, isSubmitting, updateUser]);
+  }, [selectedRole, isSubmitting, updateUser, t]);
 
   return { selectedRole, selectRole, submit, isSubmitting, error };
 }
