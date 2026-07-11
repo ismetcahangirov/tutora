@@ -3,7 +3,11 @@ packages:
   - packages/*
 
 # Dependencies allowed to run install/build scripts (pnpm blocks these by default).
+# @prisma/client + @prisma/engines + prisma: generate client and fetch query engine.
 # sharp: Next.js image optimization (native). unrs-resolver: oxlint/import resolver (native).
 allowBuilds:
+  '@prisma/client': true
+  '@prisma/engines': true
+  prisma: true
   sharp: true
   unrs-resolver: true

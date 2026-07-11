@@ -5,6 +5,7 @@ const validEnv = {
   REDIS_URL: 'redis://localhost:6379',
   JWT_ACCESS_SECRET: 'a-sufficiently-long-access-secret',
   JWT_REFRESH_SECRET: 'a-sufficiently-long-refresh-secret',
+  GOOGLE_CLIENT_ID: 'test-client-id.apps.googleusercontent.com',
 };
 
 describe('validateEnv', () => {
@@ -33,5 +34,15 @@ describe('validateEnv', () => {
     expect(() => validateEnv({ ...validEnv, JWT_ACCESS_SECRET: 'short' })).toThrow(
       /JWT_ACCESS_SECRET/,
     );
+  });
+
+  it('requires GOOGLE_CLIENT_ID', () => {
+    const withoutGoogle = {
+      DATABASE_URL: validEnv.DATABASE_URL,
+      REDIS_URL: validEnv.REDIS_URL,
+      JWT_ACCESS_SECRET: validEnv.JWT_ACCESS_SECRET,
+      JWT_REFRESH_SECRET: validEnv.JWT_REFRESH_SECRET,
+    };
+    expect(() => validateEnv(withoutGoogle)).toThrow(/GOOGLE_CLIENT_ID/);
   });
 });
