@@ -23,6 +23,16 @@ function buildPrismaMock() {
   };
 }
 
+const summaryUser = {
+  id: 'u1',
+  email: 'ada@example.com',
+  name: 'Ada',
+  avatarUrl: null,
+  role: 'STUDENT' as const,
+  onboardingCompleted: true,
+  googleId: 'g1',
+};
+
 async function buildService(prisma: ReturnType<typeof buildPrismaMock>) {
   const moduleRef = await Test.createTestingModule({
     providers: [UsersService, { provide: PrismaService, useValue: prisma }],
@@ -118,5 +128,32 @@ describe('UsersService.getSummaryById', () => {
 
     const service = await buildService(prisma);
     await expect(service.getSummaryById('missing')).rejects.toBeInstanceOf(NotFoundException);
+  });
+});
+
+describe('UsersService.completeOnboarding', () => {
+  it('sets the chosen role, marks onboarding complete, and returns the summary', async () => {
+    const prisma = buildPrismaMock();
+    prisma.user.update.mockResolvedValueOnce({
+      ...summaryUser,
+      role: 'TUTOR',
+      onboardingCompleted: true,
+    });
+
+    const service = await buildService(prisma);
+    const result = await service.completeOnboarding('u1', 'TUTOR');
+
+    expect(prisma.user.update).toHaveBeenCalledWith({
+      where: { id: 'u1' },
+      data: { role: 'TUTOR', onboardingCompleted: true },
+    });
+    expect(result).toEqual({
+      id: 'u1',
+      email: 'ada@example.com',
+      name: 'Ada',
+      avatarUrl: null,
+      role: 'TUTOR',
+      onboardingCompleted: true,
+    });
   });
 });

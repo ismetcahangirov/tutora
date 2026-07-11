@@ -31,7 +31,10 @@ describe('GET /api/v1/users/me (integration)', () => {
   let jwt: JwtService;
 
   const prismaMock = {
-    user: { findUnique: jest.fn().mockResolvedValue(dbUser) },
+    user: {
+      findUnique: jest.fn().mockResolvedValue(dbUser),
+      update: jest.fn().mockResolvedValue({ ...dbUser, role: 'TUTOR', onboardingCompleted: true }),
+    },
   };
 
   beforeAll(async () => {
@@ -96,5 +99,46 @@ describe('GET /api/v1/users/me (integration)', () => {
       onboardingCompleted: true,
     });
     expect(prismaMock.user.findUnique).toHaveBeenCalledWith({ where: { id: 'user-1' } });
+  });
+
+  it('PATCH /me returns 401 without an Authorization header', async () => {
+    await request(httpServer).patch('/api/v1/users/me').send({ role: 'TUTOR' }).expect(401);
+  });
+
+  it('PATCH /me rejects a non-selectable role (ADMIN) with 400', async () => {
+    await request(httpServer)
+      .patch('/api/v1/users/me')
+      .set('Authorization', `Bearer ${signAccessToken()}`)
+      .send({ role: 'ADMIN' })
+      .expect(400);
+    expect(prismaMock.user.update).not.toHaveBeenCalled();
+  });
+
+  it('PATCH /me rejects a missing role with 400', async () => {
+    await request(httpServer)
+      .patch('/api/v1/users/me')
+      .set('Authorization', `Bearer ${signAccessToken()}`)
+      .send({})
+      .expect(400);
+    expect(prismaMock.user.update).not.toHaveBeenCalled();
+  });
+
+  it('PATCH /me sets the role, completes onboarding, and returns the updated summary', async () => {
+    const res = await request(httpServer)
+      .patch('/api/v1/users/me')
+      .set('Authorization', `Bearer ${signAccessToken()}`)
+      .send({ role: 'TUTOR' })
+      .expect(200);
+
+    const body = res.body as { id: string; role: string; onboardingCompleted: boolean };
+    expect(body).toMatchObject({
+      id: 'user-1',
+      role: 'TUTOR',
+      onboardingCompleted: true,
+    });
+    expect(prismaMock.user.update).toHaveBeenCalledWith({
+      where: { id: 'user-1' },
+      data: { role: 'TUTOR', onboardingCompleted: true },
+    });
   });
 });

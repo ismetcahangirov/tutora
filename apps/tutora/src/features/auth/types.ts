@@ -52,8 +52,12 @@ export type AuthContextValue = {
   isAuthenticated: boolean;
   /** True while a sign-in request is in flight. */
   isSigningIn: boolean;
+  /** True during the one-shot session restore at app launch. */
+  isRestoringSession: boolean;
   /** Human-readable error from the last sign-in attempt, if any. */
   error: string | null;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
+  /** Replace the authenticated user in state (e.g. after onboarding). */
+  updateUser: (user: AuthUser) => void;
 };
