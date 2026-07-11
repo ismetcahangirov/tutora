@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { PrismaService } from '@/prisma/prisma.service';
 import { UsersService } from './users.service';
@@ -81,5 +82,41 @@ describe('UsersService.upsertFromGoogle', () => {
       },
     });
     expect(result).toBe(created);
+  });
+});
+
+describe('UsersService.getSummaryById', () => {
+  it('returns a non-sensitive summary of an existing user', async () => {
+    const prisma = buildPrismaMock();
+    prisma.user.findUnique.mockResolvedValueOnce({
+      id: 'u1',
+      email: 'ada@example.com',
+      name: 'Ada',
+      avatarUrl: null,
+      role: 'STUDENT',
+      onboardingCompleted: true,
+      googleId: 'g1',
+    });
+
+    const service = await buildService(prisma);
+    const result = await service.getSummaryById('u1');
+
+    expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { id: 'u1' } });
+    expect(result).toEqual({
+      id: 'u1',
+      email: 'ada@example.com',
+      name: 'Ada',
+      avatarUrl: null,
+      role: 'STUDENT',
+      onboardingCompleted: true,
+    });
+  });
+
+  it('throws NotFoundException (fails closed) when the user does not exist', async () => {
+    const prisma = buildPrismaMock();
+    prisma.user.findUnique.mockResolvedValueOnce(null);
+
+    const service = await buildService(prisma);
+    await expect(service.getSummaryById('missing')).rejects.toBeInstanceOf(NotFoundException);
   });
 });
