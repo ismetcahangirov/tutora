@@ -3,5 +3,11 @@
 // dependency install in CI. The shared workspace ESLint config is layered on
 // top in sub-issue #3.
 const expoConfig = require('eslint-config-expo/flat');
+const houseRules = require('@tutora/config/eslint/rules');
 
-module.exports = [expoConfig, { ignores: ['dist/*', '.expo/*'] }].flat();
+module.exports = [
+  expoConfig,
+  ...houseRules,
+  // Node/CLI dev scripts legitimately use console.
+  { ignores: ['dist/*', '.expo/*', 'scripts/*'] },
+].flat();
