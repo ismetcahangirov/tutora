@@ -18,6 +18,19 @@ module.exports = [
       'no-var': 'error',
       'prefer-const': 'error',
       'object-shorthand': ['error', 'always'],
+      // Enforce path aliases over deep relative chains (../../…).
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['../../**'],
+              message:
+                'Avoid deep relative imports; use a path alias (@/…, @shared/…, @modules/…).',
+            },
+          ],
+        },
+      ],
     },
   },
   {
