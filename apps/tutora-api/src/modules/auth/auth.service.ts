@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { UsersService } from '@modules/users/users.service';
 import { GoogleVerifierService } from './services/google-verifier.service';
 import { TokenService } from './services/token.service';
-import type { AuthResponse } from './types/auth.types';
+import type { AuthResponse, AuthTokens } from './types/auth.types';
 
 @Injectable()
 export class AuthService {
@@ -29,5 +29,15 @@ export class AuthService {
         onboardingCompleted: user.onboardingCompleted,
       },
     };
+  }
+
+  /** Rotates a refresh token into a fresh access + refresh pair. */
+  async refresh(refreshToken: string): Promise<AuthTokens> {
+    return this.tokens.rotate(refreshToken);
+  }
+
+  /** Revokes a refresh token. Idempotent; never leaks whether it existed. */
+  async logout(refreshToken: string): Promise<void> {
+    await this.tokens.revoke(refreshToken);
   }
 }
