@@ -1,0 +1,13 @@
+{
+  "welcome": {
+    "subject": "Welcome to Tutora!",
+    "greeting": "Hi {name}!",
+    "intro": "Thanks for joining Tutora.",
+    "body": "Find trusted tutors by budget, district, subject, and format in minutes.",
+    "cta": "Start finding tutors",
+    "signature": "The Tutora team"
+  },
+  "common": {
+    "defaultName": "there"
+  }
+}

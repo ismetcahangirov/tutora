@@ -1,0 +1,9 @@
+{
+  "idToken": {
+    "required": "idToken is required.",
+    "notString": "idToken must be a string."
+  },
+  "role": {
+    "invalid": "Role must be one of the allowed values."
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "common": {
+    "selectLanguage": "Select language"
+  },
+  "home": {
+    "title": "Find the right tutor, fast",
+    "tagline": "Search trusted tutors by budget, district, subject, and format — in minutes.",
+    "description": "Find trusted tutors by budget, district, subject, and format.",
+    "cta": "Get started"
+  }
+}

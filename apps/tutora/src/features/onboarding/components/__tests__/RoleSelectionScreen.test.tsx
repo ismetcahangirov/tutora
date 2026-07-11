@@ -3,9 +3,11 @@
  *
  * `useRoleSelection` is mocked so we drive each UI state directly and assert the
  * screen wires selection, the disabled/enabled continue action, and the error.
+ * Copy is asserted against the English catalog (tests boot i18n in English).
  */
 import { fireEvent, renderWithProviders, screen } from '@/test-utils';
-import { ONBOARDING_COPY, ROLE_OPTIONS } from '@features/onboarding/constants';
+import en from '@/shared/i18n/locales/en.json';
+import { SELECTABLE_ONBOARDING_ROLES } from '@features/onboarding/constants';
 import { useRoleSelection } from '@features/onboarding/hooks/useRoleSelection';
 
 import { RoleSelectionScreen } from '../RoleSelectionScreen';
@@ -33,8 +35,8 @@ describe('RoleSelectionScreen (#23)', () => {
     mockState();
     await renderWithProviders(<RoleSelectionScreen />);
 
-    for (const option of ROLE_OPTIONS) {
-      expect(screen.getByText(option.title)).toBeTruthy();
+    for (const role of SELECTABLE_ONBOARDING_ROLES) {
+      expect(screen.getByText(en.onboarding.roles[role].title)).toBeTruthy();
     }
   });
 
@@ -42,7 +44,7 @@ describe('RoleSelectionScreen (#23)', () => {
     mockState({ selectedRole: null });
     await renderWithProviders(<RoleSelectionScreen />);
 
-    expect(screen.getByRole('button', { name: ONBOARDING_COPY.role.continue })).toBeDisabled();
+    expect(screen.getByRole('button', { name: en.onboarding.role.continue })).toBeDisabled();
   });
 
   it('selects a role when its card is pressed', async () => {
@@ -50,14 +52,14 @@ describe('RoleSelectionScreen (#23)', () => {
     mockState({ selectRole });
     await renderWithProviders(<RoleSelectionScreen />);
 
-    const option = ROLE_OPTIONS[1];
-    if (!option) {
+    const role = SELECTABLE_ONBOARDING_ROLES[1];
+    if (!role) {
       throw new Error('expected two role options');
     }
 
-    await fireEvent.press(screen.getByRole('radio', { name: option.title }));
+    await fireEvent.press(screen.getByRole('radio', { name: en.onboarding.roles[role].title }));
 
-    expect(selectRole).toHaveBeenCalledWith(option.role);
+    expect(selectRole).toHaveBeenCalledWith(role);
   });
 
   it('submits when continue is pressed with a selection', async () => {
@@ -65,15 +67,15 @@ describe('RoleSelectionScreen (#23)', () => {
     mockState({ selectedRole: 'STUDENT', submit });
     await renderWithProviders(<RoleSelectionScreen />);
 
-    await fireEvent.press(screen.getByRole('button', { name: ONBOARDING_COPY.role.continue }));
+    await fireEvent.press(screen.getByRole('button', { name: en.onboarding.role.continue }));
 
     expect(submit).toHaveBeenCalledTimes(1);
   });
 
   it('shows the error message when saving fails', async () => {
-    mockState({ selectedRole: 'STUDENT', error: ONBOARDING_COPY.role.error });
+    mockState({ selectedRole: 'STUDENT', error: en.onboarding.role.error });
     await renderWithProviders(<RoleSelectionScreen />);
 
-    expect(screen.getByText(ONBOARDING_COPY.role.error)).toBeTruthy();
+    expect(screen.getByText(en.onboarding.role.error)).toBeTruthy();
   });
 });

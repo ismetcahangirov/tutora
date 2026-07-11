@@ -14,10 +14,10 @@
 import { useCallback, useEffect, useMemo, useReducer, useRef, type ReactNode } from 'react';
 
 import { configureApiAuth, setAuthTokens } from '@/shared/lib';
+import { i18n } from '@/shared/i18n';
 
 import { signInWithGoogleIdToken } from '../api/auth.api';
 import { fetchCurrentUser } from '../api/me.api';
-import { AUTH_COPY } from '../constants';
 import { authStorage } from '../services/auth-storage';
 import { googleAuthGateway } from '../services/google-auth.gateway';
 import type { AuthContextValue, AuthUser } from '../types';
@@ -63,12 +63,15 @@ function reducer(state: AuthState, action: AuthAction): AuthState {
   }
 }
 
-/** Maps a thrown value to user-facing copy (cancellation vs. generic failure). */
+/**
+ * Maps a thrown value to user-facing copy (cancellation vs. generic failure).
+ * Uses the i18n instance directly since this runs outside React.
+ */
 function toErrorMessage(error: unknown): string {
   if (error instanceof Error && /cancel|dismiss/i.test(error.message)) {
-    return AUTH_COPY.error.cancelled;
+    return i18n.t('auth.error.cancelled');
   }
-  return AUTH_COPY.error.generic;
+  return i18n.t('auth.error.generic');
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {

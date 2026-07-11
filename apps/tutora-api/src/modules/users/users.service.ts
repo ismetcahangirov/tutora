@@ -1,11 +1,19 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, Optional } from '@nestjs/common';
 import type { User, UserRole } from '@prisma/client';
 import { PrismaService } from '@/prisma/prisma.service';
+import { MailService } from '@modules/mail/mail.service';
 import type { GoogleProfile, UserSummary } from './users.types';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+  private readonly logger = new Logger(UsersService.name);
+
+  constructor(
+    private readonly prisma: PrismaService,
+    // Optional so units/integration suites that don't wire the mailer still
+    // resolve UsersService; in the running app MailModule is global.
+    @Optional() private readonly mail?: MailService,
+  ) {}
 
   /**
    * Returns a non-sensitive summary of the user for profile endpoints.
@@ -71,7 +79,7 @@ export class UsersService {
       });
     }
 
-    return this.prisma.user.create({
+    const created = await this.prisma.user.create({
       data: {
         email: profile.email,
         emailVerified: true,
@@ -82,5 +90,22 @@ export class UsersService {
         provider: 'GOOGLE',
       },
     });
+    this.sendWelcomeEmail(created);
+    return created;
+  }
+
+  /**
+   * Fire-and-forget welcome email for a newly created account (#84). A mail
+   * failure must never block or fail sign-up, so it is logged, not thrown.
+   */
+  private sendWelcomeEmail(user: User): void {
+    if (!this.mail) {
+      return;
+    }
+    void this.mail
+      .sendWelcomeEmail({ email: user.email, name: user.name, locale: user.locale })
+      .catch((error: unknown) =>
+        this.logger.error(`Failed to send welcome email to ${user.email}`, error),
+      );
   }
 }

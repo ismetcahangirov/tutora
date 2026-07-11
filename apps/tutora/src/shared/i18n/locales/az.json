@@ -1,0 +1,51 @@
+{
+  "common": {
+    "selectLanguage": "Dili seçin"
+  },
+  "auth": {
+    "screen": {
+      "title": "Tutora-ya xoş gəlmisiniz",
+      "subtitle": "Büdcə, rayon və fənnə görə uyğun repetitoru dəqiqələr içində tapın.",
+      "continueWithGoogle": "Google ilə davam et",
+      "legal": "Davam etməklə Şərtlər və Məxfilik Siyasətimizi qəbul edirsiniz."
+    },
+    "error": {
+      "title": "Giriş alınmadı",
+      "cancelled": "Giriş ləğv edildi. Zəhmət olmasa yenidən cəhd edin.",
+      "generic": "Sizi daxil edə bilmədik. İnternet bağlantınızı yoxlayıb yenidən cəhd edin.",
+      "retry": "Yenidən cəhd et"
+    }
+  },
+  "onboarding": {
+    "slides": {
+      "discover": {
+        "title": "Uyğun repetitoru tapın",
+        "description": "Büdcə, rayon, fənn, reytinq, format və dilə görə axtarın — dəqiqələr içində."
+      },
+      "transparent": {
+        "title": "Aydın və şəffaf",
+        "description": "Təsdiqlənmiş repetitorları real rəylərlə müqayisə edin. Təxminə yox, söz-söhbətə yox."
+      },
+      "flexible": {
+        "title": "Öz üsulunuzla öyrənin",
+        "description": "Onlayn və ya üzbəüz, istədiyiniz dildə, sizə uyğun cədvəllə."
+      }
+    },
+    "roles": {
+      "STUDENT": {
+        "title": "Mən şagird və ya valideynəm",
+        "description": "Ehtiyaclarınıza və büdcənizə uyğun etibarlı repetitorları tapın və rezerv edin."
+      },
+      "TUTOR": {
+        "title": "Mən repetitoram",
+        "description": "Motivasiyalı şagirdlərə çatın və sabit, proqnozlaşdırıla bilən cədvəl qurun."
+      }
+    },
+    "role": {
+      "title": "Tutora-dan necə istifadə edəcəksiniz?",
+      "subtitle": "Təcrübənizi fərdiləşdirmək üçün rolunuzu seçin.",
+      "continue": "Davam et",
+      "error": "Seçiminizi yadda saxlaya bilmədik. İnternet bağlantınızı yoxlayıb yenidən cəhd edin."
+    }
+  }
+}

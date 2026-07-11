@@ -1,14 +1,17 @@
 /**
- * Test helpers — render components inside the app's providers (theme + safe area).
+ * Test helpers — render components inside the app's providers (i18n + theme + safe
+ * area).
  *
  * Not a test file itself. `renderWithProviders` / `renderHookWithProviders` wrap
- * the subject in a `ThemeProvider` (defaulting to light) and a `SafeAreaProvider`
- * with fixed metrics so `useSafeAreaInsets` resolves synchronously in tests.
+ * the subject in an `I18nProvider`, a `ThemeProvider` (defaulting to light) and a
+ * `SafeAreaProvider` with fixed metrics so `useSafeAreaInsets` resolves
+ * synchronously in tests. Pass `language` to render in a specific locale.
  */
 import { render, renderHook, type RenderOptions } from '@testing-library/react-native';
 import type { ReactElement, ReactNode } from 'react';
 import { SafeAreaProvider, type Metrics } from 'react-native-safe-area-context';
 
+import { I18nProvider, i18n, type SupportedLanguage } from '@/shared/i18n';
 import { ThemeProvider, type ThemePreference } from '@/theme';
 
 const INITIAL_METRICS: Metrics = {
@@ -16,23 +19,28 @@ const INITIAL_METRICS: Metrics = {
   insets: { top: 47, left: 0, right: 0, bottom: 34 },
 };
 
-type ProviderOptions = { preference?: ThemePreference };
+type ProviderOptions = { preference?: ThemePreference; language?: SupportedLanguage };
 
 function AppProviders({
   children,
   preference = 'light',
-}: { children: ReactNode } & ProviderOptions) {
+}: { children: ReactNode } & Pick<ProviderOptions, 'preference'>) {
   return (
     <SafeAreaProvider initialMetrics={INITIAL_METRICS}>
-      <ThemeProvider initialPreference={preference}>{children}</ThemeProvider>
+      <I18nProvider>
+        <ThemeProvider initialPreference={preference}>{children}</ThemeProvider>
+      </I18nProvider>
     </SafeAreaProvider>
   );
 }
 
 export function renderWithProviders(
   ui: ReactElement,
-  { preference, ...options }: ProviderOptions & Omit<RenderOptions, 'wrapper'> = {},
+  { preference, language, ...options }: ProviderOptions & Omit<RenderOptions, 'wrapper'> = {},
 ) {
+  if (language) {
+    void i18n.changeLanguage(language);
+  }
   return render(ui, {
     wrapper: ({ children }) => <AppProviders preference={preference}>{children}</AppProviders>,
     ...options,
@@ -41,8 +49,11 @@ export function renderWithProviders(
 
 export function renderHookWithProviders<Result>(
   hook: () => Result,
-  { preference }: ProviderOptions = {},
+  { preference, language }: ProviderOptions = {},
 ) {
+  if (language) {
+    void i18n.changeLanguage(language);
+  }
   return renderHook(hook, {
     wrapper: ({ children }) => <AppProviders preference={preference}>{children}</AppProviders>,
   });
