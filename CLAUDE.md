@@ -85,23 +85,23 @@ Detailed diagrams: [`.claude/context/architecture.md`](.claude/context/architect
 
 ## Naming Convention
 
-| Kind | Convention | Example |
-| --- | --- | --- |
-| Directories | kebab‑case | `tutor-profile/` |
-| React components | PascalCase | `TutorCard.tsx` |
-| Component files | PascalCase | `SearchFilterSheet.tsx` |
-| Hooks | camelCase, `use` prefix | `useTutorSearch.ts` |
-| Stores (Zustand) | camelCase, `Store` suffix | `useFiltersStore.ts` |
-| Services / gateways | camelCase, `.service.ts` | `tutors.service.ts` |
-| Types & interfaces | PascalCase (no `I` prefix) | `Tutor`, `SearchFilters` |
-| Enums | PascalCase, singular | `UserRole` |
-| Constants | UPPER_SNAKE_CASE | `DEFAULT_PAGE_SIZE` |
-| Booleans | `is/has/should/can` prefix | `isVerified`, `hasReviews` |
-| Event handlers | `handle` / `on` prefix | `handleSubmit`, `onSelect` |
-| i18n keys | dot‑namespaced | `search.filter.district` |
-| NestJS DTOs | PascalCase, `Dto` suffix | `CreateTutorDto` |
-| Prisma models | PascalCase, singular | `Tutor`, `Review` |
-| Test files | `*.test.ts` / `*.spec.ts` | `useTutorSearch.test.ts` |
+| Kind                | Convention                 | Example                    |
+| ------------------- | -------------------------- | -------------------------- |
+| Directories         | kebab‑case                 | `tutor-profile/`           |
+| React components    | PascalCase                 | `TutorCard.tsx`            |
+| Component files     | PascalCase                 | `SearchFilterSheet.tsx`    |
+| Hooks               | camelCase, `use` prefix    | `useTutorSearch.ts`        |
+| Stores (Zustand)    | camelCase, `Store` suffix  | `useFiltersStore.ts`       |
+| Services / gateways | camelCase, `.service.ts`   | `tutors.service.ts`        |
+| Types & interfaces  | PascalCase (no `I` prefix) | `Tutor`, `SearchFilters`   |
+| Enums               | PascalCase, singular       | `UserRole`                 |
+| Constants           | UPPER_SNAKE_CASE           | `DEFAULT_PAGE_SIZE`        |
+| Booleans            | `is/has/should/can` prefix | `isVerified`, `hasReviews` |
+| Event handlers      | `handle` / `on` prefix     | `handleSubmit`, `onSelect` |
+| i18n keys           | dot‑namespaced             | `search.filter.district`   |
+| NestJS DTOs         | PascalCase, `Dto` suffix   | `CreateTutorDto`           |
+| Prisma models       | PascalCase, singular       | `Tutor`, `Review`          |
+| Test files          | `*.test.ts` / `*.spec.ts`  | `useTutorSearch.test.ts`   |
 
 ---
 
@@ -161,7 +161,13 @@ Detailed diagrams: [`.claude/context/architecture.md`](.claude/context/architect
 - **Never swallow errors silently.** Log with context; surface a user‑friendly message.
 - Backend: a global **exception filter** maps errors to a consistent JSON shape:
   ```json
-  { "statusCode": 400, "error": "BadRequest", "message": "…", "path": "/api/v1/…", "timestamp": "…" }
+  {
+    "statusCode": 400,
+    "error": "BadRequest",
+    "message": "…",
+    "path": "/api/v1/…",
+    "timestamp": "…"
+  }
   ```
 - Use typed domain errors (e.g. `TutorNotFoundError`) mapped to HTTP codes.
 - Client: React Query `onError` + error boundaries; show a **Toast** and an inline error state.
@@ -379,15 +385,19 @@ Claude should automatically utilize the following skills whenever appropriate.
 ### Skill Usage Rules
 
 #### brainstorming
+
 Use during: Feature planning · Architecture discussions · UX improvements · Product ideas · Database design · API planning.
 
 #### code-simplify
+
 Always refactor overly complex implementations into simpler, more maintainable solutions while preserving readability and performance.
 
 #### code-reviewer
+
 Before considering any feature complete, review the code for: Bugs · Performance · Naming · Security · Type Safety · Reusability · Dead Code · Duplicate Logic · Accessibility · Best Practices. Provide review comments as a Senior Engineer.
 
 #### taste
+
 Use the Taste skill to improve: UI consistency · Component composition · Design quality · Modern code structure · Project organization · Naming quality · UX decisions.
 
 **Taste skill reference repository:** <https://github.com/Leonxlnx/taste-skill.git>
@@ -432,14 +442,14 @@ A dedicated folder holds Claude configuration, skills, prompts, and context:
 
 ## Repository Setup
 
-| Concern | Value |
-| --- | --- |
-| Repository name | `tutora` |
-| Application name | **Tutora** |
+| Concern           | Value               |
+| ----------------- | ------------------- |
+| Repository name   | `tutora`            |
+| Application name  | **Tutora**          |
 | Bundle identifier | `com.tutora.mobile` |
-| Admin panel | `tutora-admin` |
-| Landing page | `tutora-web` |
-| Backend | `tutora-api` |
+| Admin panel       | `tutora-admin`      |
+| Landing page      | `tutora-web`        |
+| Backend           | `tutora-api`        |
 
 ---
 

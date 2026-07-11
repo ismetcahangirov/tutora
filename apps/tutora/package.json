@@ -31,7 +31,8 @@
     "@types/react": "~19.2.2",
     "eslint": "^9.39.4",
     "eslint-config-expo": "~57.0.0",
-    "typescript": "~6.0.3"
+    "typescript": "~6.0.3",
+    "@tutora/config": "workspace:*"
   },
   "scripts": {
     "dev": "expo start",
@@ -44,5 +45,6 @@
     "typecheck": "tsc --noEmit",
     "test": "echo \"no tests yet\" && exit 0"
   },
-  "private": true
+  "private": true,
+  "prettier": "@tutora/config/prettier"
 }

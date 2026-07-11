@@ -41,7 +41,7 @@ Closes #
      Delete this section if not applicable. -->
 
 | Before | After |
-|--------|-------|
+| ------ | ----- |
 |        |       |
 
 ## How Has This Been Tested?
@@ -57,9 +57,9 @@ Closes #
 
 **Test environment:**
 
-- OS / Device: 
-- App version: 
-- Node version: 
+- OS / Device:
+- App version:
+- Node version:
 
 ## Checklist
 

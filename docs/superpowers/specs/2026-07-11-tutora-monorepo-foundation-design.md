@@ -15,21 +15,21 @@ reproducible foundation.
 
 This spec covers the six sub-issues of Epic #1:
 
-| # | Title |
-|---|-------|
-| #2 | Scaffold repositories (tutora, tutora-api, tutora-admin, tutora-web) |
-| #3 | Configure TypeScript, ESLint & Prettier across packages |
-| #4 | Set up Husky, lint-staged & commitlint (Conventional Commits) |
-| #5 | Configure absolute imports & path aliases |
-| #6 | Add Zod-based environment variable validation |
-| #7 | Docker Compose for Postgres + Redis |
+| #   | Title                                                                |
+| --- | -------------------------------------------------------------------- |
+| #2  | Scaffold repositories (tutora, tutora-api, tutora-admin, tutora-web) |
+| #3  | Configure TypeScript, ESLint & Prettier across packages              |
+| #4  | Set up Husky, lint-staged & commitlint (Conventional Commits)        |
+| #5  | Configure absolute imports & path aliases                            |
+| #6  | Add Zod-based environment variable validation                        |
+| #7  | Docker Compose for Postgres + Redis                                  |
 
 ---
 
 ## 2. Key Decisions (confirmed with product owner)
 
 1. **Repo topology → Monorepo** using **pnpm workspaces**. The issue language
-   ("four *packages*", "*shared* ESLint + Prettier config across packages") takes
+   ("four _packages_", "_shared_ ESLint + Prettier config across packages") takes
    precedence over `architecture.md`'s "four independent repos" framing. A single
    repo with shared config removes duplication and keeps standards consistent.
 2. **Scaffolding depth → Official CLIs + dependency install.** Each app is generated
@@ -78,6 +78,7 @@ the mobile app lives at `apps/tutora` and is the npm package `@tutora/mobile`
 ## 4. Sub-Issue Breakdown
 
 ### #2 — Scaffold (`chore/scaffold-monorepo`)
+
 - Root workspace: `pnpm-workspace.yaml`, `turbo.json`, root `package.json`
   (scripts: `dev`, `build`, `lint`, `typecheck`, `test`, `format`), `packageManager`
   pinned to pnpm.
@@ -91,6 +92,7 @@ the mobile app lives at `apps/tutora` and is the npm package `@tutora/mobile`
   trivially green on empty apps).
 
 ### #3 — TypeScript / ESLint / Prettier (`chore/lint-format-tooling`)
+
 - `packages/config` publishes: a strict `tsconfig` base, a shared flat ESLint config
   (`@typescript-eslint/recommended` + react + react-hooks + import, `no-explicit-any: error`,
   `no-console: warn`, import-order), and a Prettier preset
@@ -99,6 +101,7 @@ the mobile app lives at `apps/tutora` and is the npm package `@tutora/mobile`
 - **DoD:** `pnpm -w lint` and `pnpm -w typecheck` green across all apps.
 
 ### #4 — Husky / lint-staged / commitlint (`chore/git-hooks`)
+
 - Root Husky install; `pre-commit` → lint-staged
   (`*.{ts,tsx}`: eslint --fix + prettier --write; `*.{json,md}`: prettier --write).
 - `commit-msg` → commitlint with `@commitlint/config-conventional`.
@@ -106,6 +109,7 @@ the mobile app lives at `apps/tutora` and is the npm package `@tutora/mobile`
 - **DoD:** a non-conventional commit is rejected; staged files are auto-fixed.
 
 ### #5 — Absolute imports & path aliases (`chore/path-aliases`)
+
 - Aliases per app in `tsconfig` + bundler config:
   - mobile: `@features/*`, `@shared/*`, `@app/*` (tsconfig + `babel.config.js`/metro).
   - admin (Vite): `@/*` → `src/*` (tsconfig + `vite.config` resolve.alias).
@@ -116,6 +120,7 @@ the mobile app lives at `apps/tutora` and is the npm package `@tutora/mobile`
 - **DoD:** an aliased import resolves in build, typecheck, and tests.
 
 ### #6 — Zod env validation (`chore/env-validation`)
+
 - `tutora-api`: `src/config/env.ts` — a Zod schema parsed at startup; process exits
   with a clear message on invalid/missing vars. Typed `Env` exported and consumed
   via Nest `ConfigModule` (validate hook).
@@ -126,6 +131,7 @@ the mobile app lives at `apps/tutora` and is the npm package `@tutora/mobile`
   a valid env boots.
 
 ### #7 — Docker Compose (`chore/docker-compose`)
+
 - `docker-compose.yml`: **PostgreSQL 15** + **Redis 7**, named volumes, healthchecks,
   ports from env (`.env.example` documents them).
 - `docker/postgres/init/` seed SQL (extensions, e.g. `uuid-ossp`/`pg_trgm`; a dev
@@ -150,16 +156,16 @@ Branches are stacked (each cut from the previous) and merged in the order above.
 ## 6. Risks & Mitigations
 
 - **Heavy installs on Windows.** Official scaffolds + `node_modules` are large and
-  slow; native/Expo deps can fail. *Mitigation:* install incrementally per app;
+  slow; native/Expo deps can fail. _Mitigation:_ install incrementally per app;
   if the Bash sandbox blocks network, hand the install command to the user to run
   via the `!` prefix.
 - **Nested lockfiles from scaffolders.** Each CLI emits its own lockfile/package
-  manager assumptions. *Mitigation:* remove nested lockfiles, re-install from root
+  manager assumptions. _Mitigation:_ remove nested lockfiles, re-install from root
   with pnpm, pin `packageManager`.
-- **Protected `main`.** No direct pushes. *Mitigation:* Draft PRs per sub-issue,
+- **Protected `main`.** No direct pushes. _Mitigation:_ Draft PRs per sub-issue,
   sequential merge; reviewer approves.
 - **`no-explicit-any: error` vs generated code.** Some scaffolds emit `any`.
-  *Mitigation:* fix or narrow generated `any`s during #3; never blanket-disable.
+  _Mitigation:_ fix or narrow generated `any`s during #3; never blanket-disable.
 
 ---
 

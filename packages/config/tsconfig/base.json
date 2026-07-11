@@ -1,0 +1,15 @@
+{
+  // Strictness-only base. Framework tsconfigs own module/target/lib/jsx; this
+  // overlay only tightens type safety and is safe to `extends` after a framework base.
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true
+  }
+}

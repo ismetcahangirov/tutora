@@ -39,6 +39,7 @@ if (session.status !== 'pending') return <SessionStatus status={session.status} 
 ### 2. Duplication
 
 Same logic copy-pasted across two or more places. Common Tutora examples:
+
 - Date formatting in multiple screen components
 - Auth header injection in multiple API calls
 - RLS check logic repeated in two NestJS services
@@ -48,6 +49,7 @@ Fix: extract to a utility, hook, or shared service method.
 ### 3. God Components / God Services
 
 A single component or class that does too many things. Signs:
+
 - 400+ lines
 - Multiple distinct sections separated by comments like `// ---- FORM LOGIC ----`
 - Imports from 10+ other modules
@@ -66,6 +68,7 @@ Fix: React Context, or restructure so the consumer is closer to the source.
 An abstraction built for a flexibility that was never needed.
 
 Signs:
+
 - A generic `<DataTable config={...} />` that is only ever used once
 - A factory function that produces only one type
 - A base class with one subclass
@@ -79,11 +82,11 @@ Names that describe implementation instead of intent:
 ```ts
 // Bad
 const d = new Date(s.startAt);
-const arr = sessions.filter(x => x.status === 'active');
+const arr = sessions.filter((x) => x.status === 'active');
 
 // Better
 const sessionDate = new Date(session.startAt);
-const activeSessions = sessions.filter(s => s.status === 'active');
+const activeSessions = sessions.filter((s) => s.status === 'active');
 ```
 
 ### 7. Commented-Out Code
@@ -109,6 +112,7 @@ if (sessions.length > MAX_SESSIONS_PER_WEEK) { ... }
 ### Step 1 — Read Without Editing
 
 Read the entire file first. Note:
+
 - What is the single responsibility of this file?
 - Which lines are the actual logic vs. boilerplate/wiring?
 - What would you delete if you had to cut the file in half?
@@ -125,13 +129,13 @@ Invert conditionals to exit early. This flattens nesting and puts the happy path
 
 For components over ~300 lines, split along these natural seams:
 
-| Seam | Extract to |
-|---|---|
-| Data fetching / async logic | Custom hook (`useTutorSessions.ts`) |
-| Form state + validation | Form hook or separate form component |
-| A repeated UI pattern | New component |
-| Business logic | Service layer / utility |
-| Type definitions | `types.ts` co-located with the feature |
+| Seam                        | Extract to                             |
+| --------------------------- | -------------------------------------- |
+| Data fetching / async logic | Custom hook (`useTutorSessions.ts`)    |
+| Form state + validation     | Form hook or separate form component   |
+| A repeated UI pattern       | New component                          |
+| Business logic              | Service layer / utility                |
+| Type definitions            | `types.ts` co-located with the feature |
 
 Tutora example — a 400-line `TutorProfileScreen.tsx`:
 
@@ -171,6 +175,7 @@ export function formatDuration(minutes: number): string {
 ### Step 6 — Verify Behavior is Unchanged
 
 After simplification:
+
 - Run existing tests
 - Manually verify the key user flow still works
 - Check TypeScript has no new errors (`tsc --noEmit`)

@@ -31,6 +31,7 @@ Questions to ask:
 - What has already been tried or ruled out, and why?
 
 Tutora examples:
+
 - "Tutors need to mark availability" → Who sets it — tutor only, or admin too? Is it recurring or per-day? Does it need to handle time zones?
 - "Build a messaging feature" → Real-time or async? Within existing booking context or standalone inbox?
 
@@ -42,14 +43,14 @@ Surface non-negotiables before ideating. These eliminate entire branches of solu
 
 Constraint categories:
 
-| Category | Questions |
-|---|---|
-| Data model | What tables already exist? What relationships are fixed? |
-| API contracts | Are mobile clients already calling an endpoint? Can we break it? |
-| Auth / security | Which roles are involved? What data must be row-level secured? |
-| Performance | What scale? Real-time? Offline support needed? |
-| Design system | Does the UI touch already exist in shadcn/ui? No gradients, Plus Jakarta Sans. |
-| Time | Is this MVP or full feature? What can be deferred? |
+| Category        | Questions                                                                      |
+| --------------- | ------------------------------------------------------------------------------ |
+| Data model      | What tables already exist? What relationships are fixed?                       |
+| API contracts   | Are mobile clients already calling an endpoint? Can we break it?               |
+| Auth / security | Which roles are involved? What data must be row-level secured?                 |
+| Performance     | What scale? Real-time? Offline support needed?                                 |
+| Design system   | Does the UI touch already exist in shadcn/ui? No gradients, Plus Jakarta Sans. |
+| Time            | Is this MVP or full feature? What can be deferred?                             |
 
 ---
 
@@ -89,11 +90,11 @@ Score or rank each option across the dimensions that matter most for this specif
 
 Use a simple table:
 
-| Option | Complexity | UX | Reversibility | Notes |
-|---|---|---|---|---|
-| A | Low | Medium | High | Safe default |
-| B | Medium | High | Medium | Better long-term |
-| C | High | High | Low | Lock-in risk |
+| Option | Complexity | UX     | Reversibility | Notes            |
+| ------ | ---------- | ------ | ------------- | ---------------- |
+| A      | Low        | Medium | High          | Safe default     |
+| B      | Medium     | High   | Medium        | Better long-term |
+| C      | High       | High   | Low           | Lock-in risk     |
 
 ---
 

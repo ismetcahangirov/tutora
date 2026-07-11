@@ -68,15 +68,15 @@ Today, finding a tutor is slow, opaque, and unreliable. Discovery happens throug
 
 These channels share the same structural problems:
 
-| Problem | Impact |
-| --- | --- |
-| ❌ No way to **compare** tutors | Decisions are made blindly |
-| ❌ Pricing is **not transparent** | Hidden or inconsistent costs |
-| ❌ **Trust is unknown** | No verification of identity or credentials |
-| ❌ **No real reviews** | Reputation is anecdotal |
-| ❌ **No filtering system** | Impossible to narrow by district, price, subject |
-| ❌ **Wasted time** | Days or weeks to find someone suitable |
-| ❌ Finding a **reliable tutor is hard** | High risk, low confidence |
+| Problem                                 | Impact                                           |
+| --------------------------------------- | ------------------------------------------------ |
+| ❌ No way to **compare** tutors         | Decisions are made blindly                       |
+| ❌ Pricing is **not transparent**       | Hidden or inconsistent costs                     |
+| ❌ **Trust is unknown**                 | No verification of identity or credentials       |
+| ❌ **No real reviews**                  | Reputation is anecdotal                          |
+| ❌ **No filtering system**              | Impossible to narrow by district, price, subject |
+| ❌ **Wasted time**                      | Days or weeks to find someone suitable           |
+| ❌ Finding a **reliable tutor is hard** | High risk, low confidence                        |
 
 Tutora is designed to eliminate every one of these problems.
 
@@ -184,19 +184,19 @@ Tutora as a brand is intentionally:
 
 The admin panel provides **full control** over the marketplace. Modules:
 
-| Group | Modules |
-| --- | --- |
-| **Overview** | Dashboard, Analytics, Monitoring |
-| **Users** | Users, Students, Tutors, Roles, Permissions |
-| **Marketplace** | Applications, Verification Requests, Reviews, Reports |
-| **Taxonomy** | Subjects, Categories, Districts, Languages |
-| **Engagement** | Notifications, Push Notifications |
-| **Content (CMS)** | Landing Page Management, FAQ Management, Blog, Media Library |
-| **Support** | Support Tickets |
-| **Monetization** | Payments, Subscription Plans, Advertisement Management |
-| **Platform** | Feature Flags, System Settings, Email Templates, Localization |
-| **Governance** | Audit Logs, Error Logs, Security Logs |
-| **Operations** | Backup, Monitoring |
+| Group             | Modules                                                       |
+| ----------------- | ------------------------------------------------------------- |
+| **Overview**      | Dashboard, Analytics, Monitoring                              |
+| **Users**         | Users, Students, Tutors, Roles, Permissions                   |
+| **Marketplace**   | Applications, Verification Requests, Reviews, Reports         |
+| **Taxonomy**      | Subjects, Categories, Districts, Languages                    |
+| **Engagement**    | Notifications, Push Notifications                             |
+| **Content (CMS)** | Landing Page Management, FAQ Management, Blog, Media Library  |
+| **Support**       | Support Tickets                                               |
+| **Monetization**  | Payments, Subscription Plans, Advertisement Management        |
+| **Platform**      | Feature Flags, System Settings, Email Templates, Localization |
+| **Governance**    | Audit Logs, Error Logs, Security Logs                         |
+| **Operations**    | Backup, Monitoring                                            |
 
 **Detailed module responsibilities:**
 
@@ -303,15 +303,15 @@ See [`.claude/context/architecture.md`](.claude/context/architecture.md) for the
 
 ## Repository & Naming
 
-| Concern | Value |
-| --- | --- |
-| Repository name | `tutora` |
-| Application name | **Tutora** |
+| Concern           | Value               |
+| ----------------- | ------------------- |
+| Repository name   | `tutora`            |
+| Application name  | **Tutora**          |
 | Bundle identifier | `com.tutora.mobile` |
-| Mobile package | `tutora` |
-| Admin panel | `tutora-admin` |
-| Landing page | `tutora-web` |
-| Backend API | `tutora-api` |
+| Mobile package    | `tutora`            |
+| Admin panel       | `tutora-admin`      |
+| Landing page      | `tutora-web`        |
+| Backend API       | `tutora-api`        |
 
 ---
 
@@ -504,55 +504,55 @@ Full standards live in [`.claude/context/coding-standards.md`](.claude/context/c
 
 **Light theme**
 
-| Token | HEX | Usage |
-| --- | --- | --- |
-| Primary | `#4F46E5` | Primary actions, brand |
-| Primary Dark | `#4338CA` | Pressed / emphasis |
-| Primary Light | `#EEF2FF` | Tinted backgrounds |
-| Secondary | `#0EA5E9` | Secondary accents |
-| Accent | `#F59E0B` | Highlights (used sparingly) |
-| Background | `#FFFFFF` | App background |
-| Surface | `#F8FAFC` | Elevated surfaces |
-| Card | `#FFFFFF` | Cards |
-| Border | `#E2E8F0` | Borders |
-| Divider | `#EEF2F6` | Dividers |
-| Text Primary | `#0F172A` | Primary text |
-| Text Secondary | `#64748B` | Secondary text |
-| Muted / Neutral | `#94A3B8` | Muted text, icons |
-| Success | `#16A34A` | Success states |
-| Warning | `#F59E0B` | Warnings |
-| Danger | `#DC2626` | Errors / destructive |
-| Info | `#2563EB` | Informational |
-| Disabled | `#CBD5E1` | Disabled states |
-| Overlay | `rgba(15,23,42,0.5)` | Modal/scrim overlay |
+| Token           | HEX                  | Usage                       |
+| --------------- | -------------------- | --------------------------- |
+| Primary         | `#4F46E5`            | Primary actions, brand      |
+| Primary Dark    | `#4338CA`            | Pressed / emphasis          |
+| Primary Light   | `#EEF2FF`            | Tinted backgrounds          |
+| Secondary       | `#0EA5E9`            | Secondary accents           |
+| Accent          | `#F59E0B`            | Highlights (used sparingly) |
+| Background      | `#FFFFFF`            | App background              |
+| Surface         | `#F8FAFC`            | Elevated surfaces           |
+| Card            | `#FFFFFF`            | Cards                       |
+| Border          | `#E2E8F0`            | Borders                     |
+| Divider         | `#EEF2F6`            | Dividers                    |
+| Text Primary    | `#0F172A`            | Primary text                |
+| Text Secondary  | `#64748B`            | Secondary text              |
+| Muted / Neutral | `#94A3B8`            | Muted text, icons           |
+| Success         | `#16A34A`            | Success states              |
+| Warning         | `#F59E0B`            | Warnings                    |
+| Danger          | `#DC2626`            | Errors / destructive        |
+| Info            | `#2563EB`            | Informational               |
+| Disabled        | `#CBD5E1`            | Disabled states             |
+| Overlay         | `rgba(15,23,42,0.5)` | Modal/scrim overlay         |
 
 **Dark theme**
 
-| Token | HEX |
-| --- | --- |
-| Background | `#0B1120` |
-| Surface | `#111827` |
-| Card | `#1E293B` |
-| Border | `#334155` |
-| Text Primary | `#F8FAFC` |
+| Token          | HEX       |
+| -------------- | --------- |
+| Background     | `#0B1120` |
+| Surface        | `#111827` |
+| Card           | `#1E293B` |
+| Border         | `#334155` |
+| Text Primary   | `#F8FAFC` |
 | Text Secondary | `#94A3B8` |
-| Primary | `#6366F1` |
+| Primary        | `#6366F1` |
 
 ### Typography
 
 **Font:** **Plus Jakarta Sans** (primary), fallback **Inter** — via Google Fonts.
 
-| Style | Size / Line height | Weight |
-| --- | --- | --- |
-| Display | 32 / 40 | 700 |
-| Headline | 28 / 36 | 700 |
-| Title | 22 / 28 | 600 |
-| Subtitle | 18 / 26 | 600 |
-| Body | 16 / 24 | 400 |
-| Body Small | 14 / 20 | 400 |
-| Label | 13 / 16 | 500 |
-| Caption | 12 / 16 | 400 |
-| Button | 15 / 20 | 600 |
+| Style      | Size / Line height | Weight |
+| ---------- | ------------------ | ------ |
+| Display    | 32 / 40            | 700    |
+| Headline   | 28 / 36            | 700    |
+| Title      | 22 / 28            | 600    |
+| Subtitle   | 18 / 26            | 600    |
+| Body       | 16 / 24            | 400    |
+| Body Small | 14 / 20            | 400    |
+| Label      | 13 / 16            | 500    |
+| Caption    | 12 / 16            | 400    |
+| Button     | 15 / 20            | 600    |
 
 ### Radius & Spacing
 

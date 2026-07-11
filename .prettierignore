@@ -1,0 +1,19 @@
+# Dependencies & lockfiles
+node_modules/
+pnpm-lock.yaml
+pnpm-workspace.yaml
+
+# Build outputs
+dist/
+build/
+.next/
+.expo/
+out/
+web-build/
+coverage/
+.turbo/
+
+# Generated
+*.tsbuildinfo
+apps/tutora/expo-env.d.ts
+apps/*/next-env.d.ts
