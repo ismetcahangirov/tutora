@@ -1,18 +1,52 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
+/**
+ * Root layout — wires the design-system providers for the whole app (epic #8).
+ *
+ * Order matters: GestureHandlerRootView (for @gorhom/bottom-sheet + gestures) →
+ * SafeAreaProvider → ThemeProvider (system-aware dark mode) → ToastProvider. Fonts
+ * load before the UI shows so text never flashes in a fallback family.
+ */
+import { Stack } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
-import { useColorScheme } from 'react-native';
+import { useEffect } from 'react';
+import { StyleSheet } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
+import { ToastProvider } from '@/components/ui';
+import { ThemeProvider, useAppFonts } from '@/theme';
 
 SplashScreen.preventAutoHideAsync();
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+export default function RootLayout() {
+  const { fontsLoaded, fontError } = useAppFonts();
+
+  useEffect(() => {
+    if (fontsLoaded || fontError) {
+      void SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
+
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <AppTabs />
-    </ThemeProvider>
+    <GestureHandlerRootView style={styles.root}>
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <ToastProvider>
+            <StatusBar style="auto" />
+            <Stack screenOptions={{ headerShown: false }} />
+          </ToastProvider>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
+});
