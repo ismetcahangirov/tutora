@@ -10,21 +10,21 @@ Name the problem clearly before proposing a solution.
 
 **Common code smells in this codebase:**
 
-| Smell | Description |
-|---|---|
-| Large component | Component over 300 lines, handles multiple concerns |
-| God hook | Hook that fetches data, manages complex state, handles navigation, and has side effects |
-| Repeated logic | Same calculation or transformation in 3+ places |
-| Anemic service | Service function that just passes data through with no logic |
-| Inconsistent naming | Mix of conventions (camelCase vs. PascalCase, `get` vs. `fetch` prefixes) |
-| Hardcoded values | Magic strings/numbers that should be constants or design tokens |
-| Prop drilling | Data passed through 3+ component levels without a state manager |
-| Implicit any | TypeScript types weakened with `any` or missing entirely |
-| Inline style | StyleSheet or className strings scattered in JSX instead of a token |
-| Missing abstraction | Two very similar features implemented without a shared abstraction |
-| Over-abstraction | A generic utility so abstract it is harder to understand than repeating the code |
-| Side effects in render | Data fetching or mutations directly in the component body, not in effects or hooks |
-| Wrong layer | Business logic in a controller, API call in a screen component |
+| Smell                  | Description                                                                             |
+| ---------------------- | --------------------------------------------------------------------------------------- |
+| Large component        | Component over 300 lines, handles multiple concerns                                     |
+| God hook               | Hook that fetches data, manages complex state, handles navigation, and has side effects |
+| Repeated logic         | Same calculation or transformation in 3+ places                                         |
+| Anemic service         | Service function that just passes data through with no logic                            |
+| Inconsistent naming    | Mix of conventions (camelCase vs. PascalCase, `get` vs. `fetch` prefixes)               |
+| Hardcoded values       | Magic strings/numbers that should be constants or design tokens                         |
+| Prop drilling          | Data passed through 3+ component levels without a state manager                         |
+| Implicit any           | TypeScript types weakened with `any` or missing entirely                                |
+| Inline style           | StyleSheet or className strings scattered in JSX instead of a token                     |
+| Missing abstraction    | Two very similar features implemented without a shared abstraction                      |
+| Over-abstraction       | A generic utility so abstract it is harder to understand than repeating the code        |
+| Side effects in render | Data fetching or mutations directly in the component body, not in effects or hooks      |
+| Wrong layer            | Business logic in a controller, API call in a screen component                          |
 
 **Document the smell:**
 
@@ -77,6 +77,7 @@ If you cannot write tests for the code before refactoring (e.g., no way to injec
 ## Step 4 — Refactor in Small, Verified Steps
 
 Never make multiple large changes at once. Each step must:
+
 1. Be a single, coherent change
 2. Leave the tests passing
 3. Be committable on its own
@@ -91,6 +92,7 @@ Never make multiple large changes at once. Each step must:
 6. **Consolidate** — Merge duplicated implementations into a single shared one. Keep the old signatures briefly using re-exports, then clean up callers, then remove re-exports.
 
 **After each step:**
+
 ```bash
 npx tsc --noEmit   # zero type errors
 npx eslint .       # zero lint errors
@@ -117,6 +119,7 @@ After all refactor steps are complete:
 4. Check for regressions in edge cases: empty state, error state, loading state, dark mode.
 
 **Behavioral equivalence checklist:**
+
 - [ ] All existing tests pass
 - [ ] No new TypeScript errors
 - [ ] No new ESLint errors
@@ -131,6 +134,7 @@ After all refactor steps are complete:
 Articulate what was achieved. This validates the effort and documents the decision.
 
 **Metrics to consider:**
+
 - Lines of code: before vs. after (smaller is often better, but not always)
 - Cyclomatic complexity: did the key function become simpler?
 - Test coverage: did it increase?
@@ -140,7 +144,7 @@ Articulate what was achieved. This validates the effort and documents the decisi
 **Write a brief summary** in the PR description:
 
 ```
-Before: SearchScreen.tsx was 480 lines, fetched data, managed filter state, 
+Before: SearchScreen.tsx was 480 lines, fetched data, managed filter state,
         handled navigation, and rendered the list — 4 responsibilities.
 
 After: SearchScreen.tsx is 180 lines and only renders.

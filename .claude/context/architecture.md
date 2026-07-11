@@ -4,12 +4,12 @@
 
 Tutora is composed of four independent deployable units that communicate over a shared REST API:
 
-| Unit | Repo | Runtime |
-|---|---|---|
-| Mobile App | `tutora` | React Native / Expo |
-| Admin Panel | `tutora-admin` | React + Vite (SPA) |
-| Landing Page | `tutora-web` | Next.js (SSG/SSR) |
-| Backend API | `tutora-api` | Node.js / NestJS |
+| Unit         | Repo           | Runtime             |
+| ------------ | -------------- | ------------------- |
+| Mobile App   | `tutora`       | React Native / Expo |
+| Admin Panel  | `tutora-admin` | React + Vite (SPA)  |
+| Landing Page | `tutora-web`   | Next.js (SSG/SSR)   |
+| Backend API  | `tutora-api`   | Node.js / NestJS    |
 
 ---
 
@@ -96,39 +96,51 @@ Each NestJS module follows a strict four-layer pattern. Dependencies point inwar
 ## Backend Module Boundaries
 
 ### `auth`
+
 Responsibilities: registration, login, JWT issuance, refresh token rotation, Google OAuth, token blacklisting (Redis), logout.
 
 ### `users`
+
 Base profile data shared across roles (name, email, phone, avatar, locale, device token). Handles profile updates and avatar upload delegation to `media`.
 
 ### `tutors`
+
 Tutor-specific profile: subjects, hourly rates, availability, districts, languages, portfolio. Tutor onboarding flow, verification status.
 
 ### `students`
+
 Student/parent profile: subject interests, budget preference, saved tutors.
 
 ### `search`
+
 Stateless full-text + filter query over tutors. Reads a denormalized Redis cache (refreshed on tutor profile updates). Filters: subject, district, price range, rating, online/offline, language. Returns paginated, sorted results.
 
 ### `applications`
+
 A student submits an application to a tutor. State machine: `PENDING → ACCEPTED | REJECTED | CANCELLED → COMPLETED`. Triggers notifications on state change.
 
 ### `reviews`
+
 Students leave a rating (1–5) and text review after a completed session. Tutor aggregate rating recomputed on each review write (or via Cron).
 
 ### `chat`
+
 Real-time messaging between student and tutor after application acceptance. Messages persisted to PostgreSQL. WebSocket gateway (Socket.IO) via NestJS Gateway decorator. Redis Pub/Sub for horizontal scalability.
 
 ### `notifications`
+
 Sends push notifications via FCM (Firebase Cloud Messaging). Consumes events from BullMQ queues. Manages device token registration and per-user notification preferences.
 
 ### `payments`
+
 Records payment intents, handles payment confirmation webhooks from payment gateway, stores transaction history. (Phase 2 feature.)
 
 ### `admin`
+
 RBAC-protected endpoints for the admin panel: user management, tutor verification, content moderation, analytics aggregation, system configuration.
 
 ### `media`
+
 Handles file upload to Cloud Storage (signed URLs or direct upload). Returns CDN URLs. Used by `users`, `tutors`, and `chat` modules.
 
 ---
@@ -165,13 +177,13 @@ Tutor ──[PATCH /applications/:id { action: "accept" }]──▶ API
 
 ## Caching Strategy (Redis)
 
-| Cache Key Pattern | TTL | Invalidation Trigger |
-|---|---|---|
-| `search:{hash(params)}` | 5 min | Tutor profile update |
-| `tutor:{id}:profile` | 10 min | Tutor profile update |
-| `user:{id}:session` | Refresh token TTL | Logout / token rotation |
-| `blacklist:token:{jti}` | Token expiry | Logout |
-| `rating:{tutorId}` | 30 min | New review written |
+| Cache Key Pattern       | TTL               | Invalidation Trigger    |
+| ----------------------- | ----------------- | ----------------------- |
+| `search:{hash(params)}` | 5 min             | Tutor profile update    |
+| `tutor:{id}:profile`    | 10 min            | Tutor profile update    |
+| `user:{id}:session`     | Refresh token TTL | Logout / token rotation |
+| `blacklist:token:{jti}` | Token expiry      | Logout                  |
+| `rating:{tutorId}`      | 30 min            | New review written      |
 
 Cache-aside pattern: API checks Redis first; on miss reads from PostgreSQL and writes to Redis.
 
@@ -181,14 +193,14 @@ Cache-aside pattern: API checks Redis first; on miss reads from PostgreSQL and w
 
 All queues are backed by Redis. Workers run in the same NestJS process (separate process in production recommended).
 
-| Queue | Job | Trigger |
-|---|---|---|
-| `notifications` | `send-push` | Application state changes, new message, review received |
-| `email` | `send-email` | Registration welcome, application confirmation |
-| `media` | `process-image` | Avatar/portfolio image uploaded (resize + CDN push) |
-| `ratings` | `recalculate-rating` | New review written |
-| `cleanup` | `expire-sessions` | Cron: nightly — purge expired refresh tokens |
-| `search` | `reindex-tutor` | Tutor profile updated — invalidate + warm cache |
+| Queue           | Job                  | Trigger                                                 |
+| --------------- | -------------------- | ------------------------------------------------------- |
+| `notifications` | `send-push`          | Application state changes, new message, review received |
+| `email`         | `send-email`         | Registration welcome, application confirmation          |
+| `media`         | `process-image`      | Avatar/portfolio image uploaded (resize + CDN push)     |
+| `ratings`       | `recalculate-rating` | New review written                                      |
+| `cleanup`       | `expire-sessions`    | Cron: nightly — purge expired refresh tokens            |
+| `search`        | `reindex-tutor`      | Tutor profile updated — invalidate + warm cache         |
 
 ---
 

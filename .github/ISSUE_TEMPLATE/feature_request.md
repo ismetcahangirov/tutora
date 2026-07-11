@@ -1,9 +1,9 @@
 ---
 name: Feature Request
 about: Propose a new feature or enhancement for the Tutora platform
-title: "feat: "
+title: 'feat: '
 labels: feature
-assignees: ""
+assignees: ''
 ---
 
 ## Problem / Motivation

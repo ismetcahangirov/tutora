@@ -1,9 +1,9 @@
 ---
 name: Bug Report
 about: Report a reproducible bug in any part of the Tutora platform
-title: "bug: "
+title: 'bug: '
 labels: bug
-assignees: ""
+assignees: ''
 ---
 
 ## Description
@@ -31,14 +31,14 @@ assignees: ""
 
 ## Environment
 
-| Field       | Value         |
-|-------------|---------------|
-| Platform    | iOS / Android / Web / Desktop |
-| App / Area  | Mobile / Admin / Landing / API |
-| App Version | e.g. 1.2.3   |
-| OS Version  | e.g. iOS 17.4 / Android 14 / macOS 14 |
-| Browser     | e.g. Chrome 124 (if web) |
-| Node / Runtime | e.g. Node 20.11 (if backend) |
+| Field          | Value                                 |
+| -------------- | ------------------------------------- |
+| Platform       | iOS / Android / Web / Desktop         |
+| App / Area     | Mobile / Admin / Landing / API        |
+| App Version    | e.g. 1.2.3                            |
+| OS Version     | e.g. iOS 17.4 / Android 14 / macOS 14 |
+| Browser        | e.g. Chrome 124 (if web)              |
+| Node / Runtime | e.g. Node 20.11 (if backend)          |
 
 ## Severity
 
