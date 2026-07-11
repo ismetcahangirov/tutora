@@ -1,0 +1,9 @@
+{
+  "common": {
+    "selectLanguage": "Select language"
+  },
+  "dashboard": {
+    "title": "Admin Panel",
+    "subtitle": "Manage tutors, students, and content across Tutora."
+  }
+}
