@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import type { User } from '@prisma/client';
+import type { User, UserRole } from '@prisma/client';
 import { PrismaService } from '@/prisma/prisma.service';
 import type { GoogleProfile, UserSummary } from './users.types';
 
@@ -17,6 +17,24 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException('User not found');
     }
+    return this.toSummary(user);
+  }
+
+  /**
+   * Persists the onboarding role choice (#23): sets the role and flips
+   * `onboardingCompleted`. Callers must restrict `role` to selectable values
+   * (see `UpdateMeDto`) — ADMIN is never assignable here.
+   */
+  async completeOnboarding(id: string, role: UserRole): Promise<UserSummary> {
+    const user = await this.prisma.user.update({
+      where: { id },
+      data: { role, onboardingCompleted: true },
+    });
+    return this.toSummary(user);
+  }
+
+  /** Non-sensitive projection shared by every user-facing endpoint. */
+  private toSummary(user: User): UserSummary {
     return {
       id: user.id,
       email: user.email,

@@ -9,6 +9,7 @@ export { useAuth } from './hooks/useAuth';
 export { useGoogleSignIn } from './hooks/useGoogleSignIn';
 export type { UseGoogleSignIn } from './hooks/useGoogleSignIn';
 export { SignInScreen } from './components/SignInScreen';
+export { GoogleSignInButton } from './components/GoogleSignInButton';
 
 export type {
   AuthUser,

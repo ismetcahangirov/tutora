@@ -1,9 +1,9 @@
 /**
  * `/sign-in` route (issue #22).
  *
- * Thin route wrapper that renders the auth feature's `SignInScreen`. Navigation
- * guards / redirect-after-login live in #23; for now this is a directly
- * reachable screen that coexists with the design-system showcase at `/`.
+ * A minimal, directly-reachable sign-in screen. The first-run flow enters
+ * through `/welcome` (carousel + sign-in); this route stays available for
+ * direct navigation and future re-authentication.
  */
 import { SignInScreen } from '@features/auth';
 

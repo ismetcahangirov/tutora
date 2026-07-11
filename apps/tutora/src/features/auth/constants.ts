@@ -15,6 +15,9 @@ export const AUTH_STORAGE_KEYS = {
 /** Backend auth endpoint, appended to `EXPO_PUBLIC_API_URL`. */
 export const AUTH_GOOGLE_ENDPOINT = '/api/v1/auth/google';
 
+/** Current-user profile endpoint, used to restore a session at launch. */
+export const AUTH_ME_ENDPOINT = '/api/v1/users/me';
+
 /** Screen + error copy (i18n-ready placeholders). */
 export const AUTH_COPY = {
   screen: {

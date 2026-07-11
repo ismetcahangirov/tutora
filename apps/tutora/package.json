@@ -6,6 +6,7 @@
     "@expo-google-fonts/plus-jakarta-sans": "^0.4.2",
     "@expo/ui": "~57.0.4",
     "@gorhom/bottom-sheet": "^5.2.14",
+    "axios": "^1.18.1",
     "expo": "~57.0.4",
     "expo-auth-session": "~57.0.2",
     "expo-constants": "~57.0.3",
