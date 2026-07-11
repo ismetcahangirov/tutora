@@ -19,6 +19,8 @@ function build() {
   const users = { upsertFromGoogle: jest.fn().mockResolvedValue(user) };
   const tokens = {
     issueTokens: jest.fn().mockResolvedValue({ accessToken: 'acc', refreshToken: 'ref' }),
+    rotate: jest.fn().mockResolvedValue({ accessToken: 'acc2', refreshToken: 'ref2' }),
+    revoke: jest.fn().mockResolvedValue(undefined),
   };
   const service = new AuthService(
     verifier as unknown as GoogleVerifierService,
@@ -59,5 +61,33 @@ describe('AuthService.authenticateWithGoogle', () => {
       UnauthorizedException,
     );
     expect(users.upsertFromGoogle).not.toHaveBeenCalled();
+  });
+});
+
+describe('AuthService.refresh', () => {
+  it('delegates rotation to TokenService and returns the new pair', async () => {
+    const { service, tokens } = build();
+
+    const result = await service.refresh('ref');
+
+    expect(tokens.rotate).toHaveBeenCalledWith('ref');
+    expect(result).toEqual({ accessToken: 'acc2', refreshToken: 'ref2' });
+  });
+
+  it('propagates a rotation failure (reuse / expired / unknown)', async () => {
+    const { service, tokens } = build();
+    tokens.rotate.mockRejectedValueOnce(new UnauthorizedException());
+
+    await expect(service.refresh('bad')).rejects.toBeInstanceOf(UnauthorizedException);
+  });
+});
+
+describe('AuthService.logout', () => {
+  it('delegates revocation to TokenService', async () => {
+    const { service, tokens } = build();
+
+    await service.logout('ref');
+
+    expect(tokens.revoke).toHaveBeenCalledWith('ref');
   });
 });
