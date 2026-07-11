@@ -1,0 +1,15 @@
+{
+  "name": "@tutora/config",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    "./prettier": "./prettier/index.json",
+    "./eslint/rules": "./eslint/rules.cjs",
+    "./tsconfig/base.json": "./tsconfig/base.json"
+  },
+  "files": [
+    "prettier",
+    "eslint",
+    "tsconfig"
+  ]
+}

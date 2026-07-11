@@ -12,10 +12,12 @@
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
-    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,mjs,cjs,json,md,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mjs,cjs,json,md,yml,yaml}\""
   },
+  "prettier": "@tutora/config/prettier",
   "devDependencies": {
+    "@tutora/config": "workspace:*",
     "prettier": "^3.3.3",
     "turbo": "^2.1.0",
     "typescript": "^5.5.4"
