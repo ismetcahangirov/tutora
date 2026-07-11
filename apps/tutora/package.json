@@ -25,14 +25,15 @@
     "react-native-safe-area-context": "~5.7.0",
     "react-native-screens": "4.25.2",
     "react-native-web": "~0.21.0",
-    "react-native-worklets": "0.10.0"
+    "react-native-worklets": "0.10.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@tutora/config": "workspace:*",
     "@types/react": "~19.2.2",
     "eslint": "^9.39.4",
     "eslint-config-expo": "~57.0.0",
-    "typescript": "~6.0.3",
-    "@tutora/config": "workspace:*"
+    "typescript": "~6.0.3"
   },
   "scripts": {
     "dev": "expo start",
