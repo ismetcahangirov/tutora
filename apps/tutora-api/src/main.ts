@@ -22,9 +22,11 @@ async function bootstrap() {
       exceptionFactory: i18nValidationErrorFactory,
     }),
   );
-  // Order matters: the specific i18n validation filter is registered first so it
-  // owns localized validation errors; the catch-all handles everything else.
-  app.useGlobalFilters(createI18nValidationExceptionFilter(), new AllExceptionsFilter());
+  // Order matters: Nest applies global filters in REVERSE registration order, so
+  // the catch-all must be registered FIRST and the specific i18n validation filter
+  // LAST — otherwise the catch-all shadows it and validation errors lose their
+  // localized message. Guarded by filter-order.integration.spec.ts.
+  app.useGlobalFilters(new AllExceptionsFilter(), createI18nValidationExceptionFilter());
 
   setupSwagger(app, API_VERSION);
 

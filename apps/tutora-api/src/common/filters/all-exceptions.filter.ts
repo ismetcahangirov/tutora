@@ -30,10 +30,12 @@ function errorNameFromStatus(status: number): string {
 
 /**
  * Catch-all exception filter. Localized validation errors are handled by the more
- * specific `I18nValidationExceptionFilter` (registered before this one), so they
- * never reach here. Everything else is shaped into the standard envelope; unknown
- * (non-HTTP) errors become a safe 500 and are logged with context — internals are
- * never leaked to the client.
+ * specific `I18nValidationExceptionFilter`, which — because Nest applies global
+ * filters in reverse registration order — is registered AFTER this one in
+ * `main.ts` so it takes precedence for validation errors and they never reach
+ * here. Everything else is shaped into the standard envelope; unknown (non-HTTP)
+ * errors become a safe 500 and are logged with context — internals are never
+ * leaked to the client.
  */
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
