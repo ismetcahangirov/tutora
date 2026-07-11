@@ -1,0 +1,35 @@
+[
+  { "name": "feature",               "color": "0075ca", "description": "New feature or request" },
+  { "name": "bug",                   "color": "d73a4a", "description": "Something is not working correctly" },
+  { "name": "task",                  "color": "e4e669", "description": "A discrete engineering or operational task" },
+  { "name": "documentation",         "color": "1d76db", "description": "Improvements or additions to documentation" },
+  { "name": "refactor",              "color": "cfd3d7", "description": "Code change that neither fixes a bug nor adds a feature" },
+  { "name": "testing",               "color": "bfd4f2", "description": "Related to tests — unit, integration, or E2E" },
+  { "name": "question",              "color": "d876e3", "description": "Further information is requested" },
+  { "name": "duplicate",             "color": "cfd3d7", "description": "This issue or pull request already exists" },
+  { "name": "help wanted",           "color": "008672", "description": "Extra attention or contribution is needed" },
+  { "name": "good first issue",      "color": "7057ff", "description": "Good for newcomers — well-scoped and low risk" },
+
+  { "name": "area: backend",         "color": "1d76db", "description": "Relates to the NestJS backend (tutora-api)" },
+  { "name": "area: frontend",        "color": "0052cc", "description": "Relates to any web frontend (admin or landing)" },
+  { "name": "area: mobile",          "color": "5319e7", "description": "Relates to the React Native / Expo mobile app" },
+  { "name": "area: admin",           "color": "006b75", "description": "Relates to the admin panel (React + Vite)" },
+  { "name": "area: api",             "color": "0e8a16", "description": "Relates to REST / GraphQL API contracts or endpoints" },
+  { "name": "area: database",        "color": "b60205", "description": "Relates to database schema, migrations, or queries" },
+  { "name": "area: ui",              "color": "f9d0c4", "description": "User interface — layout, components, styling" },
+  { "name": "area: ux",              "color": "fef2c0", "description": "User experience — flows, interactions, accessibility" },
+  { "name": "area: landing",         "color": "c2e0c6", "description": "Relates to the Next.js landing page (tutora-web)" },
+  { "name": "area: devops",          "color": "ededed", "description": "CI/CD, infrastructure, deployment, monitoring" },
+  { "name": "area: security",        "color": "ee0701", "description": "Security — auth, permissions, vulnerabilities, secrets" },
+
+  { "name": "priority: high",        "color": "b60205", "description": "Must be addressed urgently — blocks users or releases" },
+  { "name": "priority: medium",      "color": "e4a11b", "description": "Important but not immediately blocking" },
+  { "name": "priority: low",         "color": "0e8a16", "description": "Nice to have — address when bandwidth allows" },
+
+  { "name": "status: blocked",       "color": "b60205", "description": "Cannot proceed — waiting on a dependency or decision" },
+  { "name": "status: ready for review", "color": "0075ca", "description": "Implementation complete — awaiting code review" },
+  { "name": "status: in progress",   "color": "fbca04", "description": "Actively being worked on" },
+  { "name": "status: done",          "color": "0e8a16", "description": "Completed and merged / closed" },
+
+  { "name": "performance",           "color": "f9a825", "description": "Relates to speed, throughput, or resource usage" }
+]
