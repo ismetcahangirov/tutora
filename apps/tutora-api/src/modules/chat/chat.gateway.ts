@@ -1,13 +1,15 @@
-import { Logger } from '@nestjs/common';
+import { Logger, UseFilters } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import {
+  BaseWsExceptionFilter,
   ConnectedSocket,
   MessageBody,
   OnGatewayConnection,
   OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
+  WsException,
 } from '@nestjs/websockets';
 import type { Server, Socket } from 'socket.io';
 import type { JwtPayload } from '@modules/auth/types/auth.types';
@@ -40,6 +42,7 @@ const socketData = (client: Socket): ChatSocketData => client.data as ChatSocket
  * adapter (see the spec).
  */
 @WebSocketGateway({ namespace: CHAT_NAMESPACE, cors: { origin: true, credentials: true } })
+@UseFilters(new BaseWsExceptionFilter())
 export class ChatGateway implements OnGatewayInit, OnGatewayConnection {
   private readonly logger = new Logger(ChatGateway.name);
 
@@ -82,7 +85,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection {
     if (!userId) {
       return;
     }
-    await this.chat.assertParticipant(userId, body.threadId);
+    await this.assertParticipantOrWs(userId, body.threadId);
     await client.join(threadRoom(body.threadId));
     client.to(threadRoom(body.threadId)).emit(CHAT_EVENTS.PRESENCE, { userId, status: 'online' });
   }
@@ -104,7 +107,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection {
     if (!userId) {
       return;
     }
-    await this.chat.assertParticipant(userId, body.threadId);
+    await this.assertParticipantOrWs(userId, body.threadId);
     client.to(threadRoom(body.threadId)).emit(CHAT_EVENTS.TYPING, {
       threadId: body.threadId,
       userId,
@@ -130,6 +133,20 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection {
       if (room.startsWith(THREAD_ROOM_PREFIX)) {
         client.to(room).emit(CHAT_EVENTS.PRESENCE, { userId, status: 'offline' });
       }
+    }
+  }
+
+  /**
+   * Participant check for WS handlers. Translates the service's HTTP-shaped
+   * denial into a WsException so the gateway-scoped BaseWsExceptionFilter can
+   * emit a clean `exception` event to the client, instead of the denial
+   * escaping into the HTTP global filter.
+   */
+  private async assertParticipantOrWs(userId: string, threadId: string): Promise<void> {
+    try {
+      await this.chat.assertParticipant(userId, threadId);
+    } catch {
+      throw new WsException('You are not a participant of this thread');
     }
   }
 

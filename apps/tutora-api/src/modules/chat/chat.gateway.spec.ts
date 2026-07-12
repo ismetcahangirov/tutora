@@ -1,5 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { WsException } from '@nestjs/websockets';
 import { CHAT_EVENTS, threadRoom, userRoom } from './chat.events';
 import { ChatGateway } from './chat.gateway';
 import { ChatPresenceService } from './chat.presence';
@@ -85,8 +86,21 @@ describe('ChatGateway thread events', () => {
     const { gateway } = buildGateway({ assertParticipant });
     const { socket } = buildSocket({ data: { userId: 'u1' } });
 
-    await expect(gateway.onThreadJoin(socket, { threadId: 't1' })).rejects.toThrow();
+    await expect(gateway.onThreadJoin(socket, { threadId: 't1' })).rejects.toBeInstanceOf(
+      WsException,
+    );
     expect((socket as { join: jest.Mock }).join).not.toHaveBeenCalled();
+  });
+
+  it('rejects typing in a thread the caller does not participate in', async () => {
+    const assertParticipant = jest.fn().mockRejectedValue(new Error('nope'));
+    const { gateway } = buildGateway({ assertParticipant });
+    const { socket, emit } = buildSocket({ data: { userId: 'u1' } });
+
+    await expect(
+      gateway.onTyping(socket, { threadId: 't1', isTyping: true }),
+    ).rejects.toBeInstanceOf(WsException);
+    expect(emit).not.toHaveBeenCalled();
   });
 
   it('broadcasts typing to the rest of the thread room', async () => {
