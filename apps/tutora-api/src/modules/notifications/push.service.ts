@@ -1,11 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { cert, getApp, getApps, initializeApp, type App } from 'firebase-admin/app';
 import { getMessaging, type Messaging } from 'firebase-admin/messaging';
+import { readFirebaseCredentials, resolveFirebaseApp } from '@common/firebase/firebase-app';
 import type { PushPayload, PushResult } from './notifications.types';
-
-/** Named Firebase app so init is idempotent and never clashes with a default app. */
-const FIREBASE_APP_NAME = 'tutora';
 
 /** FCM error codes that mean a token is dead and should be pruned. */
 const DEAD_TOKEN_CODES = new Set([
@@ -34,13 +31,9 @@ export class PushService {
   private readonly messaging: Messaging | null;
 
   constructor(config: ConfigService) {
-    const projectId = config.get<string>('FIREBASE_PROJECT_ID');
-    const clientEmail = config.get<string>('FIREBASE_CLIENT_EMAIL');
-    const privateKey = config.get<string>('FIREBASE_PRIVATE_KEY')?.replace(/\\n/g, '\n');
-
-    if (projectId && clientEmail && privateKey) {
-      const app = this.resolveApp({ projectId, clientEmail, privateKey });
-      this.messaging = getMessaging(app);
+    const creds = readFirebaseCredentials(config);
+    if (creds) {
+      this.messaging = getMessaging(resolveFirebaseApp(creds));
     } else {
       this.messaging = null;
       this.logger.warn('Firebase not configured — push notifications will be skipped.');
@@ -92,16 +85,5 @@ export class PushService {
     }
 
     return result;
-  }
-
-  /** Returns the existing named app or initializes it once. */
-  private resolveApp(creds: { projectId: string; clientEmail: string; privateKey: string }): App {
-    const existing = getApps().find((app) => app.name === FIREBASE_APP_NAME);
-    if (existing) {
-      return existing;
-    }
-    return (
-      initializeApp({ credential: cert(creds) }, FIREBASE_APP_NAME) ?? getApp(FIREBASE_APP_NAME)
-    );
   }
 }

@@ -42,6 +42,13 @@ export const envSchema = z.object({
   FIREBASE_PROJECT_ID: z.string().optional(),
   FIREBASE_CLIENT_EMAIL: z.string().optional(),
   FIREBASE_PRIVATE_KEY: z.string().optional(),
+
+  // Media uploads (Cloud Storage — #37). The Firebase Storage / GCS bucket that
+  // signed avatar & certificate uploads are issued against, reusing the FIREBASE_*
+  // service account above for signing. Optional: when unset (or without the
+  // service account) the upload endpoint reports 503 while the rest of the API
+  // runs — so dev/test/CI need no storage credentials.
+  FIREBASE_STORAGE_BUCKET: z.string().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;
