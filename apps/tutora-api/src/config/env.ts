@@ -33,6 +33,15 @@ export const envSchema = z.object({
   SMTP_USER: z.string().optional(),
   SMTP_PASS: z.string().optional(),
   MAIL_FROM: z.string().default('Tutora <no-reply@tutora.app>'),
+
+  // Push notifications (Firebase Cloud Messaging — #35). All optional: when the
+  // service-account credentials are unset the push transport becomes a no-op, so
+  // the API runs (and features that trigger notifications still succeed) without
+  // Firebase credentials in dev/test/CI. Never commit real values — inject them
+  // via the secrets manager. FIREBASE_PRIVATE_KEY may contain escaped newlines.
+  FIREBASE_PROJECT_ID: z.string().optional(),
+  FIREBASE_CLIENT_EMAIL: z.string().optional(),
+  FIREBASE_PRIVATE_KEY: z.string().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;
