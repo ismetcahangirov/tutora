@@ -23,9 +23,10 @@ const dbUser = {
   avatarUrl: null,
   role: 'STUDENT',
   onboardingCompleted: true,
+  deletedAt: null,
 };
 
-describe('GET /api/v1/users/me (integration)', () => {
+describe('Users self-service (integration)', () => {
   let app: INestApplication;
   let httpServer: Server;
   let jwt: JwtService;
@@ -33,8 +34,14 @@ describe('GET /api/v1/users/me (integration)', () => {
   const prismaMock = {
     user: {
       findUnique: jest.fn().mockResolvedValue(dbUser),
-      update: jest.fn().mockResolvedValue({ ...dbUser, role: 'TUTOR', onboardingCompleted: true }),
+      update: jest
+        .fn()
+        .mockImplementation(({ data }: { data: Record<string, unknown> }) =>
+          Promise.resolve({ ...dbUser, ...data }),
+        ),
     },
+    refreshToken: { updateMany: jest.fn().mockResolvedValue({ count: 0 }) },
+    $transaction: jest.fn((ops: Promise<unknown>[]) => Promise.all(ops)),
   };
 
   beforeAll(async () => {
@@ -62,14 +69,14 @@ describe('GET /api/v1/users/me (integration)', () => {
     await app.close();
   });
 
-  function signAccessToken(): string {
+  beforeEach(() => {
+    prismaMock.user.update.mockClear();
+    prismaMock.refreshToken.updateMany.mockClear();
+  });
+
+  function signAccessToken(role: string | null = 'STUDENT'): string {
     return jwt.sign(
-      {
-        sub: 'user-1',
-        email: 'ada@example.com',
-        role: 'STUDENT',
-        onboardingCompleted: true,
-      },
+      { sub: 'user-1', email: 'ada@example.com', role, onboardingCompleted: true },
       { secret: ENV.JWT_ACCESS_SECRET, expiresIn: '15m' },
     );
   }
@@ -91,8 +98,7 @@ describe('GET /api/v1/users/me (integration)', () => {
       .set('Authorization', `Bearer ${signAccessToken()}`)
       .expect(200);
 
-    const body = res.body as { id: string; email: string; role: string };
-    expect(body).toMatchObject({
+    expect(res.body).toMatchObject({
       id: 'user-1',
       email: 'ada@example.com',
       role: 'STUDENT',
@@ -114,31 +120,49 @@ describe('GET /api/v1/users/me (integration)', () => {
     expect(prismaMock.user.update).not.toHaveBeenCalled();
   });
 
-  it('PATCH /me rejects a missing role with 400', async () => {
+  it('PATCH /me accepts an empty body as a no-op and returns the summary', async () => {
     await request(httpServer)
       .patch('/api/v1/users/me')
       .set('Authorization', `Bearer ${signAccessToken()}`)
       .send({})
-      .expect(400);
-    expect(prismaMock.user.update).not.toHaveBeenCalled();
+      .expect(200);
+    expect(prismaMock.user.update).toHaveBeenCalledWith({ where: { id: 'user-1' }, data: {} });
   });
 
-  it('PATCH /me sets the role, completes onboarding, and returns the updated summary', async () => {
+  it('PATCH /me updates profile fields', async () => {
+    const res = await request(httpServer)
+      .patch('/api/v1/users/me')
+      .set('Authorization', `Bearer ${signAccessToken()}`)
+      .send({ name: 'Ada L.' })
+      .expect(200);
+    expect(res.body).toMatchObject({ name: 'Ada L.' });
+  });
+
+  it('PATCH /me sets the role and completes onboarding', async () => {
     const res = await request(httpServer)
       .patch('/api/v1/users/me')
       .set('Authorization', `Bearer ${signAccessToken()}`)
       .send({ role: 'TUTOR' })
       .expect(200);
 
-    const body = res.body as { id: string; role: string; onboardingCompleted: boolean };
-    expect(body).toMatchObject({
-      id: 'user-1',
-      role: 'TUTOR',
-      onboardingCompleted: true,
-    });
+    expect(res.body).toMatchObject({ id: 'user-1', role: 'TUTOR', onboardingCompleted: true });
     expect(prismaMock.user.update).toHaveBeenCalledWith({
       where: { id: 'user-1' },
       data: { role: 'TUTOR', onboardingCompleted: true },
     });
+  });
+
+  it('DELETE /me soft-deletes the account and returns 204', async () => {
+    await request(httpServer)
+      .delete('/api/v1/users/me')
+      .set('Authorization', `Bearer ${signAccessToken()}`)
+      .expect(204);
+
+    expect(prismaMock.user.update).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { id: 'user-1' } }),
+    );
+    const calls = prismaMock.user.update.mock.calls as Array<[{ data: { deletedAt: unknown } }]>;
+    expect(calls.at(-1)?.[0]?.data.deletedAt).toBeInstanceOf(Date);
+    expect(prismaMock.refreshToken.updateMany).toHaveBeenCalled();
   });
 });

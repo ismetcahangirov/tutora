@@ -6,6 +6,9 @@ import { PrismaModule } from '@/prisma/prisma.module';
 import { AuthModule } from '@modules/auth/auth.module';
 import { MailModule } from '@modules/mail/mail.module';
 import { UsersModule } from '@modules/users/users.module';
+import { TutorsModule } from '@modules/tutors/tutors.module';
+import { StudentsModule } from '@modules/students/students.module';
+import { TaxonomyModule } from '@modules/taxonomy/taxonomy.module';
 import { HealthModule } from '@modules/health/health.module';
 
 @Module({
@@ -19,6 +22,9 @@ import { HealthModule } from '@modules/health/health.module';
     PrismaModule,
     AuthModule,
     UsersModule,
+    TutorsModule,
+    StudentsModule,
+    TaxonomyModule,
     HealthModule,
   ],
 })

@@ -5,5 +5,22 @@
   },
   "role": {
     "invalid": "Rol yalnız icazə verilən dəyərlərdən biri olmalıdır."
+  },
+  "common": {
+    "isString": "Bu sahə mətn tipində olmalıdır.",
+    "isInt": "Bu sahə tam ədəd olmalıdır.",
+    "isNumber": "Bu sahə ədəd olmalıdır.",
+    "isBoolean": "Bu sahə boolean tipində olmalıdır.",
+    "isEnum": "Bu sahə yalnız icazə verilən dəyərlərdən biri olmalıdır.",
+    "isUrl": "Bu sahə düzgün URL olmalıdır.",
+    "notEmpty": "Bu sahə boş olmamalıdır.",
+    "isArray": "Bu sahə massiv olmalıdır.",
+    "isId": "Bu sahə düzgün identifikator olmalıdır.",
+    "isCurrency": "Bu sahə düzgün 3 hərfli valyuta kodu olmalıdır.",
+    "isPositive": "Bu sahə müsbət ədəd olmalıdır.",
+    "min": "Bu sahə icazə verilən minimumdan aşağıdır.",
+    "max": "Bu sahə icazə verilən maksimumdan yuxarıdır.",
+    "maxLength": "Bu sahə çox uzundur.",
+    "slug": "Bu sahə kiçik hərflərlə slug olmalıdır (hərflər, rəqəmlər və defis)."
   }
 }

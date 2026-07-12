@@ -1,7 +1,8 @@
 import { Injectable, Logger, NotFoundException, Optional } from '@nestjs/common';
-import type { User, UserRole } from '@prisma/client';
+import { Prisma, type User } from '@prisma/client';
 import { PrismaService } from '@/prisma/prisma.service';
 import { MailService } from '@modules/mail/mail.service';
+import type { UpdateMeDto } from './dto/update-me.dto';
 import type { GoogleProfile, UserSummary } from './users.types';
 
 @Injectable()
@@ -17,28 +18,51 @@ export class UsersService {
 
   /**
    * Returns a non-sensitive summary of the user for profile endpoints.
-   * Throws `NotFoundException` (fail closed) if the id no longer exists — e.g.
-   * a still-valid token for a deleted account.
+   * Fails closed with `NotFoundException` if the id no longer exists or the
+   * account was soft-deleted — e.g. a still-valid token for a removed account.
    */
   async getSummaryById(id: string): Promise<UserSummary> {
     const user = await this.prisma.user.findUnique({ where: { id } });
-    if (!user) {
+    if (!user || user.deletedAt) {
       throw new NotFoundException('User not found');
     }
     return this.toSummary(user);
   }
 
   /**
-   * Persists the onboarding role choice (#23): sets the role and flips
-   * `onboardingCompleted`. Callers must restrict `role` to selectable values
-   * (see `UpdateMeDto`) — ADMIN is never assignable here.
+   * Updates the authenticated user's own editable fields. Every field is
+   * optional; supplying `role` also completes onboarding (#23). The id always
+   * comes from the verified token, never the client, and `UpdateMeDto` rejects
+   * non-selectable roles so this endpoint cannot escalate privilege.
    */
-  async completeOnboarding(id: string, role: UserRole): Promise<UserSummary> {
-    const user = await this.prisma.user.update({
-      where: { id },
-      data: { role, onboardingCompleted: true },
-    });
+  async updateMe(id: string, dto: UpdateMeDto): Promise<UserSummary> {
+    const data: Prisma.UserUpdateInput = {};
+    if (dto.name !== undefined) data.name = dto.name;
+    if (dto.avatarUrl !== undefined) data.avatarUrl = dto.avatarUrl;
+    if (dto.locale !== undefined) data.locale = dto.locale;
+    if (dto.role !== undefined) {
+      data.role = dto.role;
+      data.onboardingCompleted = true;
+    }
+    const user = await this.prisma.user.update({ where: { id }, data });
     return this.toSummary(user);
+  }
+
+  /**
+   * Soft-deletes the authenticated user's account (account lifecycle, #28):
+   * stamps `deletedAt` and revokes every outstanding refresh token so existing
+   * sessions cannot be silently refreshed. Access tokens expire on their own
+   * short TTL. Atomic so an account is never left half-deactivated.
+   */
+  async deactivateAccount(id: string): Promise<void> {
+    const now = new Date();
+    await this.prisma.$transaction([
+      this.prisma.user.update({ where: { id }, data: { deletedAt: now } }),
+      this.prisma.refreshToken.updateMany({
+        where: { userId: id, revokedAt: null },
+        data: { revokedAt: now },
+      }),
+    ]);
   }
 
   /** Non-sensitive projection shared by every user-facing endpoint. */
