@@ -5,5 +5,22 @@
   },
   "role": {
     "invalid": "Role must be one of the allowed values."
+  },
+  "common": {
+    "isString": "This field must be a string.",
+    "isInt": "This field must be an integer.",
+    "isNumber": "This field must be a number.",
+    "isBoolean": "This field must be a boolean.",
+    "isEnum": "This field must be one of the allowed values.",
+    "isUrl": "This field must be a valid URL.",
+    "notEmpty": "This field must not be empty.",
+    "isArray": "This field must be an array.",
+    "isId": "This field must be a valid identifier.",
+    "isCurrency": "This field must be a valid 3-letter currency code.",
+    "isPositive": "This field must be a positive number.",
+    "min": "This field is below the allowed minimum.",
+    "max": "This field is above the allowed maximum.",
+    "maxLength": "This field is too long.",
+    "slug": "This field must be a lowercase slug (letters, numbers and hyphens)."
   }
 }

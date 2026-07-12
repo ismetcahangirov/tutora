@@ -1,5 +1,14 @@
-import { Body, Controller, Get, Patch, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Patch,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '@modules/auth/decorators/current-user.decorator';
 import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 import type { AuthenticatedUser } from '@modules/auth/types/auth.types';
@@ -19,17 +28,30 @@ export class UsersController {
    * resolved from the verified access token by `JwtAuthGuard`.
    */
   @Get('me')
+  @ApiOperation({ summary: 'Get the authenticated user profile' })
   getMe(@CurrentUser() user: AuthenticatedUser): Promise<UserSummary> {
     return this.usersService.getSummaryById(user.id);
   }
 
   /**
-   * Completes onboarding for the authenticated user by persisting their chosen
-   * role (#23). Only the principal from the token can be updated — the id is
-   * never taken from the client — and `UpdateMeDto` rejects non-selectable roles.
+   * Updates the authenticated user's own profile. Serves onboarding (send
+   * `role`) and ordinary edits (name, avatar, locale). Only the principal from
+   * the token can be updated — the id is never taken from the client.
    */
   @Patch('me')
+  @ApiOperation({ summary: 'Update the authenticated user profile' })
   updateMe(@CurrentUser() user: AuthenticatedUser, @Body() dto: UpdateMeDto): Promise<UserSummary> {
-    return this.usersService.completeOnboarding(user.id, dto.role);
+    return this.usersService.updateMe(user.id, dto);
+  }
+
+  /**
+   * Soft-deletes the authenticated user's own account and revokes their refresh
+   * tokens (account lifecycle, #28). Idempotent from the client's perspective.
+   */
+  @Delete('me')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Deactivate (soft-delete) the authenticated account' })
+  async deleteMe(@CurrentUser() user: AuthenticatedUser): Promise<void> {
+    await this.usersService.deactivateAccount(user.id);
   }
 }

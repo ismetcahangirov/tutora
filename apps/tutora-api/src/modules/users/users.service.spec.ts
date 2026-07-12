@@ -21,6 +21,10 @@ function buildPrismaMock() {
       update: jest.fn(),
       create: jest.fn(),
     },
+    refreshToken: {
+      updateMany: jest.fn().mockResolvedValue({ count: 0 }),
+    },
+    $transaction: jest.fn((ops: Promise<unknown>[]) => Promise.all(ops)),
   };
 }
 
@@ -31,6 +35,7 @@ const summaryUser = {
   avatarUrl: null,
   role: 'STUDENT' as const,
   onboardingCompleted: true,
+  deletedAt: null,
   googleId: 'g1',
 };
 
@@ -122,15 +127,7 @@ describe('UsersService.upsertFromGoogle', () => {
 describe('UsersService.getSummaryById', () => {
   it('returns a non-sensitive summary of an existing user', async () => {
     const prisma = buildPrismaMock();
-    prisma.user.findUnique.mockResolvedValueOnce({
-      id: 'u1',
-      email: 'ada@example.com',
-      name: 'Ada',
-      avatarUrl: null,
-      role: 'STUDENT',
-      onboardingCompleted: true,
-      googleId: 'g1',
-    });
+    prisma.user.findUnique.mockResolvedValueOnce({ ...summaryUser });
 
     const { service } = await buildService(prisma);
     const result = await service.getSummaryById('u1');
@@ -153,31 +150,75 @@ describe('UsersService.getSummaryById', () => {
     const { service } = await buildService(prisma);
     await expect(service.getSummaryById('missing')).rejects.toBeInstanceOf(NotFoundException);
   });
-});
 
-describe('UsersService.completeOnboarding', () => {
-  it('sets the chosen role, marks onboarding complete, and returns the summary', async () => {
+  it('throws NotFoundException for a soft-deleted account', async () => {
     const prisma = buildPrismaMock();
-    prisma.user.update.mockResolvedValueOnce({
-      ...summaryUser,
-      role: 'TUTOR',
-      onboardingCompleted: true,
-    });
+    prisma.user.findUnique.mockResolvedValueOnce({ ...summaryUser, deletedAt: new Date() });
 
     const { service } = await buildService(prisma);
-    const result = await service.completeOnboarding('u1', 'TUTOR');
+    await expect(service.getSummaryById('u1')).rejects.toBeInstanceOf(NotFoundException);
+  });
+});
+
+describe('UsersService.updateMe', () => {
+  it('sets the chosen role, completes onboarding, and returns the summary', async () => {
+    const prisma = buildPrismaMock();
+    prisma.user.update.mockResolvedValueOnce({ ...summaryUser, role: 'TUTOR' });
+
+    const { service } = await buildService(prisma);
+    const result = await service.updateMe('u1', { role: 'TUTOR' });
 
     expect(prisma.user.update).toHaveBeenCalledWith({
       where: { id: 'u1' },
       data: { role: 'TUTOR', onboardingCompleted: true },
     });
-    expect(result).toEqual({
-      id: 'u1',
-      email: 'ada@example.com',
-      name: 'Ada',
-      avatarUrl: null,
-      role: 'TUTOR',
-      onboardingCompleted: true,
+    expect(result).toMatchObject({ id: 'u1', role: 'TUTOR', onboardingCompleted: true });
+  });
+
+  it('updates only the provided profile fields without touching onboarding', async () => {
+    const prisma = buildPrismaMock();
+    prisma.user.update.mockResolvedValueOnce({ ...summaryUser, name: 'Ada L.' });
+
+    const { service } = await buildService(prisma);
+    await service.updateMe('u1', { name: 'Ada L.', locale: 'az' });
+
+    expect(prisma.user.update).toHaveBeenCalledWith({
+      where: { id: 'u1' },
+      data: { name: 'Ada L.', locale: 'az' },
     });
+  });
+
+  it('is a no-op update (empty data) for an empty payload', async () => {
+    const prisma = buildPrismaMock();
+    prisma.user.update.mockResolvedValueOnce({ ...summaryUser });
+
+    const { service } = await buildService(prisma);
+    await service.updateMe('u1', {});
+
+    expect(prisma.user.update).toHaveBeenCalledWith({ where: { id: 'u1' }, data: {} });
+  });
+});
+
+describe('UsersService.deactivateAccount', () => {
+  it('soft-deletes the account and revokes outstanding refresh tokens atomically', async () => {
+    const prisma = buildPrismaMock();
+
+    const { service } = await buildService(prisma);
+    await service.deactivateAccount('u1');
+
+    expect(prisma.$transaction).toHaveBeenCalledTimes(1);
+    expect(prisma.user.update).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { id: 'u1' } }),
+    );
+    expect(prisma.refreshToken.updateMany).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { userId: 'u1', revokedAt: null } }),
+    );
+
+    const updateCalls = prisma.user.update.mock.calls as Array<[{ data: { deletedAt: unknown } }]>;
+    const revokeCalls = prisma.refreshToken.updateMany.mock.calls as Array<
+      [{ data: { revokedAt: unknown } }]
+    >;
+    expect(updateCalls[0]?.[0]?.data.deletedAt).toBeInstanceOf(Date);
+    expect(revokeCalls[0]?.[0]?.data.revokedAt).toBeInstanceOf(Date);
   });
 });
