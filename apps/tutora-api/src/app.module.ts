@@ -9,6 +9,9 @@ import { UsersModule } from '@modules/users/users.module';
 import { TutorsModule } from '@modules/tutors/tutors.module';
 import { StudentsModule } from '@modules/students/students.module';
 import { TaxonomyModule } from '@modules/taxonomy/taxonomy.module';
+import { SearchModule } from '@modules/search/search.module';
+import { ApplicationsModule } from '@modules/applications/applications.module';
+import { ReviewsModule } from '@modules/reviews/reviews.module';
 import { HealthModule } from '@modules/health/health.module';
 
 @Module({
@@ -25,6 +28,9 @@ import { HealthModule } from '@modules/health/health.module';
     TutorsModule,
     StudentsModule,
     TaxonomyModule,
+    SearchModule,
+    ApplicationsModule,
+    ReviewsModule,
     HealthModule,
   ],
 })
