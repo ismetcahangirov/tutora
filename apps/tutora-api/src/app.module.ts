@@ -3,6 +3,9 @@ import { ConfigModule } from '@nestjs/config';
 import { validateEnv } from '@config/env';
 import { AppI18nModule } from '@/i18n/i18n.module';
 import { PrismaModule } from '@/prisma/prisma.module';
+import { RedisModule } from '@/redis/redis.module';
+import { CacheModule } from '@common/cache/cache.module';
+import { ThrottlingModule } from '@common/throttler/throttling.module';
 import { AuthModule } from '@modules/auth/auth.module';
 import { MailModule } from '@modules/mail/mail.module';
 import { UsersModule } from '@modules/users/users.module';
@@ -26,6 +29,9 @@ import { HealthModule } from '@modules/health/health.module';
       validate: validateEnv,
     }),
     AppI18nModule,
+    RedisModule,
+    CacheModule,
+    ThrottlingModule,
     MailModule,
     PrismaModule,
     AuthModule,

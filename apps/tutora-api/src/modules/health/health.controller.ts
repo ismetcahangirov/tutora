@@ -1,5 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { SkipThrottle } from '@nestjs/throttler';
 import { Public } from '@modules/auth/decorators/public.decorator';
 
 /** Shape returned by the liveness endpoint. */
@@ -9,6 +10,9 @@ export class HealthCheckResponse {
   timestamp!: string;
 }
 
+// Liveness probes are polled frequently by Docker/monitoring — exempt from rate
+// limiting so an aggressive probe interval never trips the limiter.
+@SkipThrottle()
 @ApiTags('health')
 @Controller({ path: 'health', version: '1' })
 export class HealthController {

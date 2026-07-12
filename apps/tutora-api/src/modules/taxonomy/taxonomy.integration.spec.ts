@@ -1,11 +1,12 @@
 import { Server } from 'node:http';
-import { INestApplication, ValidationPipe, VersioningType } from '@nestjs/common';
+import { Global, INestApplication, Module, ValidationPipe, VersioningType } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
 import { PrismaModule } from '@/prisma/prisma.module';
 import { PrismaService } from '@/prisma/prisma.service';
+import { CacheService } from '@common/cache/cache.service';
 import { TaxonomyModule } from './taxonomy.module';
 
 const ENV = {
@@ -15,6 +16,20 @@ const ENV = {
   JWT_REFRESH_EXPIRES_IN: '7d',
   GOOGLE_CLIENT_ID: 'client-id',
 };
+
+// Stubs the global CacheService so the module runs without Redis: reads pass
+// straight through to Prisma (getOrSet runs the loader) and invalidation is a no-op.
+const cacheStub = {
+  getOrSet: (_key: string, _ttl: number, loader: () => Promise<unknown>) => loader(),
+  deleteByPrefix: jest.fn().mockResolvedValue(undefined),
+};
+
+@Global()
+@Module({
+  providers: [{ provide: CacheService, useValue: cacheStub }],
+  exports: [CacheService],
+})
+class StubCacheModule {}
 
 describe('Taxonomy module (integration)', () => {
   let app: INestApplication;
@@ -35,6 +50,7 @@ describe('Taxonomy module (integration)', () => {
     const moduleRef = await Test.createTestingModule({
       imports: [
         ConfigModule.forRoot({ isGlobal: true, load: [() => ENV] }),
+        StubCacheModule,
         PrismaModule,
         TaxonomyModule,
       ],
