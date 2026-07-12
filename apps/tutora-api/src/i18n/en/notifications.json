@@ -1,0 +1,8 @@
+{
+  "digest": {
+    "applications": {
+      "title": "New tutoring requests",
+      "body": "You have {count} new application(s) awaiting your response."
+    }
+  }
+}

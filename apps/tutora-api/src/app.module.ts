@@ -16,6 +16,7 @@ import { ChatModule } from '@modules/chat/chat.module';
 import { NotificationsModule } from '@modules/notifications/notifications.module';
 import { BillingModule } from '@modules/billing/billing.module';
 import { MediaModule } from '@modules/media/media.module';
+import { JobsModule } from '@modules/jobs/jobs.module';
 import { HealthModule } from '@modules/health/health.module';
 
 @Module({
@@ -39,6 +40,7 @@ import { HealthModule } from '@modules/health/health.module';
     NotificationsModule,
     BillingModule,
     MediaModule,
+    JobsModule,
     HealthModule,
   ],
 })
