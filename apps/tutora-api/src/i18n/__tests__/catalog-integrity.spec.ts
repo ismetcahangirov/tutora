@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES } from '../i18n.config';
 
 /** Namespaces that must exist and stay in lockstep across every language. */
-const NAMESPACES = ['validation', 'mail'] as const;
+const NAMESPACES = ['validation', 'mail', 'notifications'] as const;
 
 function flattenKeys(value: Record<string, unknown>, prefix = ''): string[] {
   return Object.entries(value).flatMap(([key, child]) => {

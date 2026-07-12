@@ -9,6 +9,8 @@ packages:
 # they ship prebuilt binaries, so their build scripts are not needed (false).
 # @firebase/util + protobufjs: pulled in by firebase-admin (#35); they ship
 # prebuilt and the SDK runs without their build scripts, so false.
+# msgpackr-extract: optional native accelerator for msgpackr (bullmq serializer,
+# #38); msgpackr falls back to a pure-JS path without it, so false.
 allowBuilds:
   '@firebase/util': false
   '@parcel/watcher': false
@@ -16,6 +18,7 @@ allowBuilds:
   '@prisma/engines': true
   '@scarf/scarf': false
   '@swc/core': false
+  msgpackr-extract: false
   prisma: true
   protobufjs: false
   sharp: true
