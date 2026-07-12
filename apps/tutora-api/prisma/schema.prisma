@@ -79,6 +79,20 @@ enum PaymentStatus {
   REFUNDED
 }
 
+enum NotificationType {
+  SYSTEM
+  CHAT_MESSAGE
+  APPLICATION
+  REVIEW
+  ANNOUNCEMENT
+}
+
+enum DevicePlatform {
+  IOS
+  ANDROID
+  WEB
+}
+
 // ---------- Identity ----------
 
 model User {
@@ -102,6 +116,8 @@ model User {
   chatMessages   ChatMessage[]
   subscriptions  Subscription[]
   payments       Payment[]
+  devices        DeviceToken[]
+  notifications  Notification[]
 }
 
 model RefreshToken {
@@ -402,4 +418,39 @@ model Payment {
 
   @@index([userId, status])
   @@index([subscriptionId])
+}
+
+// ---------- Notifications (#35) ----------
+
+/// A push target: one FCM registration token per user device. Tokens are unique
+/// (FCM reissues them per install); on re-registration the row is reassigned to
+/// the current owner. Invalid tokens are pruned as FCM reports them.
+model DeviceToken {
+  id         String         @id @default(cuid())
+  userId     String
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token      String         @unique
+  platform   DevicePlatform
+  lastUsedAt DateTime       @default(now())
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  @@index([userId])
+}
+
+/// A single in-app notification for one user. Broadcasts fan out to one row per
+/// recipient. `data` carries an optional deep-link payload for the client.
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      NotificationType @default(SYSTEM)
+  title     String
+  body      String
+  data      Json?
+  readAt    DateTime?
+  createdAt DateTime         @default(now())
+
+  @@index([userId, readAt])
+  @@index([userId, createdAt])
 }

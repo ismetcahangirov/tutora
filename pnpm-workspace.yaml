@@ -7,12 +7,16 @@ packages:
 # sharp: Next.js image optimization (native). unrs-resolver: oxlint/import resolver (native).
 # @parcel/watcher + @swc/core: optional native accelerators pulled in by vitest;
 # they ship prebuilt binaries, so their build scripts are not needed (false).
+# @firebase/util + protobufjs: pulled in by firebase-admin (#35); they ship
+# prebuilt and the SDK runs without their build scripts, so false.
 allowBuilds:
+  '@firebase/util': false
   '@parcel/watcher': false
   '@prisma/client': true
   '@prisma/engines': true
   '@scarf/scarf': false
   '@swc/core': false
   prisma: true
+  protobufjs: false
   sharp: true
   unrs-resolver: true
