@@ -74,10 +74,9 @@ describe('ChatGateway thread events', () => {
 
     await gateway.onThreadJoin(socket, { threadId: 't1' });
 
-    expect((chat as { assertParticipant: jest.Mock }).assertParticipant).toHaveBeenCalledWith(
-      'u1',
-      't1',
-    );
+    expect(
+      (chat as unknown as { assertParticipant: jest.Mock }).assertParticipant,
+    ).toHaveBeenCalledWith('u1', 't1');
     expect((socket as { join: jest.Mock }).join).toHaveBeenCalledWith(threadRoom('t1'));
   });
 
@@ -116,7 +115,7 @@ describe('ChatGateway disconnecting', () => {
     const disconnecting = (onMock.mock.calls as [string, () => void][]).find(
       (call) => call[0] === 'disconnecting',
     )?.[1];
-    disconnecting();
+    disconnecting?.();
 
     expect(presence.isOnline('u1')).toBe(false);
     expect((socket as { to: jest.Mock }).to).toHaveBeenCalledWith(threadRoom('t1'));

@@ -12,6 +12,7 @@ import { TaxonomyModule } from '@modules/taxonomy/taxonomy.module';
 import { SearchModule } from '@modules/search/search.module';
 import { ApplicationsModule } from '@modules/applications/applications.module';
 import { ReviewsModule } from '@modules/reviews/reviews.module';
+import { ChatModule } from '@modules/chat/chat.module';
 import { HealthModule } from '@modules/health/health.module';
 
 @Module({
@@ -31,6 +32,7 @@ import { HealthModule } from '@modules/health/health.module';
     SearchModule,
     ApplicationsModule,
     ReviewsModule,
+    ChatModule,
     HealthModule,
   ],
 })
