@@ -3,8 +3,9 @@ import { IsOptional, IsString, IsUrl, MaxLength } from 'class-validator';
 import { i18nValidationMessage } from 'nestjs-i18n';
 
 /**
- * Body of `POST /api/v1/tutors/me/certificates`. Accepts a already-uploaded
- * `fileUrl`; the upload transport itself lands with the media module (#37).
+ * Body of `POST /api/v1/tutors/me/certificates`. Accepts an already-uploaded
+ * `fileUrl` — the tutor first gets a signed URL from the media module
+ * (`POST /api/v1/media/uploads`, #37), uploads the file, then submits it here.
  * New certificates enter as PENDING and require admin review before they count.
  */
 export class CreateCertificateDto {
