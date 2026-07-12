@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '@/prisma/prisma.service';
+import { CacheService } from '@common/cache/cache.service';
 import type { CreateCategoryDto } from './dto/create-category.dto';
 import type { CreateDistrictDto } from './dto/create-district.dto';
 import type { CreateLanguageDto } from './dto/create-language.dto';
@@ -26,19 +27,35 @@ const SUBJECT_FIELDS = {
 const DISTRICT_FIELDS = { id: true, name: true, slug: true } satisfies Prisma.DistrictSelect;
 const LANGUAGE_FIELDS = { id: true, name: true, code: true } satisfies Prisma.LanguageSelect;
 
+// Every key lives under this namespace so a single prefix invalidates the lot.
+const CACHE_PREFIX = 'taxonomy:';
+// Reference data changes rarely (admin-only), so a long TTL is safe; writes
+// invalidate eagerly, so staleness is bounded by the write, not the TTL.
+const CACHE_TTL_SECONDS = 60 * 60;
+
 /**
  * Reference data shared across the marketplace: categories, subjects, districts
  * and languages. Read endpoints are public (filter options, tutor assignment);
  * writes are admin-only. Kept in one service since each entity is a thin CRUD.
+ *
+ * Reads are hot (every filter UI hits them) and the data is small and rarely
+ * changes, so lists are cached in Redis and served cache-aside. Any write
+ * invalidates the whole `taxonomy:` namespace — writes are infrequent admin ops,
+ * so a coarse, always-correct invalidation beats per-key bookkeeping.
  */
 @Injectable()
 export class TaxonomyService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly cache: CacheService,
+  ) {}
 
   // ---------- Categories ----------
 
   listCategories(): Promise<CategoryView[]> {
-    return this.prisma.category.findMany({ select: CATEGORY_FIELDS, orderBy: { name: 'asc' } });
+    return this.cache.getOrSet(`${CACHE_PREFIX}categories`, CACHE_TTL_SECONDS, () =>
+      this.prisma.category.findMany({ select: CATEGORY_FIELDS, orderBy: { name: 'asc' } }),
+    );
   }
 
   async createCategory(dto: CreateCategoryDto): Promise<CategoryView> {
@@ -60,11 +77,14 @@ export class TaxonomyService {
   // ---------- Subjects ----------
 
   listSubjects(categoryId?: string): Promise<SubjectView[]> {
-    return this.prisma.subject.findMany({
-      where: categoryId ? { categoryId } : undefined,
-      select: SUBJECT_FIELDS,
-      orderBy: { name: 'asc' },
-    });
+    const key = categoryId ? `${CACHE_PREFIX}subjects:${categoryId}` : `${CACHE_PREFIX}subjects`;
+    return this.cache.getOrSet(key, CACHE_TTL_SECONDS, () =>
+      this.prisma.subject.findMany({
+        where: categoryId ? { categoryId } : undefined,
+        select: SUBJECT_FIELDS,
+        orderBy: { name: 'asc' },
+      }),
+    );
   }
 
   async createSubject(dto: CreateSubjectDto): Promise<SubjectView> {
@@ -86,7 +106,9 @@ export class TaxonomyService {
   // ---------- Districts ----------
 
   listDistricts(): Promise<DistrictView[]> {
-    return this.prisma.district.findMany({ select: DISTRICT_FIELDS, orderBy: { name: 'asc' } });
+    return this.cache.getOrSet(`${CACHE_PREFIX}districts`, CACHE_TTL_SECONDS, () =>
+      this.prisma.district.findMany({ select: DISTRICT_FIELDS, orderBy: { name: 'asc' } }),
+    );
   }
 
   async createDistrict(dto: CreateDistrictDto): Promise<DistrictView> {
@@ -108,7 +130,9 @@ export class TaxonomyService {
   // ---------- Languages ----------
 
   listLanguages(): Promise<LanguageView[]> {
-    return this.prisma.language.findMany({ select: LANGUAGE_FIELDS, orderBy: { name: 'asc' } });
+    return this.cache.getOrSet(`${CACHE_PREFIX}languages`, CACHE_TTL_SECONDS, () =>
+      this.prisma.language.findMany({ select: LANGUAGE_FIELDS, orderBy: { name: 'asc' } }),
+    );
   }
 
   async createLanguage(dto: CreateLanguageDto): Promise<LanguageView> {
@@ -128,12 +152,15 @@ export class TaxonomyService {
   }
 
   /**
-   * Runs a write and maps Prisma's constraint errors to clean HTTP responses:
-   * duplicate slug/code → 409, missing row → 404, bad foreign key → 400.
+   * Runs a write, then invalidates the taxonomy cache so the next read reflects
+   * it. Maps Prisma's constraint errors to clean HTTP responses: duplicate
+   * slug/code → 409, missing row → 404, bad foreign key → 400.
    */
   private async write<T>(entity: string, op: () => Promise<T>): Promise<T> {
     try {
-      return await op();
+      const result = await op();
+      await this.cache.deleteByPrefix(CACHE_PREFIX);
+      return result;
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {

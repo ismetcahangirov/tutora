@@ -1,10 +1,15 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { Throttle } from '@nestjs/throttler';
+import { AUTH_THROTTLE, DEFAULT_THROTTLER } from '@common/throttler/throttle.constants';
 import { AuthService } from './auth.service';
 import { GoogleAuthDto } from './dto/google-auth.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import type { AuthResponse, AuthTokens } from './types/auth.types';
 
+// Tighter budget than the global default: these unauthenticated endpoints are the
+// prime target for credential stuffing and refresh-token brute force.
+@Throttle({ [DEFAULT_THROTTLER]: { limit: AUTH_THROTTLE.limit, ttl: AUTH_THROTTLE.ttl } })
 @ApiTags('auth')
 @Controller({ path: 'auth', version: '1' })
 export class AuthController {

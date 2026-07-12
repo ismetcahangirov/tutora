@@ -30,6 +30,7 @@
     "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
+    "@nest-lab/throttler-storage-redis": "^1.2.0",
     "@nestjs/bullmq": "^11.0.4",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.4",
@@ -38,6 +39,7 @@
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/platform-socket.io": "^11.1.28",
     "@nestjs/swagger": "^11.4.5",
+    "@nestjs/throttler": "^6.5.0",
     "@nestjs/websockets": "^11.1.28",
     "@prisma/client": "^6.19.3",
     "bullmq": "^5.80.1",
@@ -45,6 +47,7 @@
     "class-validator": "^0.15.1",
     "firebase-admin": "^14.1.0",
     "google-auth-library": "^10.9.0",
+    "ioredis": "^5.11.1",
     "nestjs-i18n": "^10.8.5",
     "nodemailer": "^9.0.3",
     "reflect-metadata": "^0.2.2",
