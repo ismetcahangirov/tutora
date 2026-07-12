@@ -3,7 +3,7 @@
 - **Issue:** #34 — Chat module (realtime), part of backend epic #25
 - **Surface:** `tutora-api` (NestJS backend)
 - **Date:** 2026-07-12
-- **Status:** Approved design → ready for implementation plan
+- **Status:** Implemented
 
 ## 1. Goal
 
