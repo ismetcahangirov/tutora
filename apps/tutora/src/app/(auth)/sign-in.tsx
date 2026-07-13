@@ -1,5 +1,5 @@
 /**
- * `/sign-in` route (issue #22).
+ * `/sign-in` route (issues #22, #41).
  *
  * A minimal, directly-reachable sign-in screen. The first-run flow enters
  * through `/welcome` (carousel + sign-in); this route stays available for

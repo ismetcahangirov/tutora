@@ -3,3 +3,4 @@ export * from './constants';
 export * from './app-info';
 export * from './lib';
 export * from './components';
+export * from './navigation';

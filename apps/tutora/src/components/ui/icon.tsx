@@ -20,7 +20,11 @@ export type IconName =
   | 'filter'
   | 'star'
   | 'alert-circle'
-  | 'inbox';
+  | 'inbox'
+  | 'home'
+  | 'heart'
+  | 'message-circle'
+  | 'user';
 
 export type IconProps = {
   name: IconName;
@@ -83,6 +87,31 @@ function IconShape({ name, stroke, filled }: { name: IconName; stroke: string; f
         <>
           <Polyline points="22 12 16 12 14 15 10 15 8 12 2 12" />
           <Path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" />
+        </>
+      );
+    case 'home':
+      return (
+        <>
+          <Path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <Polyline points="9 22 9 12 15 12 15 22" />
+        </>
+      );
+    case 'heart':
+      return (
+        <Path
+          d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+          fill={filled ? stroke : 'none'}
+        />
+      );
+    case 'message-circle':
+      return (
+        <Path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z" />
+      );
+    case 'user':
+      return (
+        <>
+          <Path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <Circle cx={12} cy={7} r={4} />
         </>
       );
   }
