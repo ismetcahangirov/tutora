@@ -1,6 +1,7 @@
 {
   "common": {
-    "selectLanguage": "Dili seçin"
+    "selectLanguage": "Dili seçin",
+    "signOut": "Çıxış"
   },
   "auth": {
     "screen": {
@@ -46,6 +47,41 @@
       "subtitle": "Təcrübənizi fərdiləşdirmək üçün rolunuzu seçin.",
       "continue": "Davam et",
       "error": "Seçiminizi yadda saxlaya bilmədik. İnternet bağlantınızı yoxlayıb yenidən cəhd edin."
+    }
+  },
+  "student": {
+    "tabs": {
+      "home": "Ana səhifə",
+      "search": "Axtarış",
+      "favorites": "Seçilmişlər",
+      "messages": "Mesajlar",
+      "profile": "Profil"
+    },
+    "home": {
+      "title": "Ana səhifəniz",
+      "description": "Sizə uyğun repetitor seçimləri və yeniliklər burada görünəcək."
+    },
+    "search": {
+      "title": "Repetitor tapın",
+      "description": "Fənn, büdcə, rayon, format və dilə görə axtarış — tezliklə."
+    },
+    "favorites": {
+      "title": "Hələ seçilmiş yoxdur",
+      "description": "Yadda saxladığınız repetitorlar sürətli giriş üçün burada görünəcək."
+    },
+    "messages": {
+      "title": "Hələ mesaj yoxdur",
+      "description": "Repetitorlarla yazışmalarınız burada görünəcək."
+    },
+    "profile": {
+      "title": "Profiliniz",
+      "description": "Hesabınızı və seçimlərinizi idarə edin."
+    }
+  },
+  "tutor": {
+    "dashboard": {
+      "title": "Repetitor paneli",
+      "description": "Repetitor alətləriniz hazırlanır — hazırda üzərində işləyirik."
     }
   }
 }

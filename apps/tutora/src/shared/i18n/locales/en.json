@@ -1,6 +1,7 @@
 {
   "common": {
-    "selectLanguage": "Select language"
+    "selectLanguage": "Select language",
+    "signOut": "Sign out"
   },
   "auth": {
     "screen": {
@@ -46,6 +47,41 @@
       "subtitle": "Choose your role to personalize your experience.",
       "continue": "Continue",
       "error": "We could not save your choice. Please check your connection and try again."
+    }
+  },
+  "student": {
+    "tabs": {
+      "home": "Home",
+      "search": "Search",
+      "favorites": "Favorites",
+      "messages": "Messages",
+      "profile": "Profile"
+    },
+    "home": {
+      "title": "Your home",
+      "description": "Personalized tutor picks and updates will appear here."
+    },
+    "search": {
+      "title": "Find a tutor",
+      "description": "Search by subject, budget, district, format, and language — coming soon."
+    },
+    "favorites": {
+      "title": "No favorites yet",
+      "description": "Tutors you save will show up here for quick access."
+    },
+    "messages": {
+      "title": "No messages yet",
+      "description": "Your conversations with tutors will appear here."
+    },
+    "profile": {
+      "title": "Your profile",
+      "description": "Manage your account and preferences."
+    }
+  },
+  "tutor": {
+    "dashboard": {
+      "title": "Tutor dashboard",
+      "description": "Your tutoring tools are on the way — we’re building them now."
     }
   }
 }
