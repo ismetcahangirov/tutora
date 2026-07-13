@@ -39,6 +39,32 @@ jest.mock('expo-localization', () => ({
   getLocales: () => [{ languageCode: 'en', languageTag: 'en-US' }],
 }));
 
+// expo-notifications is a native module with no Jest binding — stub the surface
+// the notifications feature (#50) uses (push registration + OS listeners) so that
+// importing the feature barrel, and anything that re-exports its bridge, loads
+// cleanly. Individual tests override return values as needed.
+jest.mock('expo-notifications', () => ({
+  setNotificationHandler: jest.fn(),
+  getPermissionsAsync: jest.fn(async () => ({
+    granted: true,
+    canAskAgain: true,
+    status: 'granted',
+  })),
+  requestPermissionsAsync: jest.fn(async () => ({
+    granted: true,
+    canAskAgain: true,
+    status: 'granted',
+  })),
+  getDevicePushTokenAsync: jest.fn(async () => ({ type: 'android', data: 'device-token' })),
+  setNotificationChannelAsync: jest.fn(async () => null),
+  addNotificationReceivedListener: jest.fn(() => ({ remove: jest.fn() })),
+  addNotificationResponseReceivedListener: jest.fn(() => ({ remove: jest.fn() })),
+  AndroidImportance: { DEFAULT: 5, HIGH: 6 },
+}));
+
+// expo-device reports whether we're on a physical device (push needs one).
+jest.mock('expo-device', () => ({ isDevice: true }));
+
 jest.mock('@gorhom/bottom-sheet', () => {
   const React = jest.requireActual('react') as typeof import('react');
   const { View } = jest.requireActual('react-native') as typeof import('react-native');

@@ -88,6 +88,15 @@
     "today": "Today",
     "yesterday": "Yesterday"
   },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "No notifications yet",
+    "emptyHint": "We’ll let you know when something new happens.",
+    "error": "Couldn’t load notifications.",
+    "markAllRead": "Mark all read",
+    "markAllError": "Couldn’t update notifications. Try again.",
+    "unreadA11y": "unread"
+  },
   "tutors": {
     "unnamed": "Tutor",
     "verified": "Verified",
@@ -248,6 +257,7 @@
       "account": "Account"
     },
     "myReviews": "My reviews",
+    "notifications": "Notifications",
     "appearance": {
       "label": "Appearance",
       "system": "System",

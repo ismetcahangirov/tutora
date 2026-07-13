@@ -14,6 +14,13 @@ import { ProfileScreen } from '../ProfileScreen';
 import { fireEvent, renderWithProviders, screen } from '@/test-utils';
 
 jest.mock('@features/auth', () => ({ useAuth: jest.fn() }));
+// Stub the notifications barrel so the screen doesn't pull in the push bridge or
+// poll the unread-count endpoint here — the badge behaviour is tested in the
+// notifications feature.
+jest.mock('@features/notifications', () => ({
+  useUnreadNotificationsCount: () => ({ count: 0 }),
+  NotificationsBadge: () => null,
+}));
 const mockedUseAuth = useAuth as jest.MockedFunction<typeof useAuth>;
 
 const signOut = jest.fn();
@@ -41,7 +48,11 @@ beforeEach(() => {
 describe('ProfileScreen (#49)', () => {
   it('renders identity, role, and preference groups', async () => {
     await renderWithProviders(
-      <ProfileScreen onApplySavedSearch={jest.fn()} onOpenMyReviews={jest.fn()} />,
+      <ProfileScreen
+        onApplySavedSearch={jest.fn()}
+        onOpenMyReviews={jest.fn()}
+        onOpenNotifications={jest.fn()}
+      />,
     );
 
     expect(screen.getByText('Aygün Məmmədova')).toBeOnTheScreen();
@@ -53,7 +64,11 @@ describe('ProfileScreen (#49)', () => {
 
   it('shows the empty saved-searches hint when there are none', async () => {
     await renderWithProviders(
-      <ProfileScreen onApplySavedSearch={jest.fn()} onOpenMyReviews={jest.fn()} />,
+      <ProfileScreen
+        onApplySavedSearch={jest.fn()}
+        onOpenMyReviews={jest.fn()}
+        onOpenNotifications={jest.fn()}
+      />,
     );
     expect(screen.getByText('You haven’t saved any searches yet.')).toBeOnTheScreen();
   });
@@ -67,7 +82,11 @@ describe('ProfileScreen (#49)', () => {
     const onApply = jest.fn();
 
     await renderWithProviders(
-      <ProfileScreen onApplySavedSearch={onApply} onOpenMyReviews={jest.fn()} />,
+      <ProfileScreen
+        onApplySavedSearch={onApply}
+        onOpenMyReviews={jest.fn()}
+        onOpenNotifications={jest.fn()}
+      />,
     );
 
     await fireEvent.press(screen.getByText('Math online'));
@@ -78,18 +97,41 @@ describe('ProfileScreen (#49)', () => {
     const onOpenMyReviews = jest.fn();
 
     await renderWithProviders(
-      <ProfileScreen onApplySavedSearch={jest.fn()} onOpenMyReviews={onOpenMyReviews} />,
+      <ProfileScreen
+        onApplySavedSearch={jest.fn()}
+        onOpenMyReviews={onOpenMyReviews}
+        onOpenNotifications={jest.fn()}
+      />,
     );
 
     await fireEvent.press(screen.getByText('My reviews'));
     expect(onOpenMyReviews).toHaveBeenCalledTimes(1);
   });
 
+  it('opens notifications from the activity row', async () => {
+    const onOpenNotifications = jest.fn();
+
+    await renderWithProviders(
+      <ProfileScreen
+        onApplySavedSearch={jest.fn()}
+        onOpenMyReviews={jest.fn()}
+        onOpenNotifications={onOpenNotifications}
+      />,
+    );
+
+    await fireEvent.press(screen.getByText('Notifications'));
+    expect(onOpenNotifications).toHaveBeenCalledTimes(1);
+  });
+
   it('deletes a saved search', async () => {
     addSavedSearch({ name: 'Math online', query: 'math', selection: { subject: ['s1'] } });
 
     await renderWithProviders(
-      <ProfileScreen onApplySavedSearch={jest.fn()} onOpenMyReviews={jest.fn()} />,
+      <ProfileScreen
+        onApplySavedSearch={jest.fn()}
+        onOpenMyReviews={jest.fn()}
+        onOpenNotifications={jest.fn()}
+      />,
     );
 
     expect(screen.getByText('Math online')).toBeOnTheScreen();
@@ -99,7 +141,11 @@ describe('ProfileScreen (#49)', () => {
 
   it('signs out', async () => {
     await renderWithProviders(
-      <ProfileScreen onApplySavedSearch={jest.fn()} onOpenMyReviews={jest.fn()} />,
+      <ProfileScreen
+        onApplySavedSearch={jest.fn()}
+        onOpenMyReviews={jest.fn()}
+        onOpenNotifications={jest.fn()}
+      />,
     );
 
     await fireEvent.press(screen.getByRole('button', { name: 'Sign out' }));

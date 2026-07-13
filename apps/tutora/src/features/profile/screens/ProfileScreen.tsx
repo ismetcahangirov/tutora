@@ -4,15 +4,17 @@
  * Composes the pieces a student manages about themselves: their identity (from the
  * in-memory auth user), preferences (appearance + language), their saved searches
  * (apply or delete), and sign-out. Server state is untouched — everything here is
- * either already-loaded auth state or local device settings — so the screen owns
- * no queries. Navigation out (applying a saved search opens the Search tab) is
- * injected, keeping the screen route-agnostic.
+ * either already-loaded auth state or local device settings, plus one lightweight
+ * polled query — the notifications unread count that badges the Notifications row.
+ * Navigation out (applying a saved search opens the Search tab, opening reviews /
+ * notifications) is injected, keeping the screen route-agnostic.
  */
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAuth } from '@features/auth';
+import { NotificationsBadge, useUnreadNotificationsCount } from '@features/notifications';
 import { useSavedSearches } from '@features/saved-searches';
 import { Button, Text } from '@/components/ui';
 import { LanguageSwitcher } from '@/shared/i18n';
@@ -30,13 +32,20 @@ export type ProfileScreenProps = {
   onApplySavedSearch: (id: string) => void;
   /** Open the caller's own reviews (#48). */
   onOpenMyReviews: () => void;
+  /** Open the in-app notification feed (#50). */
+  onOpenNotifications: () => void;
 };
 
-export function ProfileScreen({ onApplySavedSearch, onOpenMyReviews }: ProfileScreenProps) {
+export function ProfileScreen({
+  onApplySavedSearch,
+  onOpenMyReviews,
+  onOpenNotifications,
+}: ProfileScreenProps) {
   const { t } = useTranslation();
   const colors = useColors();
   const { user, signOut } = useAuth();
   const { searches, remove } = useSavedSearches();
+  const { count: unreadNotifications } = useUnreadNotificationsCount();
 
   // The (student) layout guards auth, so this is defensive: hold on a loader
   // rather than render a broken header if the user is momentarily absent.
@@ -62,6 +71,16 @@ export function ProfileScreen({ onApplySavedSearch, onOpenMyReviews }: ProfileSc
         </SettingsGroup>
 
         <SettingsGroup title={t('profile.sections.activity')}>
+          <SettingRow
+            icon="bell"
+            label={t('profile.notifications')}
+            onPress={onOpenNotifications}
+            trailing={
+              unreadNotifications > 0 ? (
+                <NotificationsBadge count={unreadNotifications} />
+              ) : undefined
+            }
+          />
           <SettingRow icon="star" label={t('profile.myReviews')} onPress={onOpenMyReviews} />
         </SettingsGroup>
 
