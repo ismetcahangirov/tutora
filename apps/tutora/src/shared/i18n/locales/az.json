@@ -88,6 +88,15 @@
     "today": "Bu gün",
     "yesterday": "Dünən"
   },
+  "notifications": {
+    "title": "Bildirişlər",
+    "empty": "Hələ bildiriş yoxdur",
+    "emptyHint": "Yeni bir şey olduqda sizə bildirəcəyik.",
+    "error": "Bildirişlər yüklənmədi.",
+    "markAllRead": "Hamısını oxunmuş kimi işarələ",
+    "markAllError": "Bildirişlər yenilənmədi. Yenidən cəhd edin.",
+    "unreadA11y": "oxunmamış"
+  },
   "tutors": {
     "unnamed": "Repetitor",
     "verified": "Təsdiqlənib",
@@ -248,6 +257,7 @@
       "account": "Hesab"
     },
     "myReviews": "Rəylərim",
+    "notifications": "Bildirişlər",
     "appearance": {
       "label": "Görünüş",
       "system": "Sistem",
