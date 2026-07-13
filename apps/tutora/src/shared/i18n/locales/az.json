@@ -154,6 +154,68 @@
     "emptyTitle": "Hələ seçilmiş yoxdur",
     "emptyDescription": "Repetitoru burada saxlamaq üçün ürək işarəsinə toxunun."
   },
+  "comparison": {
+    "add": "Müqayisəyə əlavə et",
+    "remove": "Müqayisədən çıxar",
+    "title": "Müqayisə",
+    "subtitle": "{{limit}} repetitordan {{count}} müqayisə olunur",
+    "clear": "Təmizlə",
+    "emptyTitle": "Hələ müqayisə üçün heç nə yoxdur",
+    "emptyDescription": "Yan-yana müqayisə etmək üçün seçilmişlərdən repetitor əlavə edin.",
+    "bar": {
+      "selected": "{{limit}} repetitordan {{count}} seçilib",
+      "hint": "Müqayisə üçün ən azı bir repetitor da seçin",
+      "clear": "Təmizlə",
+      "compare": "Müqayisə et"
+    },
+    "column": {
+      "remove": "Müqayisədən çıxar",
+      "error": "Bu repetitor yüklənmədi."
+    },
+    "attributes": {
+      "rating": "Reytinq",
+      "price": "Qiymət",
+      "experience": "Təcrübə",
+      "experienceValue": "{{count}} il",
+      "formats": "Format",
+      "subjects": "Fənlər",
+      "districts": "Rayonlar",
+      "languages": "Dillər"
+    }
+  },
+  "profile": {
+    "title": "Profil",
+    "roles": {
+      "STUDENT": "Şagird",
+      "TUTOR": "Repetitor",
+      "ADMIN": "Admin"
+    },
+    "sections": {
+      "preferences": "Seçimlər",
+      "savedSearches": "Yadda saxlanmış axtarışlar",
+      "account": "Hesab"
+    },
+    "appearance": {
+      "label": "Görünüş",
+      "system": "Sistem",
+      "light": "İşıqlı",
+      "dark": "Qaranlıq"
+    },
+    "language": "Dil",
+    "savedSearches": {
+      "empty": "Hələ heç bir axtarış yadda saxlamamısınız.",
+      "emptyHint": "Sonra istifadə etmək üçün Axtarış bölməsindən axtarışı yadda saxlayın.",
+      "apply": "Yadda saxlanmış axtarışı tətbiq et",
+      "delete": "Yadda saxlanmış axtarışı sil",
+      "filters": "{{count}} filtr"
+    }
+  },
+  "savedSearches": {
+    "save": "Axtarışı yadda saxla",
+    "saved": "Axtarış yadda saxlanıldı",
+    "untitled": "Adsız axtarış",
+    "limitReached": "Ən çoxu {{limit}} axtarış yadda saxlaya bilərsiniz."
+  },
   "tutor": {
     "dashboard": {
       "title": "Repetitor paneli",

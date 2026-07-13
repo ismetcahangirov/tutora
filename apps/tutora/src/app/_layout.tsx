@@ -19,6 +19,7 @@ import { AuthProvider } from '@features/auth';
 import { I18nProvider } from '@/shared/i18n';
 import { QueryProvider } from '@/shared/query';
 import { ThemeProvider, useAppFonts } from '@/theme';
+import { getStoredAppearance, setStoredAppearance } from '@/theme/appearance-storage';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -39,7 +40,10 @@ export default function RootLayout() {
     <GestureHandlerRootView style={styles.root}>
       <SafeAreaProvider>
         <I18nProvider>
-          <ThemeProvider>
+          <ThemeProvider
+            initialPreference={getStoredAppearance() ?? 'system'}
+            onPreferenceChange={setStoredAppearance}
+          >
             <QueryProvider>
               <AuthProvider>
                 <ToastProvider>

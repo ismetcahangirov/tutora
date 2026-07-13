@@ -1,32 +1,20 @@
 /**
- * `/profile` — the student Profile tab (issue #41).
+ * `/profile` — the student Profile tab (issues #40, #49).
  *
- * Scaffolded placeholder that already carries two real controls: the language
- * switcher (#82) and sign-out (#22). The full account surface lands in a later
- * issue of the student epic (#40).
+ * Thin route wrapper around the profile feature's `ProfileScreen`; owns only the
+ * navigation out of it — applying a saved search opens the Search tab pre-filled
+ * with that preset (the Search screen re-mounts on the `presetId` param).
  */
-import { useTranslation } from 'react-i18next';
+import { useRouter } from 'expo-router';
 
-import { useAuth } from '@features/auth';
-import { PlaceholderScreen } from '@/shared';
-import { LanguageSwitcher } from '@/shared/i18n';
+import { ProfileScreen } from '@features/profile';
 
 export default function ProfileTab() {
-  const { t } = useTranslation();
-  const { signOut } = useAuth();
+  const router = useRouter();
 
   return (
-    <PlaceholderScreen
-      icon="user"
-      title={t('student.profile.title')}
-      description={t('student.profile.description')}
-      footer={<LanguageSwitcher />}
-      action={{
-        label: t('common.signOut'),
-        onPress: () => void signOut(),
-        variant: 'outline',
-      }}
-      testID="student-profile"
+    <ProfileScreen
+      onApplySavedSearch={(id) => router.push({ pathname: '/search', params: { presetId: id } })}
     />
   );
 }

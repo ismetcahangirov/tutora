@@ -7,11 +7,16 @@
  * imports no store and the same component works with live results or persisted
  * snapshots. The whole card navigates to the profile; the corner heart toggles
  * the favorite without triggering that navigation (inner Pressable wins the tap).
+ *
+ * Comparison selection is opt-in: pass `comparison` to stack an "add to compare"
+ * toggle under the heart (used on the Favorites tab). Screens that don't compare
+ * (Home, Search) simply omit it and the card renders exactly as before.
  */
 import { StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { FavoriteButton } from '@features/favorites';
+import { ComparisonButton } from '@features/comparison';
 import { Avatar, Card, Text } from '@/components/ui';
 import { formatPrice } from '@/shared';
 import { spacing } from '@/theme';
@@ -21,11 +26,21 @@ import type { TutorCardData } from '../mappers';
 import { TutorRating } from './TutorRating';
 import { VerificationBadge } from './VerificationBadge';
 
+/** Opt-in compare toggle state for a card (see `TutorCardProps.comparison`). */
+export type TutorCardComparison = {
+  active: boolean;
+  /** True when the comparison is full and this tutor is not part of it. */
+  disabled: boolean;
+  onToggle: () => void;
+};
+
 export type TutorCardProps = {
   tutor: TutorCardData;
   onPress: () => void;
   isFavorite: boolean;
   onToggleFavorite: () => void;
+  /** Render an "add to compare" toggle under the favorite heart when provided. */
+  comparison?: TutorCardComparison;
   testID?: string;
 };
 
@@ -34,6 +49,7 @@ export function TutorCard({
   onPress,
   isFavorite,
   onToggleFavorite,
+  comparison,
   testID,
 }: TutorCardProps) {
   const { t } = useTranslation();
@@ -88,6 +104,16 @@ export function TutorCard({
         accessibilityLabel={isFavorite ? t('favorites.remove') : t('favorites.add')}
         style={styles.favorite}
       />
+
+      {comparison ? (
+        <ComparisonButton
+          active={comparison.active}
+          disabled={comparison.disabled}
+          onPress={comparison.onToggle}
+          accessibilityLabel={comparison.active ? t('comparison.remove') : t('comparison.add')}
+          style={styles.compare}
+        />
+      ) : null}
     </Card>
   );
 }
@@ -125,6 +151,12 @@ const styles = StyleSheet.create({
   favorite: {
     position: 'absolute',
     top: spacing.md,
+    right: spacing.md,
+  },
+  compare: {
+    position: 'absolute',
+    // Stacked directly under the 36 pt favorite heart.
+    top: spacing.md + 36 + spacing.xs,
     right: spacing.md,
   },
 });

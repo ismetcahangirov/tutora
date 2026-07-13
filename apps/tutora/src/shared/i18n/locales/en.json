@@ -154,6 +154,68 @@
     "emptyTitle": "No favorites yet",
     "emptyDescription": "Tap the heart on a tutor to save them here."
   },
+  "comparison": {
+    "add": "Add to compare",
+    "remove": "Remove from compare",
+    "title": "Compare",
+    "subtitle": "Comparing {{count}} of {{limit}} tutors",
+    "clear": "Clear",
+    "emptyTitle": "Nothing to compare yet",
+    "emptyDescription": "Add tutors from your favorites to compare them side by side.",
+    "bar": {
+      "selected": "{{count}} of {{limit}} selected",
+      "hint": "Pick at least one more to compare",
+      "clear": "Clear",
+      "compare": "Compare"
+    },
+    "column": {
+      "remove": "Remove from comparison",
+      "error": "Couldn’t load this tutor."
+    },
+    "attributes": {
+      "rating": "Rating",
+      "price": "Price",
+      "experience": "Experience",
+      "experienceValue": "{{count}} yrs",
+      "formats": "Format",
+      "subjects": "Subjects",
+      "districts": "Districts",
+      "languages": "Languages"
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "roles": {
+      "STUDENT": "Student",
+      "TUTOR": "Tutor",
+      "ADMIN": "Admin"
+    },
+    "sections": {
+      "preferences": "Preferences",
+      "savedSearches": "Saved searches",
+      "account": "Account"
+    },
+    "appearance": {
+      "label": "Appearance",
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "language": "Language",
+    "savedSearches": {
+      "empty": "You haven’t saved any searches yet.",
+      "emptyHint": "Save a search from the Search tab to reuse it later.",
+      "apply": "Apply saved search",
+      "delete": "Delete saved search",
+      "filters": "{{count}} filters"
+    }
+  },
+  "savedSearches": {
+    "save": "Save search",
+    "saved": "Search saved",
+    "untitled": "Untitled search",
+    "limitReached": "You can save up to {{limit}} searches."
+  },
   "tutor": {
     "dashboard": {
       "title": "Tutor dashboard",

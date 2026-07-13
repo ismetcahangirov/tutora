@@ -31,7 +31,11 @@ export type IconName =
   | 'verified'
   | 'award'
   | 'book-open'
-  | 'clock';
+  | 'clock'
+  | 'columns'
+  | 'log-out'
+  | 'bookmark'
+  | 'moon';
 
 export type IconProps = {
   name: IconName;
@@ -171,6 +175,27 @@ function IconShape({ name, stroke, filled }: { name: IconName; stroke: string; f
           <Polyline points="12 6 12 12 16 14" />
         </>
       );
+    case 'columns':
+      return (
+        <Path d="M12 3h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7m0-18H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7m0-18v18" />
+      );
+    case 'log-out':
+      return (
+        <>
+          <Path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+          <Polyline points="16 17 21 12 16 7" />
+          <Line x1={21} y1={12} x2={9} y2={12} />
+        </>
+      );
+    case 'bookmark':
+      return (
+        <Path
+          d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"
+          fill={filled ? stroke : 'none'}
+        />
+      );
+    case 'moon':
+      return <Path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />;
   }
 }
 

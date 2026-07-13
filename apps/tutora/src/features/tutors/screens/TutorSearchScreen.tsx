@@ -1,19 +1,29 @@
 /**
- * TutorSearchScreen — debounced search + filter sheet (student epic #40, #43).
+ * TutorSearchScreen — debounced search + filter sheet (student epic #40, #43, #49).
  *
  * Owns the search UI state: the immediate text (for the input) plus a debounced
  * query (for the request), the chip `selection`, and the sheet's visibility. The
  * typed API params are *derived* from those via `deriveSearchParams` — no effects
  * syncing state — and fed to `useTutorSearch`, whose infinite query drives the
  * paginated results list. May be opened pre-filtered by subject from the Home
- * screen (`initialSubjectId`).
+ * screen (`initialSubjectId`) or pre-filled from a saved search (`initialSelection`
+ * + `initialQuery`). The bookmark action persists the current query + filters as a
+ * saved search (#49).
  */
 import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { FilterSheet, Icon, SearchBar, Text, type FilterSelection } from '@/components/ui';
+import { useSavedSearches } from '@features/saved-searches';
+import {
+  FilterSheet,
+  Icon,
+  SearchBar,
+  Text,
+  useToast,
+  type FilterSelection,
+} from '@/components/ui';
 import { radius, spacing, useColors } from '@/theme';
 
 import { TutorResultsList } from '../components/TutorResultsList';
@@ -25,18 +35,40 @@ import { FILTER_KEYS, countActiveFilters, deriveSearchParams } from '../search-f
 export type TutorSearchScreenProps = {
   /** Preselect a subject when arriving from a Home quick-filter. */
   initialSubjectId?: string;
+  /** Seed the whole chip selection (e.g. applying a saved search). */
+  initialSelection?: FilterSelection;
+  /** Seed the search text (e.g. applying a saved search). */
+  initialQuery?: string;
   onPressTutor: (id: string) => void;
 };
 
-export function TutorSearchScreen({ initialSubjectId, onPressTutor }: TutorSearchScreenProps) {
+/** The starting chip selection: an explicit preset wins over a single subject. */
+function initialSelectionFrom(
+  initialSelection: FilterSelection | undefined,
+  initialSubjectId: string | undefined,
+): FilterSelection {
+  if (initialSelection) {
+    return initialSelection;
+  }
+  return initialSubjectId ? { [FILTER_KEYS.subject]: [initialSubjectId] } : {};
+}
+
+export function TutorSearchScreen({
+  initialSubjectId,
+  initialSelection,
+  initialQuery,
+  onPressTutor,
+}: TutorSearchScreenProps) {
   const { t } = useTranslation();
   const colors = useColors();
+  const toast = useToast();
   const sections = useTutorFilterSections();
+  const { save, limit: savedSearchLimit } = useSavedSearches();
 
-  const [query, setQuery] = useState('');
-  const [debouncedQuery, setDebouncedQuery] = useState('');
+  const [query, setQuery] = useState(initialQuery ?? '');
+  const [debouncedQuery, setDebouncedQuery] = useState(initialQuery ?? '');
   const [selection, setSelection] = useState<FilterSelection>(
-    initialSubjectId ? { [FILTER_KEYS.subject]: [initialSubjectId] } : {},
+    initialSelectionFrom(initialSelection, initialSubjectId),
   );
   const [isSheetOpen, setSheetOpen] = useState(false);
 
@@ -53,6 +85,22 @@ export function TutorSearchScreen({ initialSubjectId, onPressTutor }: TutorSearc
   } = useTutorSearch({ ...params, limit: DEFAULT_PAGE_SIZE });
 
   const activeFilters = countActiveFilters(selection);
+  const trimmedQuery = debouncedQuery.trim();
+  const canSaveSearch = activeFilters > 0 || trimmedQuery.length > 0;
+
+  const handleSaveSearch = () => {
+    const saved = save({
+      name: trimmedQuery || t('savedSearches.untitled'),
+      query: trimmedQuery,
+      selection,
+    });
+    toast.show({
+      message: saved
+        ? t('savedSearches.saved')
+        : t('savedSearches.limitReached', { limit: savedSearchLimit }),
+      type: saved ? 'success' : 'info',
+    });
+  };
 
   return (
     <SafeAreaView style={[styles.screen, { backgroundColor: colors.background }]} edges={['top']}>
@@ -84,6 +132,21 @@ export function TutorSearchScreen({ initialSubjectId, onPressTutor }: TutorSearc
                 </Text>
               </View>
             ) : null}
+          </Pressable>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={t('savedSearches.save')}
+            accessibilityState={{ disabled: !canSaveSearch }}
+            disabled={!canSaveSearch}
+            onPress={handleSaveSearch}
+            testID="tutor-search-save"
+            style={[
+              styles.filterButton,
+              { backgroundColor: colors.surface, borderColor: colors.border },
+              !canSaveSearch && styles.disabledButton,
+            ]}
+          >
+            <Icon name="bookmark" size={20} color={canSaveSearch ? 'primary' : 'muted'} />
           </Pressable>
         </View>
 
@@ -154,6 +217,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  disabledButton: {
+    opacity: 0.5,
   },
   badge: {
     position: 'absolute',
