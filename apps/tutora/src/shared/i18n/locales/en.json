@@ -4,7 +4,11 @@
     "signOut": "Sign out",
     "retry": "Retry",
     "back": "Back",
-    "loading": "Loading…"
+    "loading": "Loading…",
+    "edit": "Edit",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "save": "Save"
   },
   "auth": {
     "screen": {
@@ -159,7 +163,39 @@
     "anonymous": "Anonymous",
     "empty": "No reviews yet.",
     "error": "Couldn’t load reviews.",
-    "starsLabel": "{{rating}} out of {{max}} stars"
+    "starsLabel": "{{rating}} out of {{max}} stars",
+    "status": {
+      "PUBLISHED": "Published",
+      "HIDDEN": "Hidden",
+      "REMOVED": "Removed"
+    },
+    "compose": {
+      "createTitle": "Write a review",
+      "editTitle": "Edit review",
+      "ratingLabel": "Your rating",
+      "ratingHint": "Tap a star to rate.",
+      "rateStars": "Rate {{rating}} of {{max}} stars",
+      "commentLabel": "Comment (optional)",
+      "commentPlaceholder": "Share what the session was like…",
+      "commentHelper": "{{count}}/{{max}}",
+      "submit": "Submit review",
+      "saveChanges": "Save changes",
+      "successCreate": "Review submitted. Thanks!",
+      "successUpdate": "Review updated.",
+      "error": "Couldn’t save your review. Try again.",
+      "missingApplication": "This review can’t be submitted right now."
+    },
+    "myReviews": {
+      "title": "My reviews",
+      "empty": "You haven’t written any reviews yet.",
+      "emptyHint": "Reviews you write appear here.",
+      "error": "Couldn’t load your reviews.",
+      "deleteTitle": "Delete review?",
+      "deleteMessage": "This permanently removes your review.",
+      "deleteConfirm": "Delete",
+      "deleteSuccess": "Review deleted.",
+      "deleteError": "Couldn’t delete the review. Try again."
+    }
   },
   "favorites": {
     "title": "Favorites",
@@ -207,9 +243,11 @@
     },
     "sections": {
       "preferences": "Preferences",
+      "activity": "Activity",
       "savedSearches": "Saved searches",
       "account": "Account"
     },
+    "myReviews": "My reviews",
     "appearance": {
       "label": "Appearance",
       "system": "System",

@@ -4,7 +4,11 @@
     "signOut": "Çıxış",
     "retry": "Yenidən cəhd et",
     "back": "Geri",
-    "loading": "Yüklənir…"
+    "loading": "Yüklənir…",
+    "edit": "Redaktə et",
+    "delete": "Sil",
+    "cancel": "Ləğv et",
+    "save": "Yadda saxla"
   },
   "auth": {
     "screen": {
@@ -159,7 +163,39 @@
     "anonymous": "Anonim",
     "empty": "Hələ rəy yoxdur.",
     "error": "Rəylər yüklənmədi.",
-    "starsLabel": "{{max}} ulduzdan {{rating}}"
+    "starsLabel": "{{max}} ulduzdan {{rating}}",
+    "status": {
+      "PUBLISHED": "Dərc edilib",
+      "HIDDEN": "Gizlədilib",
+      "REMOVED": "Silinib"
+    },
+    "compose": {
+      "createTitle": "Rəy yaz",
+      "editTitle": "Rəyi redaktə et",
+      "ratingLabel": "Qiymətiniz",
+      "ratingHint": "Qiymətləndirmək üçün ulduza toxunun.",
+      "rateStars": "{{max}} ulduzdan {{rating}} qiymət ver",
+      "commentLabel": "Şərh (istəyə bağlı)",
+      "commentPlaceholder": "Dərsin necə keçdiyini paylaşın…",
+      "commentHelper": "{{count}}/{{max}}",
+      "submit": "Rəyi göndər",
+      "saveChanges": "Dəyişiklikləri yadda saxla",
+      "successCreate": "Rəy göndərildi. Təşəkkürlər!",
+      "successUpdate": "Rəy yeniləndi.",
+      "error": "Rəyiniz saxlanılmadı. Yenidən cəhd edin.",
+      "missingApplication": "Bu rəy hazırda göndərilə bilməz."
+    },
+    "myReviews": {
+      "title": "Rəylərim",
+      "empty": "Hələ heç bir rəy yazmamısınız.",
+      "emptyHint": "Yazdığınız rəylər burada görünür.",
+      "error": "Rəyləriniz yüklənmədi.",
+      "deleteTitle": "Rəy silinsin?",
+      "deleteMessage": "Bu, rəyinizi birdəfəlik silir.",
+      "deleteConfirm": "Sil",
+      "deleteSuccess": "Rəy silindi.",
+      "deleteError": "Rəy silinmədi. Yenidən cəhd edin."
+    }
   },
   "favorites": {
     "title": "Seçilmişlər",
@@ -207,9 +243,11 @@
     },
     "sections": {
       "preferences": "Seçimlər",
+      "activity": "Fəaliyyət",
       "savedSearches": "Yadda saxlanmış axtarışlar",
       "account": "Hesab"
     },
+    "myReviews": "Rəylərim",
     "appearance": {
       "label": "Görünüş",
       "system": "Sistem",

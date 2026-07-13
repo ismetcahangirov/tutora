@@ -4,7 +4,11 @@
     "signOut": "Выйти",
     "retry": "Повторить",
     "back": "Назад",
-    "loading": "Загрузка…"
+    "loading": "Загрузка…",
+    "edit": "Изменить",
+    "delete": "Удалить",
+    "cancel": "Отмена",
+    "save": "Сохранить"
   },
   "auth": {
     "screen": {
@@ -159,7 +163,39 @@
     "anonymous": "Аноним",
     "empty": "Пока нет отзывов.",
     "error": "Не удалось загрузить отзывы.",
-    "starsLabel": "{{rating}} из {{max}} звёзд"
+    "starsLabel": "{{rating}} из {{max}} звёзд",
+    "status": {
+      "PUBLISHED": "Опубликован",
+      "HIDDEN": "Скрыт",
+      "REMOVED": "Удалён"
+    },
+    "compose": {
+      "createTitle": "Написать отзыв",
+      "editTitle": "Изменить отзыв",
+      "ratingLabel": "Ваша оценка",
+      "ratingHint": "Нажмите на звезду, чтобы оценить.",
+      "rateStars": "Оценить на {{rating}} из {{max}} звёзд",
+      "commentLabel": "Комментарий (необязательно)",
+      "commentPlaceholder": "Расскажите, как прошло занятие…",
+      "commentHelper": "{{count}}/{{max}}",
+      "submit": "Отправить отзыв",
+      "saveChanges": "Сохранить изменения",
+      "successCreate": "Отзыв отправлен. Спасибо!",
+      "successUpdate": "Отзыв обновлён.",
+      "error": "Не удалось сохранить отзыв. Попробуйте снова.",
+      "missingApplication": "Этот отзыв сейчас нельзя отправить."
+    },
+    "myReviews": {
+      "title": "Мои отзывы",
+      "empty": "Вы ещё не написали ни одного отзыва.",
+      "emptyHint": "Здесь появятся ваши отзывы.",
+      "error": "Не удалось загрузить ваши отзывы.",
+      "deleteTitle": "Удалить отзыв?",
+      "deleteMessage": "Это навсегда удалит ваш отзыв.",
+      "deleteConfirm": "Удалить",
+      "deleteSuccess": "Отзыв удалён.",
+      "deleteError": "Не удалось удалить отзыв. Попробуйте снова."
+    }
   },
   "favorites": {
     "title": "Избранное",
@@ -207,9 +243,11 @@
     },
     "sections": {
       "preferences": "Настройки",
+      "activity": "Активность",
       "savedSearches": "Сохранённые поиски",
       "account": "Аккаунт"
     },
+    "myReviews": "Мои отзывы",
     "appearance": {
       "label": "Оформление",
       "system": "Системное",

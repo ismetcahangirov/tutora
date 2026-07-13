@@ -40,7 +40,9 @@ beforeEach(() => {
 
 describe('ProfileScreen (#49)', () => {
   it('renders identity, role, and preference groups', async () => {
-    await renderWithProviders(<ProfileScreen onApplySavedSearch={jest.fn()} />);
+    await renderWithProviders(
+      <ProfileScreen onApplySavedSearch={jest.fn()} onOpenMyReviews={jest.fn()} />,
+    );
 
     expect(screen.getByText('Aygün Məmmədova')).toBeOnTheScreen();
     expect(screen.getByText('aygun@example.com')).toBeOnTheScreen();
@@ -50,7 +52,9 @@ describe('ProfileScreen (#49)', () => {
   });
 
   it('shows the empty saved-searches hint when there are none', async () => {
-    await renderWithProviders(<ProfileScreen onApplySavedSearch={jest.fn()} />);
+    await renderWithProviders(
+      <ProfileScreen onApplySavedSearch={jest.fn()} onOpenMyReviews={jest.fn()} />,
+    );
     expect(screen.getByText('You haven’t saved any searches yet.')).toBeOnTheScreen();
   });
 
@@ -62,16 +66,31 @@ describe('ProfileScreen (#49)', () => {
     });
     const onApply = jest.fn();
 
-    await renderWithProviders(<ProfileScreen onApplySavedSearch={onApply} />);
+    await renderWithProviders(
+      <ProfileScreen onApplySavedSearch={onApply} onOpenMyReviews={jest.fn()} />,
+    );
 
     await fireEvent.press(screen.getByText('Math online'));
     expect(onApply).toHaveBeenCalledWith(saved?.id);
   });
 
+  it('opens the caller’s reviews from the activity row', async () => {
+    const onOpenMyReviews = jest.fn();
+
+    await renderWithProviders(
+      <ProfileScreen onApplySavedSearch={jest.fn()} onOpenMyReviews={onOpenMyReviews} />,
+    );
+
+    await fireEvent.press(screen.getByText('My reviews'));
+    expect(onOpenMyReviews).toHaveBeenCalledTimes(1);
+  });
+
   it('deletes a saved search', async () => {
     addSavedSearch({ name: 'Math online', query: 'math', selection: { subject: ['s1'] } });
 
-    await renderWithProviders(<ProfileScreen onApplySavedSearch={jest.fn()} />);
+    await renderWithProviders(
+      <ProfileScreen onApplySavedSearch={jest.fn()} onOpenMyReviews={jest.fn()} />,
+    );
 
     expect(screen.getByText('Math online')).toBeOnTheScreen();
     await fireEvent.press(screen.getByRole('button', { name: 'Delete saved search' }));
@@ -79,7 +98,9 @@ describe('ProfileScreen (#49)', () => {
   });
 
   it('signs out', async () => {
-    await renderWithProviders(<ProfileScreen onApplySavedSearch={jest.fn()} />);
+    await renderWithProviders(
+      <ProfileScreen onApplySavedSearch={jest.fn()} onOpenMyReviews={jest.fn()} />,
+    );
 
     await fireEvent.press(screen.getByRole('button', { name: 'Sign out' }));
     expect(signOut).toHaveBeenCalledTimes(1);
