@@ -9,6 +9,9 @@ export type { TextProps } from './text';
 export { Icon } from './icon';
 export type { IconName, IconProps } from './icon';
 
+export { Avatar, initialsOf } from './avatar';
+export type { AvatarProps } from './avatar';
+
 export { Button } from './button';
 export type { ButtonProps, ButtonVariant, ButtonSize } from './button';
 

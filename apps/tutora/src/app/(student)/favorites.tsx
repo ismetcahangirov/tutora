@@ -1,22 +1,19 @@
 /**
- * `/favorites` — the student Favorites tab (issue #41).
+ * `/favorites` — the student Favorites tab (issues #40, #45).
  *
- * Scaffolded placeholder; saved tutors land in a later issue of the student
- * epic (#40).
+ * Thin route wrapper around the tutors feature's `FavoritesScreen`; owns only
+ * navigation into a profile.
  */
-import { useTranslation } from 'react-i18next';
+import { useRouter } from 'expo-router';
 
-import { PlaceholderScreen } from '@/shared';
+import { FavoritesScreen } from '@features/tutors';
 
 export default function FavoritesTab() {
-  const { t } = useTranslation();
+  const router = useRouter();
 
   return (
-    <PlaceholderScreen
-      icon="heart"
-      title={t('student.favorites.title')}
-      description={t('student.favorites.description')}
-      testID="student-favorites"
+    <FavoritesScreen
+      onPressTutor={(id) => router.push({ pathname: '/tutor/[id]', params: { id } })}
     />
   );
 }

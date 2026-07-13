@@ -3,15 +3,19 @@
  * area).
  *
  * Not a test file itself. `renderWithProviders` / `renderHookWithProviders` wrap
- * the subject in an `I18nProvider`, a `ThemeProvider` (defaulting to light) and a
+ * the subject in an `I18nProvider`, a `ThemeProvider` (defaulting to light), a
  * `SafeAreaProvider` with fixed metrics so `useSafeAreaInsets` resolves
- * synchronously in tests. Pass `language` to render in a specific locale.
+ * synchronously in tests, and a fresh React Query client (isolated per render, so
+ * one test's cache never bleeds into the next). Pass `language` to render in a
+ * specific locale.
  */
+import { QueryClientProvider } from '@tanstack/react-query';
 import { render, renderHook, type RenderOptions } from '@testing-library/react-native';
 import type { ReactElement, ReactNode } from 'react';
 import { SafeAreaProvider, type Metrics } from 'react-native-safe-area-context';
 
 import { I18nProvider, i18n, type SupportedLanguage } from '@/shared/i18n';
+import { createQueryClient } from '@/shared/query';
 import { ThemeProvider, type ThemePreference } from '@/theme';
 
 const INITIAL_METRICS: Metrics = {
@@ -25,10 +29,14 @@ function AppProviders({
   children,
   preference = 'light',
 }: { children: ReactNode } & Pick<ProviderOptions, 'preference'>) {
+  // A fresh client per wrapper instance keeps each test's cache isolated.
+  const queryClient = createQueryClient();
   return (
     <SafeAreaProvider initialMetrics={INITIAL_METRICS}>
       <I18nProvider>
-        <ThemeProvider initialPreference={preference}>{children}</ThemeProvider>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider initialPreference={preference}>{children}</ThemeProvider>
+        </QueryClientProvider>
       </I18nProvider>
     </SafeAreaProvider>
   );

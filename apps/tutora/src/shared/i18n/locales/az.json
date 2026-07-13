@@ -1,7 +1,10 @@
 {
   "common": {
     "selectLanguage": "Dili seçin",
-    "signOut": "Çıxış"
+    "signOut": "Çıxış",
+    "retry": "Yenidən cəhd et",
+    "back": "Geri",
+    "loading": "Yüklənir…"
   },
   "auth": {
     "screen": {
@@ -57,18 +60,6 @@
       "messages": "Mesajlar",
       "profile": "Profil"
     },
-    "home": {
-      "title": "Ana səhifəniz",
-      "description": "Sizə uyğun repetitor seçimləri və yeniliklər burada görünəcək."
-    },
-    "search": {
-      "title": "Repetitor tapın",
-      "description": "Fənn, büdcə, rayon, format və dilə görə axtarış — tezliklə."
-    },
-    "favorites": {
-      "title": "Hələ seçilmiş yoxdur",
-      "description": "Yadda saxladığınız repetitorlar sürətli giriş üçün burada görünəcək."
-    },
     "messages": {
       "title": "Hələ mesaj yoxdur",
       "description": "Repetitorlarla yazışmalarınız burada görünəcək."
@@ -77,6 +68,91 @@
       "title": "Profiliniz",
       "description": "Hesabınızı və seçimlərinizi idarə edin."
     }
+  },
+  "tutors": {
+    "unnamed": "Repetitor",
+    "verified": "Təsdiqlənib",
+    "perHour": "/saat",
+    "rating": {
+      "new": "Yeni",
+      "count": "({{count}})"
+    },
+    "format": {
+      "ONLINE": "Onlayn",
+      "AT_STUDENT_HOME": "Sizin ünvanda",
+      "AT_TUTOR_PLACE": "Repetitorun ünvanında"
+    },
+    "sort": {
+      "rating": "Ən yüksək reytinq",
+      "price_asc": "Ən aşağı qiymət",
+      "price_desc": "Ən yüksək qiymət",
+      "newest": "Ən yeni"
+    },
+    "home": {
+      "greeting": "Repetitorunuzu tapın",
+      "greetingNamed": "Salam, {{name}}",
+      "subtitle": "Təsdiqlənmiş repetitorları fənn, büdcə və formata görə axtarın.",
+      "browseSubjects": "Fənnə görə baxın",
+      "topRated": "Ən yüksək reytinqli repetitorlar",
+      "errorTitle": "Repetitorlar yüklənmədi"
+    },
+    "search": {
+      "placeholder": "Repetitor axtarın",
+      "resultCount": "{{count}} repetitor tapıldı",
+      "emptyTitle": "Repetitor tapılmadı",
+      "emptyDescription": "Filtrləri və ya axtarış sözlərini dəyişməyə cəhd edin.",
+      "errorTitle": "Xəta baş verdi",
+      "errorDescription": "Repetitorları yükləyə bilmədik. Zəhmət olmasa yenidən cəhd edin."
+    },
+    "filters": {
+      "title": "Filtrlər",
+      "open": "Filtrləri aç",
+      "apply": "Tətbiq et",
+      "reset": "Sıfırla",
+      "subject": "Fənn",
+      "district": "Rayon",
+      "language": "Dil",
+      "format": "Format",
+      "price": "Qiymət",
+      "rating": "Minimum reytinq",
+      "sort": "Sıralama",
+      "ratingThreshold": "{{rating}}+",
+      "priceRanges": {
+        "upTo20": "20 ₼-dək",
+        "from20to40": "20–40 ₼",
+        "from40to60": "40–60 ₼",
+        "over60": "60 ₼-dən çox"
+      }
+    },
+    "detail": {
+      "about": "Haqqında",
+      "subjects": "Fənlər",
+      "districts": "Rayonlar",
+      "languages": "Dillər",
+      "formats": "Dərs formatı",
+      "certificates": "Sertifikatlar",
+      "reviews": "Rəylər",
+      "experienceYears": "il təcrübə",
+      "contact": "Repetitorla əlaqə",
+      "contactSoon": "Mesajlaşma tezliklə əlçatan olacaq.",
+      "errorTitle": "Bu repetitor yüklənmədi",
+      "notFoundTitle": "Repetitor tapılmadı",
+      "notFoundDescription": "Bu repetitor artıq əlçatan olmaya bilər."
+    }
+  },
+  "reviews": {
+    "anonymous": "Anonim",
+    "empty": "Hələ rəy yoxdur.",
+    "error": "Rəylər yüklənmədi.",
+    "starsLabel": "{{max}} ulduzdan {{rating}}"
+  },
+  "favorites": {
+    "title": "Seçilmişlər",
+    "add": "Yadda saxla",
+    "remove": "Seçilmişlərdən çıxar",
+    "count": "{{count}} yadda saxlanılıb",
+    "emptyTitle": "Hələ seçilmiş yoxdur",
+    "emptyDescription": "Repetitoru burada saxlamaq üçün ürək işarəsinə toxunun."
   },
   "tutor": {
     "dashboard": {

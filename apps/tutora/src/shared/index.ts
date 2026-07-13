@@ -4,3 +4,6 @@ export * from './app-info';
 export * from './lib';
 export * from './components';
 export * from './navigation';
+export * from './query';
+export * from './utils';
+export * from './types';
