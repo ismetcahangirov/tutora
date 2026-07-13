@@ -60,14 +60,29 @@
       "messages": "Сообщения",
       "profile": "Профиль"
     },
-    "messages": {
-      "title": "Пока нет сообщений",
-      "description": "Здесь появятся ваши переписки с репетиторами."
-    },
     "profile": {
       "title": "Ваш профиль",
       "description": "Управляйте аккаунтом и настройками."
     }
+  },
+  "chat": {
+    "title": "Сообщения",
+    "conversation": "Переписка",
+    "unknownUser": "Пользователь Tutora",
+    "noMessagesYet": "Сообщений пока нет",
+    "unreadCount": "{{count}} непрочит.",
+    "emptyTitle": "Пока нет переписок",
+    "emptyDescription": "Напишите репетитору — и ваши переписки появятся здесь.",
+    "errorTitle": "Не удалось загрузить сообщения",
+    "errorDescription": "Проверьте подключение и попробуйте снова.",
+    "threadEmptyTitle": "Сообщений пока нет",
+    "threadEmptyDescription": "Поздоровайтесь, чтобы начать переписку.",
+    "composerPlaceholder": "Введите сообщение",
+    "messageInputLabel": "Сообщение",
+    "send": "Отправить",
+    "retryFailed": "Не удалось отправить. Нажмите, чтобы повторить.",
+    "today": "Сегодня",
+    "yesterday": "Вчера"
   },
   "tutors": {
     "unnamed": "Репетитор",

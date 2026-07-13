@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon, type IconName } from '@/components/ui';
 import { useAuth } from '@features/auth';
+import { MessagesTabIcon } from '@features/chat';
 import { ROUTES, ScreenLoader, resolveLandingRoute } from '@/shared';
 import { useColors } from '@/theme';
 
@@ -62,14 +63,17 @@ export default function StudentLayout() {
           name={tab.name}
           options={{
             title: t(tab.labelKey),
-            tabBarIcon: ({ focused }) => (
-              <Icon
-                name={tab.icon}
-                size={24}
-                color={focused ? 'primary' : 'muted'}
-                filled={focused && tab.icon === 'heart'}
-              />
-            ),
+            tabBarIcon: ({ focused }) =>
+              tab.name === 'messages' ? (
+                <MessagesTabIcon focused={focused} />
+              ) : (
+                <Icon
+                  name={tab.icon}
+                  size={24}
+                  color={focused ? 'primary' : 'muted'}
+                  filled={focused && tab.icon === 'heart'}
+                />
+              ),
           }}
         />
       ))}

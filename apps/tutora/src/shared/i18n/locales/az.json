@@ -60,14 +60,29 @@
       "messages": "Mesajlar",
       "profile": "Profil"
     },
-    "messages": {
-      "title": "Hələ mesaj yoxdur",
-      "description": "Repetitorlarla yazışmalarınız burada görünəcək."
-    },
     "profile": {
       "title": "Profiliniz",
       "description": "Hesabınızı və seçimlərinizi idarə edin."
     }
+  },
+  "chat": {
+    "title": "Mesajlar",
+    "conversation": "Söhbət",
+    "unknownUser": "Tutora istifadəçisi",
+    "noMessagesYet": "Hələ mesaj yoxdur",
+    "unreadCount": "{{count}} oxunmamış",
+    "emptyTitle": "Hələ söhbət yoxdur",
+    "emptyDescription": "Repetitora yazın və söhbətləriniz burada görünəcək.",
+    "errorTitle": "Mesajlar yüklənmədi",
+    "errorDescription": "Bağlantınızı yoxlayıb yenidən cəhd edin.",
+    "threadEmptyTitle": "Hələ mesaj yoxdur",
+    "threadEmptyDescription": "Söhbətə başlamaq üçün salam yazın.",
+    "composerPlaceholder": "Mesaj yazın",
+    "messageInputLabel": "Mesaj",
+    "send": "Göndər",
+    "retryFailed": "Mesaj göndərilmədi. Yenidən cəhd üçün toxunun.",
+    "today": "Bu gün",
+    "yesterday": "Dünən"
   },
   "tutors": {
     "unnamed": "Repetitor",
