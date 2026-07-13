@@ -10,6 +10,7 @@ export { HomeScreen, type HomeScreenProps } from './screens/HomeScreen';
 export { TutorSearchScreen, type TutorSearchScreenProps } from './screens/TutorSearchScreen';
 export { TutorDetailScreen, type TutorDetailScreenProps } from './screens/TutorDetailScreen';
 export { FavoritesScreen, type FavoritesScreenProps } from './screens/FavoritesScreen';
+export { ComparisonScreen, type ComparisonScreenProps } from './screens/ComparisonScreen';
 
 export { TutorCard, type TutorCardProps } from './components/TutorCard';
 
