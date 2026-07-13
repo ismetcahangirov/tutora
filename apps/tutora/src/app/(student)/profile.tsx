@@ -15,6 +15,7 @@ export default function ProfileTab() {
   return (
     <ProfileScreen
       onApplySavedSearch={(id) => router.push({ pathname: '/search', params: { presetId: id } })}
+      onOpenMyReviews={() => router.push('/reviews')}
     />
   );
 }

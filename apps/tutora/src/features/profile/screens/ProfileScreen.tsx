@@ -28,9 +28,11 @@ import { SettingsGroup } from '../components/SettingsGroup';
 export type ProfileScreenProps = {
   /** Apply a saved search — the route navigates to the Search tab with the preset. */
   onApplySavedSearch: (id: string) => void;
+  /** Open the caller's own reviews (#48). */
+  onOpenMyReviews: () => void;
 };
 
-export function ProfileScreen({ onApplySavedSearch }: ProfileScreenProps) {
+export function ProfileScreen({ onApplySavedSearch, onOpenMyReviews }: ProfileScreenProps) {
   const { t } = useTranslation();
   const colors = useColors();
   const { user, signOut } = useAuth();
@@ -57,6 +59,10 @@ export function ProfileScreen({ onApplySavedSearch }: ProfileScreenProps) {
             <AppearanceSetting />
           </View>
           <SettingRow icon="globe" label={t('profile.language')} trailing={<LanguageSwitcher />} />
+        </SettingsGroup>
+
+        <SettingsGroup title={t('profile.sections.activity')}>
+          <SettingRow icon="star" label={t('profile.myReviews')} onPress={onOpenMyReviews} />
         </SettingsGroup>
 
         <SettingsGroup title={t('profile.sections.savedSearches')}>

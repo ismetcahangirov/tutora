@@ -40,6 +40,7 @@ export const Input = forwardRef<TextInput, InputProps>(function Input(
     trailingIcon,
     onTrailingIconPress,
     disabled = false,
+    multiline = false,
     onFocus,
     onBlur,
     containerStyle,
@@ -63,6 +64,7 @@ export const Input = forwardRef<TextInput, InputProps>(function Input(
       <View
         style={[
           styles.field,
+          multiline && styles.fieldMultiline,
           { borderColor, backgroundColor: disabled ? colors.surface : colors.card },
         ]}
       >
@@ -71,6 +73,8 @@ export const Input = forwardRef<TextInput, InputProps>(function Input(
         <TextInput
           ref={ref}
           editable={!disabled}
+          multiline={multiline}
+          textAlignVertical={multiline ? 'top' : undefined}
           placeholderTextColor={colors.muted}
           style={[styles.input, { color: colors.textPrimary }]}
           accessibilityLabel={label}
@@ -127,6 +131,11 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderRadius: radius.sm,
     paddingHorizontal: spacing.lg,
+  },
+  // Multiline grows downward with the text pinned to the top of a taller box.
+  fieldMultiline: {
+    minHeight: 112,
+    alignItems: 'stretch',
   },
   input: {
     flex: 1,
