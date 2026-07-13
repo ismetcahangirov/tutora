@@ -15,6 +15,8 @@ export type IconName =
   | 'search'
   | 'close'
   | 'check'
+  | 'check-check'
+  | 'send'
   | 'chevron-down'
   | 'chevron-right'
   | 'filter'
@@ -72,6 +74,20 @@ function IconShape({ name, stroke, filled }: { name: IconName; stroke: string; f
       );
     case 'check':
       return <Polyline points="20 6 9 17 4 12" />;
+    case 'check-check':
+      return (
+        <>
+          <Polyline points="18 6 7 17 3 13" />
+          <Polyline points="22 8 13.5 16.5 13 16" />
+        </>
+      );
+    case 'send':
+      return (
+        <>
+          <Line x1={22} y1={2} x2={11} y2={13} />
+          <Polygon points="22 2 15 22 11 13 2 9 22 2" />
+        </>
+      );
     case 'chevron-down':
       return <Polyline points="6 9 12 15 18 9" />;
     case 'chevron-right':

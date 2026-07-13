@@ -1,22 +1,29 @@
 /**
- * `/messages` — the student Messages tab (issue #41).
+ * `/messages` — the student Messages tab (issues #41, #47).
  *
- * Scaffolded placeholder; the chat surface (backend module #34) is wired into
- * the app in a later issue of the student epic (#40).
+ * Renders the conversation list and pushes the tapped thread onto the root stack
+ * (`/chat/[id]`), passing the counterpart's name + avatar as params so the thread
+ * header renders instantly without a second fetch.
  */
-import { useTranslation } from 'react-i18next';
+import { useRouter } from 'expo-router';
 
-import { PlaceholderScreen } from '@/shared';
+import { MessagesScreen } from '@features/chat';
 
 export default function MessagesTab() {
-  const { t } = useTranslation();
+  const router = useRouter();
 
   return (
-    <PlaceholderScreen
-      icon="message-circle"
-      title={t('student.messages.title')}
-      description={t('student.messages.description')}
-      testID="student-messages"
+    <MessagesScreen
+      onOpenThread={(thread) =>
+        router.push({
+          pathname: '/chat/[id]',
+          params: {
+            id: thread.id,
+            name: thread.counterpart.name ?? '',
+            avatarUrl: thread.counterpart.avatarUrl ?? '',
+          },
+        })
+      }
     />
   );
 }

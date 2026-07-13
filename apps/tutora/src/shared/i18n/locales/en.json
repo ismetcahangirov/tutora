@@ -60,14 +60,29 @@
       "messages": "Messages",
       "profile": "Profile"
     },
-    "messages": {
-      "title": "No messages yet",
-      "description": "Your conversations with tutors will appear here."
-    },
     "profile": {
       "title": "Your profile",
       "description": "Manage your account and preferences."
     }
+  },
+  "chat": {
+    "title": "Messages",
+    "conversation": "Conversation",
+    "unknownUser": "Tutora user",
+    "noMessagesYet": "No messages yet",
+    "unreadCount": "{{count}} unread",
+    "emptyTitle": "No conversations yet",
+    "emptyDescription": "Message a tutor and your conversations will show up here.",
+    "errorTitle": "Couldn’t load messages",
+    "errorDescription": "Please check your connection and try again.",
+    "threadEmptyTitle": "No messages yet",
+    "threadEmptyDescription": "Say hello to start the conversation.",
+    "composerPlaceholder": "Type a message",
+    "messageInputLabel": "Message",
+    "send": "Send",
+    "retryFailed": "Message failed to send. Tap to retry.",
+    "today": "Today",
+    "yesterday": "Yesterday"
   },
   "tutors": {
     "unnamed": "Tutor",
