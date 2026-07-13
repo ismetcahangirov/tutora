@@ -1,7 +1,10 @@
 {
   "common": {
     "selectLanguage": "Select language",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "retry": "Retry",
+    "back": "Back",
+    "loading": "Loading…"
   },
   "auth": {
     "screen": {
@@ -57,18 +60,6 @@
       "messages": "Messages",
       "profile": "Profile"
     },
-    "home": {
-      "title": "Your home",
-      "description": "Personalized tutor picks and updates will appear here."
-    },
-    "search": {
-      "title": "Find a tutor",
-      "description": "Search by subject, budget, district, format, and language — coming soon."
-    },
-    "favorites": {
-      "title": "No favorites yet",
-      "description": "Tutors you save will show up here for quick access."
-    },
     "messages": {
       "title": "No messages yet",
       "description": "Your conversations with tutors will appear here."
@@ -77,6 +68,91 @@
       "title": "Your profile",
       "description": "Manage your account and preferences."
     }
+  },
+  "tutors": {
+    "unnamed": "Tutor",
+    "verified": "Verified",
+    "perHour": "/hr",
+    "rating": {
+      "new": "New",
+      "count": "({{count}})"
+    },
+    "format": {
+      "ONLINE": "Online",
+      "AT_STUDENT_HOME": "At your place",
+      "AT_TUTOR_PLACE": "At tutor’s place"
+    },
+    "sort": {
+      "rating": "Top rated",
+      "price_asc": "Lowest price",
+      "price_desc": "Highest price",
+      "newest": "Newest"
+    },
+    "home": {
+      "greeting": "Find your tutor",
+      "greetingNamed": "Hi, {{name}}",
+      "subtitle": "Search verified tutors by subject, budget, and format.",
+      "browseSubjects": "Browse by subject",
+      "topRated": "Top-rated tutors",
+      "errorTitle": "Couldn’t load tutors"
+    },
+    "search": {
+      "placeholder": "Search tutors",
+      "resultCount": "{{count}} tutors found",
+      "emptyTitle": "No tutors found",
+      "emptyDescription": "Try adjusting your filters or search terms.",
+      "errorTitle": "Something went wrong",
+      "errorDescription": "We couldn’t load tutors. Please try again."
+    },
+    "filters": {
+      "title": "Filters",
+      "open": "Open filters",
+      "apply": "Apply",
+      "reset": "Reset",
+      "subject": "Subject",
+      "district": "District",
+      "language": "Language",
+      "format": "Format",
+      "price": "Price",
+      "rating": "Minimum rating",
+      "sort": "Sort by",
+      "ratingThreshold": "{{rating}}+",
+      "priceRanges": {
+        "upTo20": "Under 20 ₼",
+        "from20to40": "20–40 ₼",
+        "from40to60": "40–60 ₼",
+        "over60": "Over 60 ₼"
+      }
+    },
+    "detail": {
+      "about": "About",
+      "subjects": "Subjects",
+      "districts": "Districts",
+      "languages": "Languages",
+      "formats": "Lesson format",
+      "certificates": "Certificates",
+      "reviews": "Reviews",
+      "experienceYears": "years of experience",
+      "contact": "Contact tutor",
+      "contactSoon": "Messaging is coming soon.",
+      "errorTitle": "Couldn’t load this tutor",
+      "notFoundTitle": "Tutor not found",
+      "notFoundDescription": "This tutor may no longer be available."
+    }
+  },
+  "reviews": {
+    "anonymous": "Anonymous",
+    "empty": "No reviews yet.",
+    "error": "Couldn’t load reviews.",
+    "starsLabel": "{{rating}} out of {{max}} stars"
+  },
+  "favorites": {
+    "title": "Favorites",
+    "add": "Save",
+    "remove": "Remove from favorites",
+    "count": "{{count}} saved",
+    "emptyTitle": "No favorites yet",
+    "emptyDescription": "Tap the heart on a tutor to save them here."
   },
   "tutor": {
     "dashboard": {

@@ -3,8 +3,8 @@
  *
  * Order matters: GestureHandlerRootView (for @gorhom/bottom-sheet + gestures) →
  * SafeAreaProvider → I18nProvider (so screens translate) → ThemeProvider
- * (system-aware dark mode) → ToastProvider. Fonts load before the UI shows so
- * text never flashes in a fallback family.
+ * (system-aware dark mode) → QueryProvider (server-state cache) → ToastProvider.
+ * Fonts load before the UI shows so text never flashes in a fallback family.
  */
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -17,6 +17,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ToastProvider } from '@/components/ui';
 import { AuthProvider } from '@features/auth';
 import { I18nProvider } from '@/shared/i18n';
+import { QueryProvider } from '@/shared/query';
 import { ThemeProvider, useAppFonts } from '@/theme';
 
 SplashScreen.preventAutoHideAsync();
@@ -39,12 +40,14 @@ export default function RootLayout() {
       <SafeAreaProvider>
         <I18nProvider>
           <ThemeProvider>
-            <AuthProvider>
-              <ToastProvider>
-                <StatusBar style="auto" />
-                <Stack screenOptions={{ headerShown: false }} />
-              </ToastProvider>
-            </AuthProvider>
+            <QueryProvider>
+              <AuthProvider>
+                <ToastProvider>
+                  <StatusBar style="auto" />
+                  <Stack screenOptions={{ headerShown: false }} />
+                </ToastProvider>
+              </AuthProvider>
+            </QueryProvider>
           </ThemeProvider>
         </I18nProvider>
       </SafeAreaProvider>

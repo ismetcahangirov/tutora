@@ -1,22 +1,21 @@
 /**
- * `/home` — the student Home tab (issue #41).
+ * `/home` — the student Home tab (issues #40, #42).
  *
- * Scaffolded placeholder; the personalized home surface lands in a later issue
- * of the student epic (#40). Guarded upstream by the `(student)` layout.
+ * Thin route wrapper: it owns navigation and delegates all UI to the tutors
+ * feature's `HomeScreen`. Guarded upstream by the `(student)` layout.
  */
-import { useTranslation } from 'react-i18next';
+import { useRouter } from 'expo-router';
 
-import { PlaceholderScreen } from '@/shared';
+import { HomeScreen } from '@features/tutors';
 
 export default function HomeTab() {
-  const { t } = useTranslation();
+  const router = useRouter();
 
   return (
-    <PlaceholderScreen
-      icon="home"
-      title={t('student.home.title')}
-      description={t('student.home.description')}
-      testID="student-home"
+    <HomeScreen
+      onPressTutor={(id) => router.push({ pathname: '/tutor/[id]', params: { id } })}
+      onPressSearch={() => router.push('/search')}
+      onPressSubject={(subjectId) => router.push({ pathname: '/search', params: { subjectId } })}
     />
   );
 }

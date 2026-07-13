@@ -24,7 +24,14 @@ export type IconName =
   | 'home'
   | 'heart'
   | 'message-circle'
-  | 'user';
+  | 'user'
+  | 'arrow-left'
+  | 'map-pin'
+  | 'globe'
+  | 'verified'
+  | 'award'
+  | 'book-open'
+  | 'clock';
 
 export type IconProps = {
   name: IconName;
@@ -112,6 +119,56 @@ function IconShape({ name, stroke, filled }: { name: IconName; stroke: string; f
         <>
           <Path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
           <Circle cx={12} cy={7} r={4} />
+        </>
+      );
+    case 'arrow-left':
+      return (
+        <>
+          <Line x1={19} y1={12} x2={5} y2={12} />
+          <Polyline points="12 19 5 12 12 5" />
+        </>
+      );
+    case 'map-pin':
+      return (
+        <>
+          <Path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+          <Circle cx={12} cy={10} r={3} />
+        </>
+      );
+    case 'globe':
+      return (
+        <>
+          <Circle cx={12} cy={12} r={10} />
+          <Line x1={2} y1={12} x2={22} y2={12} />
+          <Path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+        </>
+      );
+    case 'verified':
+      return (
+        <>
+          <Path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          <Polyline points="9 12 11 14 15 9.5" />
+        </>
+      );
+    case 'award':
+      return (
+        <>
+          <Circle cx={12} cy={8} r={7} />
+          <Polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
+        </>
+      );
+    case 'book-open':
+      return (
+        <>
+          <Path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+          <Path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+        </>
+      );
+    case 'clock':
+      return (
+        <>
+          <Circle cx={12} cy={12} r={10} />
+          <Polyline points="12 6 12 12 16 14" />
         </>
       );
   }
