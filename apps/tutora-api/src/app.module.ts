@@ -21,6 +21,8 @@ import { BillingModule } from '@modules/billing/billing.module';
 import { MediaModule } from '@modules/media/media.module';
 import { JobsModule } from '@modules/jobs/jobs.module';
 import { DashboardModule } from '@modules/dashboard/dashboard.module';
+import { AuditModule } from '@modules/audit/audit.module';
+import { SettingsModule } from '@modules/settings/settings.module';
 import { HealthModule } from '@modules/health/health.module';
 
 @Module({
@@ -49,6 +51,8 @@ import { HealthModule } from '@modules/health/health.module';
     MediaModule,
     JobsModule,
     DashboardModule,
+    AuditModule,
+    SettingsModule,
     HealthModule,
   ],
 })

@@ -34,6 +34,12 @@ const NotificationsPage = lazy(() =>
 const PaymentsPage = lazy(() =>
   import('@features/payments').then((m) => ({ default: m.PaymentsPage })),
 );
+const SettingsPage = lazy(() =>
+  import('@features/settings').then((m) => ({ default: m.SettingsPage })),
+);
+const AuditLogsPage = lazy(() =>
+  import('@features/audit-logs').then((m) => ({ default: m.AuditLogsPage })),
+);
 
 /**
  * Section pages that already exist. Everything else falls back to a placeholder,
@@ -47,6 +53,8 @@ const SECTION_ELEMENTS: Record<string, ReactElement> = {
   taxonomy: <TaxonomyPage />,
   notifications: <NotificationsPage />,
   payments: <PaymentsPage />,
+  settings: <SettingsPage />,
+  logs: <AuditLogsPage />,
 };
 
 /** One route per nav item, each gated by the section's permission. */

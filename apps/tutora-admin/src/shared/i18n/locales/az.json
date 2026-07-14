@@ -6,6 +6,7 @@
     "save": "Yadda saxla",
     "close": "Bağla",
     "edit": "Redaktə et",
+    "delete": "Sil",
     "yes": "Bəli",
     "no": "Xeyr"
   },
@@ -488,6 +489,112 @@
       "providerRefPlaceholder": "məs. şlüz əməliyyat id-si",
       "error": "Ödəniş yenilənmədi. Yenidən cəhd edin.",
       "save": "Tətbiq et"
+    }
+  },
+  "settings": {
+    "title": "Funksiya bayraqları və parametrlər",
+    "subtitle": "Funksiyaları aç/bağla, mərhələli yayımı tənzimlə və qlobal konfiqurasiyanı idarə et.",
+    "tabsLabel": "Parametrlər görünüşləri",
+    "tabs": {
+      "flags": "Funksiya bayraqları",
+      "config": "Sistem parametrləri"
+    },
+    "rolloutValue": "{{percent}}%",
+    "flagsColumns": {
+      "key": "Bayraq",
+      "status": "Status",
+      "rollout": "Yayım",
+      "updated": "Yeniləndi",
+      "actions": "Əməliyyatlar"
+    },
+    "flagsEmpty": "Hələ funksiya bayrağı yoxdur.",
+    "flagForm": {
+      "add": "Bayraq əlavə et",
+      "createTitle": "Funksiya bayrağı yarat",
+      "editTitle": "Funksiya bayrağını redaktə et",
+      "subtitle": "Bir imkanı aktivləşdir və auditoriyanın bir hissəsinə yay.",
+      "key": "Açar",
+      "keyInvalid": "Kiçik hərflərlə açar istifadə et: hərflər, rəqəmlər və alt xətt.",
+      "description": "Təsvir",
+      "descriptionInvalid": "Təsvir çox uzundur (maksimum 200 simvol).",
+      "enabled": "Vəziyyət",
+      "on": "Aktiv",
+      "off": "Deaktiv",
+      "rollout": "Yayım (%)",
+      "rolloutInvalid": "0 ilə 100 arasında tam ədəd daxil et.",
+      "error": "Bayraq saxlanmadı. Açar artıq istifadədə ola bilər.",
+      "create": "Bayraq yarat"
+    },
+    "flagDelete": {
+      "title": "Bu bayraq silinsin?",
+      "description": "“{{key}}” silinəcək. Bunu geri qaytarmaq olmaz.",
+      "error": "Bayraq silinmədi. Yenidən cəhd edin."
+    },
+    "settingsColumns": {
+      "key": "Açar",
+      "value": "Dəyər",
+      "updated": "Yeniləndi",
+      "actions": "Əməliyyatlar"
+    },
+    "settingsEmpty": "Hələ parametr yoxdur.",
+    "settingForm": {
+      "add": "Parametr əlavə et",
+      "createTitle": "Sistem parametri yarat",
+      "editTitle": "Sistem parametrini redaktə et",
+      "subtitle": "Qlobal konfiqurasiya dəyərini JSON kimi saxla.",
+      "key": "Açar",
+      "keyInvalid": "Kiçik hərflərlə açar istifadə et: hərflər, rəqəmlər və alt xətt.",
+      "value": "Dəyər (JSON)",
+      "valueHint": "İstənilən JSON dəyəri — mətnləri dırnaq içində yaz, məs. \"support@tutora.app\".",
+      "valueInvalid": "Düzgün JSON daxil et (mətnləri dırnaq içində).",
+      "description": "Təsvir",
+      "descriptionInvalid": "Təsvir çox uzundur (maksimum 200 simvol).",
+      "error": "Parametr saxlanmadı. Açar artıq istifadədə ola bilər.",
+      "create": "Parametr yarat"
+    },
+    "settingDelete": {
+      "title": "Bu parametr silinsin?",
+      "description": "“{{key}}” silinəcək. Bunu geri qaytarmaq olmaz.",
+      "error": "Parametr silinmədi. Yenidən cəhd edin."
+    }
+  },
+  "logs": {
+    "title": "Audit jurnalları",
+    "subtitle": "İmtiyazlı əməliyyatları və təhlükəsizliklə bağlı hadisələri nəzərdən keçir.",
+    "search": "Əməliyyat və ya istifadəçi axtar",
+    "filters": {
+      "category": "Kateqoriya",
+      "allCategories": "Bütün kateqoriyalar",
+      "clear": "Təmizlə"
+    },
+    "categories": {
+      "ADMIN": "Admin",
+      "SECURITY": "Təhlükəsizlik",
+      "SYSTEM": "Sistem"
+    },
+    "columns": {
+      "time": "Vaxt",
+      "actor": "İcraçı",
+      "category": "Kateqoriya",
+      "action": "Əməliyyat",
+      "entity": "Obyekt",
+      "actions": "Əməliyyatlar"
+    },
+    "view": "Bax",
+    "empty": {
+      "title": "Jurnal qeydi tapılmadı"
+    },
+    "detail": {
+      "title": "Audit qeydi",
+      "category": "Kateqoriya",
+      "time": "Vaxt",
+      "actor": "İcraçı",
+      "actorId": "İcraçı ID",
+      "ip": "IP ünvanı",
+      "entity": "Obyekt",
+      "userAgent": "İstifadəçi agenti",
+      "metadata": "Metadata",
+      "noMetadata": "Bu qeyd üçün metadata yoxdur."
     }
   }
 }

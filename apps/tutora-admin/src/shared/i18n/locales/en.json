@@ -6,6 +6,7 @@
     "save": "Save",
     "close": "Close",
     "edit": "Edit",
+    "delete": "Delete",
     "yes": "Yes",
     "no": "No"
   },
@@ -488,6 +489,112 @@
       "providerRefPlaceholder": "e.g. gateway transaction id",
       "error": "Couldn’t update the payment. Please try again.",
       "save": "Apply"
+    }
+  },
+  "settings": {
+    "title": "Feature flags & settings",
+    "subtitle": "Toggle features, tune progressive rollout, and manage global configuration.",
+    "tabsLabel": "Settings views",
+    "tabs": {
+      "flags": "Feature flags",
+      "config": "System settings"
+    },
+    "rolloutValue": "{{percent}}%",
+    "flagsColumns": {
+      "key": "Flag",
+      "status": "Status",
+      "rollout": "Rollout",
+      "updated": "Updated",
+      "actions": "Actions"
+    },
+    "flagsEmpty": "No feature flags yet.",
+    "flagForm": {
+      "add": "Add flag",
+      "createTitle": "Create feature flag",
+      "editTitle": "Edit feature flag",
+      "subtitle": "Enable a capability and roll it out to a share of the audience.",
+      "key": "Key",
+      "keyInvalid": "Use a lowercase key: letters, numbers, and underscores.",
+      "description": "Description",
+      "descriptionInvalid": "Description is too long (max 200 characters).",
+      "enabled": "State",
+      "on": "Enabled",
+      "off": "Disabled",
+      "rollout": "Rollout (%)",
+      "rolloutInvalid": "Enter a whole number between 0 and 100.",
+      "error": "Couldn’t save the flag. The key may already be in use.",
+      "create": "Create flag"
+    },
+    "flagDelete": {
+      "title": "Delete this flag?",
+      "description": "“{{key}}” will be removed. This can’t be undone.",
+      "error": "Couldn’t delete the flag. Please try again."
+    },
+    "settingsColumns": {
+      "key": "Key",
+      "value": "Value",
+      "updated": "Updated",
+      "actions": "Actions"
+    },
+    "settingsEmpty": "No settings yet.",
+    "settingForm": {
+      "add": "Add setting",
+      "createTitle": "Create system setting",
+      "editTitle": "Edit system setting",
+      "subtitle": "Store a global configuration value as JSON.",
+      "key": "Key",
+      "keyInvalid": "Use a lowercase key: letters, numbers, and underscores.",
+      "value": "Value (JSON)",
+      "valueHint": "Any JSON value — quote strings, e.g. \"support@tutora.app\".",
+      "valueInvalid": "Enter valid JSON (quote strings).",
+      "description": "Description",
+      "descriptionInvalid": "Description is too long (max 200 characters).",
+      "error": "Couldn’t save the setting. The key may already be in use.",
+      "create": "Create setting"
+    },
+    "settingDelete": {
+      "title": "Delete this setting?",
+      "description": "“{{key}}” will be removed. This can’t be undone.",
+      "error": "Couldn’t delete the setting. Please try again."
+    }
+  },
+  "logs": {
+    "title": "Audit logs",
+    "subtitle": "Review privileged actions and security-relevant events.",
+    "search": "Search action or actor",
+    "filters": {
+      "category": "Category",
+      "allCategories": "All categories",
+      "clear": "Clear"
+    },
+    "categories": {
+      "ADMIN": "Admin",
+      "SECURITY": "Security",
+      "SYSTEM": "System"
+    },
+    "columns": {
+      "time": "Time",
+      "actor": "Actor",
+      "category": "Category",
+      "action": "Action",
+      "entity": "Entity",
+      "actions": "Actions"
+    },
+    "view": "View",
+    "empty": {
+      "title": "No log entries found"
+    },
+    "detail": {
+      "title": "Audit entry",
+      "category": "Category",
+      "time": "Time",
+      "actor": "Actor",
+      "actorId": "Actor ID",
+      "ip": "IP address",
+      "entity": "Entity",
+      "userAgent": "User agent",
+      "metadata": "Metadata",
+      "noMetadata": "No metadata for this entry."
     }
   }
 }
