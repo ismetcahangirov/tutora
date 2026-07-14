@@ -1,9 +1,78 @@
 {
   "common": {
-    "selectLanguage": "Dili seçin"
+    "selectLanguage": "Dili seçin",
+    "loading": "Yüklənir…"
+  },
+  "auth": {
+    "title": "Tutora Admin-ə daxil olun",
+    "subtitle": "Davam etmək üçün administrator Google hesabınızdan istifadə edin.",
+    "adminOnly": "Giriş yalnız Tutora administratorları üçün nəzərdə tutulub.",
+    "googleNotConfigured": "Google ilə giriş konfiqurasiya edilməyib.",
+    "googleLoadError": "Google ilə giriş yüklənmədi. Yenidən cəhd edin.",
+    "errors": {
+      "not_authorized": "Bu hesabın admin girişi yoxdur.",
+      "sign_in_failed": "Giriş alınmadı. Yenidən cəhd edin.",
+      "network_error": "Şəbəkə xətası. Bağlantınızı yoxlayıb yenidən cəhd edin."
+    }
+  },
+  "nav": {
+    "primary": "Əsas naviqasiya",
+    "openMenu": "Menyunu aç",
+    "dashboard": "İdarə paneli",
+    "users": "İstifadəçilər",
+    "verifications": "Təsdiqləmələr",
+    "reviews": "Rəylər və şikayətlər",
+    "taxonomy": "Taksonomiya",
+    "notifications": "Bildirişlər",
+    "cms": "Məzmun",
+    "payments": "Ödənişlər",
+    "roles": "Rollar və icazələr",
+    "settings": "Parametrlər",
+    "logs": "Audit jurnalları"
+  },
+  "theme": {
+    "toggle": "Mövzunu dəyiş",
+    "light": "İşıqlı",
+    "dark": "Qaranlıq",
+    "system": "Sistem"
+  },
+  "user": {
+    "menu": "Hesab menyusu",
+    "signOut": "Çıxış"
   },
   "dashboard": {
-    "title": "İdarə paneli",
-    "subtitle": "Tutora üzrə repetitorları, şagirdləri və məzmunu idarə edin."
+    "subtitle": "Tutora üzrə repetitorları, şagirdləri və məzmunu idarə edin.",
+    "kpi": {
+      "students": "Şagirdlər",
+      "tutors": "Repetitorlar",
+      "sessions": "Sessiyalar",
+      "revenue": "Gəlir"
+    },
+    "empty": {
+      "title": "Analitika tezliklə",
+      "description": "KPI-lar, trendlər və qrafiklər burada görünəcək."
+    }
+  },
+  "section": {
+    "comingSoon": {
+      "title": "Tezliklə",
+      "description": "Bu bölmə hazırlanır."
+    }
+  },
+  "errors": {
+    "forbidden": {
+      "title": "Giriş qadağandır",
+      "description": "Bu səhifəyə baxmaq üçün icazəniz yoxdur."
+    },
+    "notFound": {
+      "title": "Səhifə tapılmadı",
+      "description": "Axtardığınız səhifə mövcud deyil.",
+      "backHome": "İdarə panelinə qayıt"
+    },
+    "generic": {
+      "title": "Xəta baş verdi",
+      "description": "Gözlənilməz xəta baş verdi. Yenidən cəhd edin.",
+      "retry": "Yenilə"
+    }
   }
 }

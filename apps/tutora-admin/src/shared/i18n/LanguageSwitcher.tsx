@@ -1,25 +1,42 @@
+import { Languages } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-import { LANGUAGE_LABELS, SUPPORTED_LANGUAGES } from './languages';
+import {
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from '@shared/ui';
+
+import { LANGUAGE_LABELS, SUPPORTED_LANGUAGES, toSupportedLanguage } from './languages';
 import { useLanguage } from './use-language';
 
-/** az / en / ru switcher for the admin panel (epic #81). */
+/** Compact az / en / ru switcher for the topbar and login (epic #81). */
 export function LanguageSwitcher() {
   const { t } = useTranslation();
   const { language, setLanguage } = useLanguage();
 
   return (
-    <div role="group" aria-label={t('common.selectLanguage')} className="language-switcher">
-      {SUPPORTED_LANGUAGES.map((lang) => (
-        <button
-          key={lang}
-          type="button"
-          aria-pressed={lang === language}
-          onClick={() => setLanguage(lang)}
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon" aria-label={t('common.selectLanguage')}>
+          <Languages />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuRadioGroup
+          value={language}
+          onValueChange={(value) => setLanguage(toSupportedLanguage(value))}
         >
-          {LANGUAGE_LABELS[lang]}
-        </button>
-      ))}
-    </div>
+          {SUPPORTED_LANGUAGES.map((lang) => (
+            <DropdownMenuRadioItem key={lang} value={lang}>
+              {LANGUAGE_LABELS[lang]}
+            </DropdownMenuRadioItem>
+          ))}
+        </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
