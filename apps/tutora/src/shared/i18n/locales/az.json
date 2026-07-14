@@ -280,9 +280,127 @@
     "limitReached": "Ən çoxu {{limit}} axtarış yadda saxlaya bilərsiniz."
   },
   "tutor": {
+    "tabs": {
+      "dashboard": "Panel",
+      "applications": "Müraciətlər",
+      "profile": "Profil"
+    },
     "dashboard": {
-      "title": "Repetitor paneli",
-      "description": "Repetitor alətləriniz hazırlanır — hazırda üzərində işləyirik."
+      "title": "Panel",
+      "greeting": "Salam, {{name}}",
+      "errorTitle": "Panel yüklənmədi",
+      "errorDescription": "Xəta baş verdi. Yeniləyin və ya yenidən cəhd edin.",
+      "stats": {
+        "views": "Profil baxışları",
+        "rating": "Reytinq",
+        "reviews": "Rəylər",
+        "pending": "Gözləyən müraciətlər",
+        "pendingA11y": "{{count}} gözləyən müraciət"
+      },
+      "status": {
+        "title": "Profil statusu",
+        "published": "Profiliniz axtarışda görünür.",
+        "unpublished": "Profiliniz axtarışda gizlidir.",
+        "live": "Aktivsiniz — tələbələr sizi tapıb əlaqə saxlaya bilər.",
+        "cta": "Profili tamamlayın"
+      },
+      "actions": {
+        "editProfile": "Profili redaktə et",
+        "viewApplications": "Müraciətlərə bax"
+      }
+    },
+    "profile": {
+      "title": "Profil",
+      "unnamed": "Profiliniz",
+      "viewsSummary": "{{count}} profil baxışı",
+      "error": "Xəta baş verdi. Yenidən cəhd edin.",
+      "errorTitle": "Profil yüklənmədi",
+      "errorDescription": "İnternet bağlantınızı yoxlayıb yenidən cəhd edin.",
+      "verification": {
+        "VERIFIED": "Təsdiqlənib",
+        "PENDING": "Yoxlanılır",
+        "REJECTED": "Rədd edilib",
+        "UNVERIFIED": "Təsdiqlənməyib"
+      },
+      "publish": {
+        "title": "Təsdiq və görünürlük",
+        "submitHint": "Təsdiqlənmək və axtarışda görünmək üçün profilinizi yoxlamağa göndərin.",
+        "submit": "Təsdiq üçün göndər",
+        "submitted": "Təsdiq üçün göndərildi.",
+        "pendingHint": "Profiliniz yoxlanılır. Təsdiqləndikdə sizə bildiriş göndərəcəyik.",
+        "published": "Dərc edilib",
+        "publishedHint": "Tələbələr sizi axtarışda tapa bilər.",
+        "unpublishedHint": "Axtarış nəticələrində görünmək üçün aktiv edin.",
+        "updated": "Görünürlük yeniləndi."
+      },
+      "basics": {
+        "title": "Haqqınızda",
+        "bioLabel": "Bio",
+        "bioPlaceholder": "Tələbələrə tədris təcrübəniz və yanaşmanız haqqında məlumat verin.",
+        "bioHelper": "{{count}}/{{max}}",
+        "experienceLabel": "Təcrübə (il)",
+        "experienceError": "0 ilə {{max}} arasında tam ədəd daxil edin.",
+        "rateLabel": "Saatlıq qiymət",
+        "rateError": "0 ilə {{max}} arasında məbləğ daxil edin.",
+        "currencyLabel": "Valyuta",
+        "formatsLabel": "Dərs formatları",
+        "saved": "Profil yeniləndi."
+      },
+      "subjects": {
+        "title": "Fənlər və qiymət",
+        "empty": "Tədris etdiyiniz fənləri əlavə edin və hər biri üçün qiymət təyin edin.",
+        "add": "Fənn əlavə et",
+        "remove": "{{subject}} fənnini sil",
+        "basePrice": "Əsas qiymət ({{currency}})",
+        "pickerTitle": "Fənn əlavə et",
+        "search": "Fənləri axtar",
+        "pickerEmpty": "Fənn tapılmadı."
+      },
+      "districts": {
+        "title": "Rayonlar",
+        "empty": "Əyani dərs verdiyiniz rayonları əlavə edin.",
+        "add": "Rayon əlavə et",
+        "remove": "{{district}} rayonunu sil",
+        "pickerTitle": "Rayon əlavə et",
+        "search": "Rayonları axtar",
+        "pickerEmpty": "Rayon tapılmadı."
+      },
+      "languages": {
+        "title": "Dillər",
+        "empty": "Dərs verdiyiniz dilləri əlavə edin.",
+        "add": "Dil əlavə et",
+        "remove": "{{language}} dilini sil",
+        "pickerTitle": "Dil əlavə et",
+        "search": "Dilləri axtar",
+        "pickerEmpty": "Dil tapılmadı."
+      }
+    },
+    "applications": {
+      "title": "Müraciətlər",
+      "error": "Müraciətlər yüklənmədi.",
+      "empty": "Hələ müraciət yoxdur",
+      "emptyHint": "Tələbələr sizə müraciət etdikdə burada görünəcək.",
+      "actionError": "Xəta baş verdi. Yenidən cəhd edin.",
+      "anonymousStudent": "Tələbə",
+      "filters": {
+        "all": "Hamısı"
+      },
+      "status": {
+        "PENDING": "Gözləyir",
+        "ACCEPTED": "Qəbul edilib",
+        "DECLINED": "Rədd edilib",
+        "CANCELLED": "Ləğv edilib",
+        "COMPLETED": "Tamamlanıb",
+        "EXPIRED": "Vaxtı bitib"
+      },
+      "actions": {
+        "accept": "Qəbul et",
+        "decline": "Rədd et",
+        "complete": "Tamamla",
+        "acceptSuccess": "Müraciət qəbul edildi.",
+        "declineSuccess": "Müraciət rədd edildi.",
+        "completeSuccess": "Tamamlandı olaraq işarələndi."
+      }
     }
   }
 }

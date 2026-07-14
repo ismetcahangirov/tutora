@@ -280,9 +280,127 @@
     "limitReached": "You can save up to {{limit}} searches."
   },
   "tutor": {
+    "tabs": {
+      "dashboard": "Dashboard",
+      "applications": "Applications",
+      "profile": "Profile"
+    },
     "dashboard": {
-      "title": "Tutor dashboard",
-      "description": "Your tutoring tools are on the way — we’re building them now."
+      "title": "Dashboard",
+      "greeting": "Hello, {{name}}",
+      "errorTitle": "Couldn’t load your dashboard",
+      "errorDescription": "Something went wrong. Pull to refresh or try again.",
+      "stats": {
+        "views": "Profile views",
+        "rating": "Rating",
+        "reviews": "Reviews",
+        "pending": "Pending applications",
+        "pendingA11y": "{{count}} pending applications"
+      },
+      "status": {
+        "title": "Profile status",
+        "published": "Your profile is visible in search.",
+        "unpublished": "Your profile is hidden from search.",
+        "live": "You’re live — students can find and contact you.",
+        "cta": "Finish your profile"
+      },
+      "actions": {
+        "editProfile": "Edit profile",
+        "viewApplications": "View applications"
+      }
+    },
+    "profile": {
+      "title": "Profile",
+      "unnamed": "Your profile",
+      "viewsSummary": "{{count}} profile views",
+      "error": "Something went wrong. Please try again.",
+      "errorTitle": "Couldn’t load your profile",
+      "errorDescription": "Check your connection and try again.",
+      "verification": {
+        "VERIFIED": "Verified",
+        "PENDING": "Under review",
+        "REJECTED": "Rejected",
+        "UNVERIFIED": "Not verified"
+      },
+      "publish": {
+        "title": "Verification & visibility",
+        "submitHint": "Submit your profile for review to get verified and appear in search.",
+        "submit": "Submit for verification",
+        "submitted": "Submitted for verification.",
+        "pendingHint": "Your profile is under review. We’ll notify you once it’s verified.",
+        "published": "Published",
+        "publishedHint": "Students can find you in search.",
+        "unpublishedHint": "Turn on to appear in search results.",
+        "updated": "Visibility updated."
+      },
+      "basics": {
+        "title": "About you",
+        "bioLabel": "Bio",
+        "bioPlaceholder": "Tell students about your teaching experience and approach.",
+        "bioHelper": "{{count}}/{{max}}",
+        "experienceLabel": "Years of experience",
+        "experienceError": "Enter a whole number between 0 and {{max}}.",
+        "rateLabel": "Hourly rate",
+        "rateError": "Enter an amount between 0 and {{max}}.",
+        "currencyLabel": "Currency",
+        "formatsLabel": "Lesson formats",
+        "saved": "Profile updated."
+      },
+      "subjects": {
+        "title": "Subjects & pricing",
+        "empty": "Add the subjects you teach and set a price for each.",
+        "add": "Add subject",
+        "remove": "Remove {{subject}}",
+        "basePrice": "Base rate ({{currency}})",
+        "pickerTitle": "Add a subject",
+        "search": "Search subjects",
+        "pickerEmpty": "No subjects found."
+      },
+      "districts": {
+        "title": "Districts",
+        "empty": "Add the districts where you teach in person.",
+        "add": "Add district",
+        "remove": "Remove {{district}}",
+        "pickerTitle": "Add a district",
+        "search": "Search districts",
+        "pickerEmpty": "No districts found."
+      },
+      "languages": {
+        "title": "Languages",
+        "empty": "Add the languages you teach in.",
+        "add": "Add language",
+        "remove": "Remove {{language}}",
+        "pickerTitle": "Add a language",
+        "search": "Search languages",
+        "pickerEmpty": "No languages found."
+      }
+    },
+    "applications": {
+      "title": "Applications",
+      "error": "Couldn’t load your applications.",
+      "empty": "No applications yet",
+      "emptyHint": "When students apply to you, they’ll show up here.",
+      "actionError": "Something went wrong. Please try again.",
+      "anonymousStudent": "Student",
+      "filters": {
+        "all": "All"
+      },
+      "status": {
+        "PENDING": "Pending",
+        "ACCEPTED": "Accepted",
+        "DECLINED": "Declined",
+        "CANCELLED": "Cancelled",
+        "COMPLETED": "Completed",
+        "EXPIRED": "Expired"
+      },
+      "actions": {
+        "accept": "Accept",
+        "decline": "Decline",
+        "complete": "Mark complete",
+        "acceptSuccess": "Application accepted.",
+        "declineSuccess": "Application declined.",
+        "completeSuccess": "Marked as complete."
+      }
     }
   }
 }

@@ -1,30 +1,21 @@
 /**
- * `/dashboard` — the tutor experience entry (issue #41).
+ * `/dashboard` — the tutor Dashboard tab (tutor epic #51, #52).
  *
- * Scaffolded placeholder; the tutor surface (schedule, students, earnings) is
- * its own epic. Offers sign-out so a tutor is never stranded here. Guarded
- * upstream by the `(tutor)` layout.
+ * Thin route wrapper around the dashboard feature's screen; owns only the
+ * navigation out of it — the profile-management and pending-application jumps both
+ * switch to a sibling tab. Guarded upstream by the `(tutor)` layout.
  */
-import { useTranslation } from 'react-i18next';
+import { useRouter } from 'expo-router';
 
-import { useAuth } from '@features/auth';
-import { PlaceholderScreen } from '@/shared';
+import { TutorDashboardScreen } from '@features/tutor-dashboard';
 
-export default function TutorDashboard() {
-  const { t } = useTranslation();
-  const { signOut } = useAuth();
+export default function TutorDashboardRoute() {
+  const router = useRouter();
 
   return (
-    <PlaceholderScreen
-      icon="inbox"
-      title={t('tutor.dashboard.title')}
-      description={t('tutor.dashboard.description')}
-      action={{
-        label: t('common.signOut'),
-        onPress: () => void signOut(),
-        variant: 'outline',
-      }}
-      testID="tutor-dashboard"
+    <TutorDashboardScreen
+      onEditProfile={() => router.navigate('/account')}
+      onViewApplications={() => router.navigate('/applications')}
     />
   );
 }
