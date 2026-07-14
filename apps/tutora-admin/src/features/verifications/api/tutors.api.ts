@@ -12,9 +12,9 @@ import {
   type AdminTutor,
   type AdminTutorListItem,
   type Certificate,
-  type CertificateDecision,
   type ListTutorsParams,
-  type VerificationStatus,
+  type ReviewCertificateBody,
+  type SetVerificationBody,
 } from '../types';
 
 const tutorsPageSchema = paginatedSchema(adminTutorListItemSchema);
@@ -38,23 +38,27 @@ export async function getTutor(id: string): Promise<AdminTutor> {
   return adminTutorSchema.parse(data);
 }
 
-/** Record the account-level verification decision (verify / reject identity). */
-export async function setVerification(id: string, status: VerificationStatus): Promise<AdminTutor> {
-  const { data } = await apiClient.patch<unknown>(`${ADMIN_TUTORS_ENDPOINT}/${id}/verification`, {
-    status,
-  });
+/**
+ * Record the account-level verification decision (verify / reject identity).
+ * A rejection carries a reason; the API clears it on approval.
+ */
+export async function setVerification(id: string, body: SetVerificationBody): Promise<AdminTutor> {
+  const { data } = await apiClient.patch<unknown>(
+    `${ADMIN_TUTORS_ENDPOINT}/${id}/verification`,
+    body,
+  );
   return adminTutorSchema.parse(data);
 }
 
-/** Approve or reject a single certificate. */
+/** Approve or reject a single certificate, with a reason on rejection. */
 export async function reviewCertificate(
   tutorId: string,
   certificateId: string,
-  status: CertificateDecision,
+  body: ReviewCertificateBody,
 ): Promise<Certificate> {
   const { data } = await apiClient.patch<unknown>(
     `${ADMIN_TUTORS_ENDPOINT}/${tutorId}/certificates/${certificateId}`,
-    { status },
+    body,
   );
   return certificateSchema.parse(data);
 }

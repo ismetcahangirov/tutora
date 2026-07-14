@@ -99,7 +99,28 @@ describe('AdminTutorsService.setVerification', () => {
     expect(prisma.tutorProfile.update).toHaveBeenCalledWith(
       expect.objectContaining({
         where: { id: 'tp1' },
-        data: { verificationStatus: 'REJECTED', isPublished: false },
+        data: { verificationStatus: 'REJECTED', verificationReason: null, isPublished: false },
+      }),
+    );
+  });
+
+  it('records the rejection reason when rejecting', async () => {
+    const prisma = buildPrismaMock();
+    prisma.tutorProfile.findUnique.mockResolvedValueOnce(makeFullProfile());
+    prisma.tutorProfile.update.mockResolvedValueOnce(
+      makeFullProfile({ verificationStatus: 'REJECTED', isPublished: false }),
+    );
+
+    const service = await buildService(prisma);
+    await service.setVerification('tp1', { status: 'REJECTED', reason: 'Blurry ID scan' });
+
+    expect(prisma.tutorProfile.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: {
+          verificationStatus: 'REJECTED',
+          verificationReason: 'Blurry ID scan',
+          isPublished: false,
+        },
       }),
     );
   });
@@ -112,12 +133,12 @@ describe('AdminTutorsService.setVerification', () => {
     );
 
     const service = await buildService(prisma);
-    await service.setVerification('tp1', { status: 'VERIFIED' });
+    await service.setVerification('tp1', { status: 'VERIFIED', reason: 'ignored on approve' });
 
     expect(prisma.tutorProfile.update).toHaveBeenCalledWith(
       expect.objectContaining({
         where: { id: 'tp1' },
-        data: { verificationStatus: 'VERIFIED' },
+        data: { verificationStatus: 'VERIFIED', verificationReason: null },
       }),
     );
   });
@@ -161,9 +182,45 @@ describe('AdminTutorsService.reviewCertificate', () => {
     >;
     const updateArg = calls[0]?.[0];
     expect(updateArg?.where).toEqual({ id: 'c1' });
-    expect(updateArg?.data).toMatchObject({ status: 'VERIFIED', reviewedById: 'admin-1' });
+    expect(updateArg?.data).toMatchObject({
+      status: 'VERIFIED',
+      reviewReason: null,
+      reviewedById: 'admin-1',
+    });
     expect(updateArg?.data.reviewedAt).toBeInstanceOf(Date);
     expect(result.status).toBe('VERIFIED');
+  });
+
+  it('stores the reason when a certificate is rejected', async () => {
+    const prisma = buildPrismaMock();
+    prisma.certificate.findUnique.mockResolvedValueOnce({ id: 'c1', tutorId: 'tp1' });
+    prisma.certificate.update.mockResolvedValueOnce({
+      id: 'c1',
+      title: 'A',
+      fileUrl: 'https://a',
+      status: 'REJECTED',
+      reviewReason: 'Unreadable document',
+      issuedBy: null,
+      reviewedAt: new Date('2026-02-01T00:00:00Z'),
+      createdAt: new Date('2026-01-01T00:00:00Z'),
+    });
+
+    const service = await buildService(prisma);
+    const result = await service.reviewCertificate(
+      'tp1',
+      'c1',
+      { status: 'REJECTED', reason: 'Unreadable document' },
+      'admin-1',
+    );
+
+    const calls = prisma.certificate.update.mock.calls as Array<
+      [{ data: { status: string; reviewReason: string | null } }]
+    >;
+    expect(calls[0]?.[0].data).toMatchObject({
+      status: 'REJECTED',
+      reviewReason: 'Unreadable document',
+    });
+    expect(result.reviewReason).toBe('Unreadable document');
   });
 });
 

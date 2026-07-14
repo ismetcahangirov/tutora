@@ -228,13 +228,22 @@
       "joined": "Joined",
       "subjects": "Subjects",
       "languages": "Languages",
-      "districts": "Districts"
+      "districts": "Districts",
+      "rejectionReason": "Rejection reason"
     },
     "confirm": {
       "verifyTitle": "Verify this tutor?",
       "verifyDescription": "The tutor will be marked verified and can be published.",
       "rejectTitle": "Reject this tutor?",
-      "rejectDescription": "The tutor will be rejected and unpublished from search."
+      "rejectDescription": "The tutor will be rejected and unpublished from search.",
+      "rejectCertTitle": "Reject this certificate?",
+      "rejectCertDescription": "The certificate will be rejected. The tutor can re-upload a corrected file."
+    },
+    "reject": {
+      "reason": "Reason",
+      "reasonPlaceholder": "Explain why this tutor is being rejected.",
+      "certReasonPlaceholder": "Explain why this certificate is being rejected.",
+      "reasonRequired": "A reason is required to reject."
     },
     "error": "Couldn’t complete the action. Please try again."
   },

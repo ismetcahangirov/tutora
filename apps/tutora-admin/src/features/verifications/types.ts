@@ -17,11 +17,15 @@ export type CertificateStatus = (typeof CERTIFICATE_STATUSES)[number];
 export const CERTIFICATE_DECISIONS = ['VERIFIED', 'REJECTED'] as const;
 export type CertificateDecision = (typeof CERTIFICATE_DECISIONS)[number];
 
+/** Upper bound on a rejection reason (mirrors the API's DTOs). */
+export const REJECTION_REASON_MAX_LENGTH = 500;
+
 export const certificateSchema = z.object({
   id: z.string(),
   title: z.string(),
   fileUrl: z.string(),
   status: z.enum(CERTIFICATE_STATUSES),
+  reviewReason: z.string().nullable(),
   issuedBy: z.string().nullable(),
   reviewedAt: z.string().nullable(),
   createdAt: z.string(),
@@ -44,6 +48,7 @@ export const adminTutorSchema = z.object({
   hourlyRate: z.number(),
   currency: z.string(),
   verificationStatus: z.enum(VERIFICATION_STATUSES),
+  verificationReason: z.string().nullable(),
   ratingAvg: z.number(),
   ratingCount: z.number(),
   isPublished: z.boolean(),
@@ -82,4 +87,16 @@ export type ListTutorsParams = {
   limit: number;
   verificationStatus?: VerificationStatus;
   q?: string;
+};
+
+/** Body of the identity verification decision. `reason` is cleared on approve. */
+export type SetVerificationBody = {
+  status: VerificationStatus;
+  reason?: string;
+};
+
+/** Body of a certificate review decision. `reason` is cleared on approve. */
+export type ReviewCertificateBody = {
+  status: CertificateDecision;
+  reason?: string;
 };

@@ -13,6 +13,7 @@ const rawTutor = {
   hourlyRate: 40,
   currency: 'AZN',
   verificationStatus: 'PENDING',
+  verificationReason: null,
   ratingAvg: 4.5,
   ratingCount: 10,
   isPublished: false,
@@ -25,6 +26,7 @@ const rawTutor = {
       title: 'BSc Mathematics',
       fileUrl: 'https://files.example.com/c1.pdf',
       status: 'PENDING',
+      reviewReason: null,
       issuedBy: null,
       reviewedAt: null,
       createdAt: '2026-01-01T00:00:00.000Z',
@@ -44,6 +46,19 @@ describe('adminTutorSchema', () => {
     expect(tutor.verificationStatus).toBe('PENDING');
     expect(tutor.certificates).toHaveLength(1);
     expect(tutor.certificates[0]?.status).toBe('PENDING');
+  });
+
+  it('surfaces rejection reasons for identity and certificates', () => {
+    const tutor = adminTutorSchema.parse({
+      ...rawTutor,
+      verificationStatus: 'REJECTED',
+      verificationReason: 'ID photo was blurry',
+      certificates: [
+        { ...rawTutor.certificates[0], status: 'REJECTED', reviewReason: 'Unreadable file' },
+      ],
+    });
+    expect(tutor.verificationReason).toBe('ID photo was blurry');
+    expect(tutor.certificates[0]?.reviewReason).toBe('Unreadable file');
   });
 
   it('keeps only the name from each relation', () => {

@@ -32,6 +32,8 @@ export interface CertificateView {
   title: string;
   fileUrl: string;
   status: CertificateStatus;
+  /** Why the certificate was rejected; null once approved or still pending. */
+  reviewReason: string | null;
   issuedBy: string | null;
   reviewedAt: Date | null;
   createdAt: Date;
@@ -49,6 +51,8 @@ export interface TutorProfileView {
   currency: string;
   formats: LessonFormat[];
   verificationStatus: VerificationStatus;
+  /** Why verification was rejected; null once verified. Shown to the tutor. */
+  verificationReason: string | null;
   ratingAvg: number;
   ratingCount: number;
   profileViews: number;
