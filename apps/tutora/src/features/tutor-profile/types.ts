@@ -9,7 +9,12 @@
  */
 import type { LessonFormat, TutorCertificate, VerificationStatus } from '@features/tutors';
 
-export type { LessonFormat, VerificationStatus } from '@features/tutors';
+export type {
+  LessonFormat,
+  VerificationStatus,
+  CertificateStatus,
+  TutorCertificate,
+} from '@features/tutors';
 
 /** A subject the tutor teaches, carrying an optional subject-specific price (#56). */
 export type TutorProfileSubject = {
@@ -81,4 +86,47 @@ export type UpsertTutorSubjectInput = {
   subjectId: string;
   /** Omit or send `undefined` to fall back to the base hourly rate. */
   priceOverride?: number;
+};
+
+/** What a signed upload is for. Mirrors the backend `MediaPurpose` (#37). */
+export type MediaPurpose = 'AVATAR' | 'CERTIFICATE';
+
+/** Body of `POST /api/v1/media/uploads` — declare what will be uploaded (#37). */
+export type CreateUploadInput = {
+  purpose: MediaPurpose;
+  contentType: string;
+};
+
+/**
+ * A signed upload ticket from `POST /api/v1/media/uploads` (#37). The client PUTs
+ * the raw bytes to `uploadUrl` sending exactly `headers`, then submits `fileUrl` to
+ * the certificate endpoint. `expiresAt` is an ISO string over the wire.
+ */
+export type UploadTicket = {
+  uploadUrl: string;
+  method: 'PUT';
+  headers: Record<string, string>;
+  objectKey: string;
+  fileUrl: string;
+  maxBytes: number;
+  expiresAt: string;
+};
+
+/** Body of `POST /api/v1/tutors/me/certificates` — register an uploaded file (#54). */
+export type CreateCertificateInput = {
+  title: string;
+  fileUrl: string;
+  issuedBy?: string;
+};
+
+/** A local file the tutor picked to upload as a certificate (#54). */
+export type PickedCertificate = {
+  /** `file://` (or `content://`) URI of the local file. */
+  uri: string;
+  /** Original file name, shown back to the tutor before upload. */
+  name: string;
+  /** MIME type — used both to validate on-device and to sign the upload URL. */
+  contentType: string;
+  /** Size in bytes when the picker reports it; used to reject oversized files. */
+  size: number | null;
 };

@@ -28,6 +28,7 @@ export type {
   TutorSort,
   LessonFormat,
   VerificationStatus,
+  CertificateStatus,
   TutorCertificate,
   Paginated,
 } from './types';

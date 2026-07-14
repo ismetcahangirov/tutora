@@ -373,6 +373,31 @@
         "pickerTitle": "Add a language",
         "search": "Search languages",
         "pickerEmpty": "No languages found."
+      },
+      "certificates": {
+        "title": "Certificates",
+        "empty": "Add certificates to build trust — each is reviewed before it shows on your profile.",
+        "add": "Add certificate",
+        "remove": "Remove {{certificate}}",
+        "removeError": "Couldn’t remove the certificate. Please try again.",
+        "pickerTitle": "Add a certificate",
+        "titleLabel": "Title",
+        "titlePlaceholder": "e.g. IELTS 8.0",
+        "issuedByLabel": "Issued by (optional)",
+        "issuedByPlaceholder": "e.g. British Council",
+        "selectFile": "Select file",
+        "changeFile": "Change file",
+        "added": "Certificate added — it’s now under review.",
+        "uploadError": "Couldn’t upload the certificate. Please try again.",
+        "file": {
+          "type": "That file type isn’t supported. Use a JPG, PNG, WEBP or PDF.",
+          "size": "That file is too large. The maximum size is 10 MB."
+        },
+        "status": {
+          "VERIFIED": "Verified",
+          "PENDING": "Under review",
+          "REJECTED": "Rejected"
+        }
       }
     },
     "applications": {

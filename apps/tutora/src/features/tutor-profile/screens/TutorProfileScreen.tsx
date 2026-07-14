@@ -18,6 +18,7 @@ import { Avatar, Button, ErrorState, LoadingState, Text, useToast } from '@/comp
 import { LanguageSwitcher } from '@/shared/i18n';
 import { spacing, useColors } from '@/theme';
 
+import { CertificatesSection } from '../components/CertificatesSection';
 import { ProfileBasicsForm } from '../components/ProfileBasicsForm';
 import { ProfileCollectionsSection } from '../components/ProfileCollectionsSection';
 import { PublishSection } from '../components/PublishSection';
@@ -107,6 +108,8 @@ export function TutorProfileScreen() {
           </View>
 
           <ProfileCollectionsSection profile={profile} />
+
+          <CertificatesSection profile={profile} />
 
           <View style={[styles.settings, { borderTopColor: colors.border }]}>
             <View style={styles.settingRow}>
