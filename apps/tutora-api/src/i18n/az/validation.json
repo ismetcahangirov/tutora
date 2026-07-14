@@ -18,11 +18,13 @@
     "arrayMaxSize": "Bu sahədə həddindən çox element var.",
     "isObject": "Bu sahə obyekt olmalıdır.",
     "isId": "Bu sahə düzgün identifikator olmalıdır.",
+    "isDateString": "Bu sahə düzgün ISO 8601 tarixi olmalıdır.",
     "isCurrency": "Bu sahə düzgün 3 hərfli valyuta kodu olmalıdır.",
     "isPositive": "Bu sahə müsbət ədəd olmalıdır.",
     "min": "Bu sahə icazə verilən minimumdan aşağıdır.",
     "max": "Bu sahə icazə verilən maksimumdan yuxarıdır.",
     "maxLength": "Bu sahə çox uzundur.",
-    "slug": "Bu sahə kiçik hərflərlə slug olmalıdır (hərflər, rəqəmlər və defis)."
+    "slug": "Bu sahə kiçik hərflərlə slug olmalıdır (hərflər, rəqəmlər və defis).",
+    "key": "Bu sahə kiçik hərflərlə açar olmalıdır (hərflər, rəqəmlər və alt xətt)."
   }
 }
