@@ -85,11 +85,14 @@ export class AdminTutorsService {
    */
   async setVerification(id: string, dto: SetVerificationDto): Promise<AdminTutorView> {
     await this.findOrThrow(id);
+    const isVerified = dto.status === 'VERIFIED';
     const updated = await this.prisma.tutorProfile.update({
       where: { id },
       data: {
         verificationStatus: dto.status,
-        ...(dto.status !== 'VERIFIED' ? { isPublished: false } : {}),
+        // A verified tutor carries no rejection reason; otherwise record it.
+        verificationReason: isVerified ? null : (dto.reason ?? null),
+        ...(isVerified ? {} : { isPublished: false }),
       },
       include: TUTOR_PROFILE_INCLUDE,
     });
@@ -128,7 +131,13 @@ export class AdminTutorsService {
     }
     const updated = await this.prisma.certificate.update({
       where: { id: certificateId },
-      data: { status: dto.status, reviewedById: adminId, reviewedAt: new Date() },
+      data: {
+        status: dto.status,
+        // An approved certificate carries no rejection reason; otherwise record it.
+        reviewReason: dto.status === 'VERIFIED' ? null : (dto.reason ?? null),
+        reviewedById: adminId,
+        reviewedAt: new Date(),
+      },
     });
     return toCertificateView(updated);
   }

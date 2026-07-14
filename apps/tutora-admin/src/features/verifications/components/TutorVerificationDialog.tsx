@@ -25,8 +25,10 @@ import { getInitials } from '@shared/utils/initials';
 
 import { useTutorQuery } from '../hooks/useTutors';
 import { useSetVerification } from '../hooks/useVerificationMutations';
-import type { AdminTutor, VerificationStatus } from '../types';
+import type { AdminTutor } from '../types';
 import { CertificateReviewList } from './CertificateReviewList';
+import { RejectionReasonNote } from './RejectionReasonNote';
+import { RejectReasonDialog } from './RejectReasonDialog';
 import { VerificationStatusBadge } from './VerificationStatusBadge';
 
 function Fact({ label, value }: { label: string; value: string }) {
@@ -146,15 +148,21 @@ export function TutorVerificationDialog({
   const { t, i18n } = useTranslation();
   const { data: tutor, isLoading, isError, refetch } = useTutorQuery(tutorId);
   const setVerification = useSetVerification();
-  const [decision, setDecision] = useState<VerificationStatus | null>(null);
+  const [action, setAction] = useState<'verify' | 'reject' | null>(null);
 
-  const isVerify = decision === 'VERIFIED';
+  const closeAction = () => setAction(null);
 
-  const confirmDecision = () => {
-    if (!decision) return;
+  const confirmVerify = () => {
     setVerification.mutate(
-      { id: tutorId, status: decision },
-      { onSuccess: () => setDecision(null) },
+      { id: tutorId, body: { status: 'VERIFIED' } },
+      { onSuccess: closeAction },
+    );
+  };
+
+  const confirmReject = (reason: string) => {
+    setVerification.mutate(
+      { id: tutorId, body: { status: 'REJECTED', reason } },
+      { onSuccess: closeAction },
     );
   };
 
@@ -184,7 +192,7 @@ export function TutorVerificationDialog({
                   <div className="flex flex-wrap gap-2">
                     <Button
                       size="sm"
-                      onClick={() => setDecision('VERIFIED')}
+                      onClick={() => setAction('verify')}
                       disabled={
                         setVerification.isPending || tutor.verificationStatus === 'VERIFIED'
                       }
@@ -195,7 +203,7 @@ export function TutorVerificationDialog({
                     <Button
                       size="sm"
                       variant="destructive"
-                      onClick={() => setDecision('REJECTED')}
+                      onClick={() => setAction('reject')}
                       disabled={
                         setVerification.isPending || tutor.verificationStatus === 'REJECTED'
                       }
@@ -204,6 +212,9 @@ export function TutorVerificationDialog({
                       {t('verifications.detail.rejectIdentity')}
                     </Button>
                   </div>
+                  {tutor.verificationStatus === 'REJECTED' && tutor.verificationReason ? (
+                    <RejectionReasonNote reason={tutor.verificationReason} />
+                  ) : null}
                 </section>
                 <Separator />
                 <section className="space-y-3">
@@ -229,26 +240,29 @@ export function TutorVerificationDialog({
         </DialogContent>
       </Dialog>
 
-      {decision ? (
+      {action === 'verify' ? (
         <ConfirmDialog
           open
-          onOpenChange={(open) => !open && setDecision(null)}
-          title={t(
-            isVerify ? 'verifications.confirm.verifyTitle' : 'verifications.confirm.rejectTitle',
-          )}
-          description={t(
-            isVerify
-              ? 'verifications.confirm.verifyDescription'
-              : 'verifications.confirm.rejectDescription',
-          )}
-          confirmLabel={t(
-            isVerify
-              ? 'verifications.detail.approveIdentity'
-              : 'verifications.detail.rejectIdentity',
-          )}
-          onConfirm={confirmDecision}
+          onOpenChange={(open) => !open && closeAction()}
+          title={t('verifications.confirm.verifyTitle')}
+          description={t('verifications.confirm.verifyDescription')}
+          confirmLabel={t('verifications.detail.approveIdentity')}
+          onConfirm={confirmVerify}
           pending={setVerification.isPending}
-          destructive={!isVerify}
+          error={setVerification.isError ? t('verifications.error') : null}
+        />
+      ) : null}
+
+      {action === 'reject' ? (
+        <RejectReasonDialog
+          open
+          onOpenChange={(open) => !open && closeAction()}
+          title={t('verifications.confirm.rejectTitle')}
+          description={t('verifications.confirm.rejectDescription')}
+          placeholder={t('verifications.reject.reasonPlaceholder')}
+          confirmLabel={t('verifications.detail.rejectIdentity')}
+          onConfirm={confirmReject}
+          pending={setVerification.isPending}
           error={setVerification.isError ? t('verifications.error') : null}
         />
       ) : null}

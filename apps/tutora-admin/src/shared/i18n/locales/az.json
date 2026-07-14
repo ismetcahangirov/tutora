@@ -228,13 +228,22 @@
       "joined": "Qoşulub",
       "subjects": "Fənlər",
       "languages": "Dillər",
-      "districts": "Rayonlar"
+      "districts": "Rayonlar",
+      "rejectionReason": "Rədd səbəbi"
     },
     "confirm": {
       "verifyTitle": "Bu repetitor təsdiqlənsin?",
       "verifyDescription": "Repetitor təsdiqlənmiş kimi işarələnəcək və dərc oluna biləcək.",
       "rejectTitle": "Bu repetitor rədd edilsin?",
-      "rejectDescription": "Repetitor rədd ediləcək və axtarışdan çıxarılacaq."
+      "rejectDescription": "Repetitor rədd ediləcək və axtarışdan çıxarılacaq.",
+      "rejectCertTitle": "Bu sertifikat rədd edilsin?",
+      "rejectCertDescription": "Sertifikat rədd ediləcək. Repetitor düzəldilmiş faylı yenidən yükləyə bilər."
+    },
+    "reject": {
+      "reason": "Səbəb",
+      "reasonPlaceholder": "Bu repetitorun niyə rədd edildiyini izah edin.",
+      "certReasonPlaceholder": "Bu sertifikatın niyə rədd edildiyini izah edin.",
+      "reasonRequired": "Rədd etmək üçün səbəb tələb olunur."
     },
     "error": "Əməliyyat tamamlanmadı. Yenidən cəhd edin."
   },
