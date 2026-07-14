@@ -5,6 +5,7 @@
     "cancel": "Ləğv et",
     "save": "Yadda saxla",
     "close": "Bağla",
+    "edit": "Redaktə et",
     "yes": "Bəli",
     "no": "Xeyr"
   },
@@ -371,6 +372,112 @@
       "description": "“{{name}}” silinəcək. Bunu geri qaytarmaq olmaz.",
       "confirm": "Sil",
       "error": "Silinmədi. Hələ də istifadədə ola bilər."
+    }
+  },
+  "payments": {
+    "title": "Ödənişlər və planlar",
+    "subtitle": "Abunə planlarını idarə edin, abunələrə nəzarət edin və əməliyyatları uzlaşdırın.",
+    "tabsLabel": "Ödəniş görünüşləri",
+    "perMonth": "/ ay",
+    "tabs": {
+      "plans": "Planlar",
+      "subscriptions": "Abunələr",
+      "transactions": "Əməliyyatlar"
+    },
+    "tier": {
+      "FREE": "Pulsuz",
+      "PRO": "Pro"
+    },
+    "paymentStatus": {
+      "PENDING": "Gözləyir",
+      "SUCCEEDED": "Uğurlu",
+      "FAILED": "Uğursuz",
+      "REFUNDED": "Geri qaytarılıb"
+    },
+    "subscriptionStatus": {
+      "ACTIVE": "Aktiv",
+      "PAST_DUE": "Gecikmiş",
+      "CANCELED": "Ləğv edilib",
+      "EXPIRED": "Bitib"
+    },
+    "filters": {
+      "status": "Status",
+      "allStatuses": "Bütün statuslar",
+      "userScope": "İstifadəçi üzrə süzülüb",
+      "clear": "Təmizlə"
+    },
+    "entitlements": {
+      "limits": "{{applications}} müraciət · {{favorites}} sevimli",
+      "featuredProfile": "Seçilmiş profil",
+      "analytics": "Analitika",
+      "prioritySupport": "Prioritet dəstək"
+    },
+    "plansColumns": {
+      "name": "Plan",
+      "tier": "Səviyyə",
+      "price": "Qiymət",
+      "entitlements": "İmkanlar",
+      "status": "Status",
+      "updated": "Yenilənib",
+      "actions": "Əməliyyatlar"
+    },
+    "plansEmpty": "Hələ plan yoxdur.",
+    "planForm": {
+      "add": "Plan əlavə et",
+      "allTiersUsed": "Hər səviyyənin artıq planı var.",
+      "createTitle": "Plan yarat",
+      "editTitle": "Planı redaktə et",
+      "subtitle": "Plan səviyyənin qiymətini və açdığı imkanları təyin edir.",
+      "tier": "Səviyyə",
+      "name": "Ad",
+      "nameRequired": "Ad daxil edin (60 simvola qədər).",
+      "price": "Aylıq qiymət",
+      "priceInvalid": "Düzgün məbləğ daxil edin (ən çox iki onluq).",
+      "currency": "Valyuta",
+      "currencyInvalid": "3 hərfli kod istifadə edin (məs. AZN).",
+      "entitlements": "İmkanlar",
+      "maxActiveApplications": "Maksimum aktiv müraciət",
+      "maxFavorites": "Maksimum sevimli",
+      "limitInvalid": "Tam ədəd daxil edin (0 və ya daha çox).",
+      "featuredProfile": "Seçilmiş profil",
+      "analytics": "Analitika",
+      "prioritySupport": "Prioritet dəstək",
+      "enabled": "Aktiv",
+      "disabled": "Deaktiv",
+      "availability": "Əlçatanlıq",
+      "active": "Aktiv",
+      "retired": "Arxivlənib",
+      "error": "Plan yadda saxlanmadı. Yenidən cəhd edin.",
+      "save": "Dəyişiklikləri yadda saxla",
+      "create": "Plan yarat"
+    },
+    "subscriptionsColumns": {
+      "subscriber": "Abunəçi",
+      "plan": "Plan",
+      "status": "Status",
+      "period": "Cari dövr",
+      "created": "Başlayıb"
+    },
+    "subscriptionsEmpty": "Bu filtrlərə uyğun abunə yoxdur.",
+    "transactionsColumns": {
+      "payer": "Ödəyən",
+      "amount": "Məbləğ",
+      "status": "Status",
+      "provider": "Provayder",
+      "created": "Tarix",
+      "actions": "Əməliyyatlar",
+      "reconcile": "Uzlaşdır"
+    },
+    "transactionsEmpty": "Bu filtrlərə uyğun əməliyyat yoxdur.",
+    "reconcile": {
+      "title": "Ödənişi uzlaşdır",
+      "subtitle": "Ödənişi tamamlanmış statusa keçirin. Geri qaytarma ləğv edilə bilməz.",
+      "terminal": "Bu ödəniş son statusdadır və dəyişdirilə bilməz.",
+      "newStatus": "Yeni status",
+      "providerRef": "Provayder istinadı",
+      "providerRefPlaceholder": "məs. şlüz əməliyyat id-si",
+      "error": "Ödəniş yenilənmədi. Yenidən cəhd edin.",
+      "save": "Tətbiq et"
     }
   }
 }

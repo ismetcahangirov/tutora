@@ -5,6 +5,7 @@
     "cancel": "Cancel",
     "save": "Save",
     "close": "Close",
+    "edit": "Edit",
     "yes": "Yes",
     "no": "No"
   },
@@ -371,6 +372,112 @@
       "description": "“{{name}}” will be removed. This can’t be undone.",
       "confirm": "Delete",
       "error": "Couldn’t delete. It may still be in use."
+    }
+  },
+  "payments": {
+    "title": "Payments & plans",
+    "subtitle": "Manage subscription plans, oversee subscriptions, and reconcile transactions.",
+    "tabsLabel": "Payments views",
+    "perMonth": "/ mo",
+    "tabs": {
+      "plans": "Plans",
+      "subscriptions": "Subscriptions",
+      "transactions": "Transactions"
+    },
+    "tier": {
+      "FREE": "Free",
+      "PRO": "Pro"
+    },
+    "paymentStatus": {
+      "PENDING": "Pending",
+      "SUCCEEDED": "Succeeded",
+      "FAILED": "Failed",
+      "REFUNDED": "Refunded"
+    },
+    "subscriptionStatus": {
+      "ACTIVE": "Active",
+      "PAST_DUE": "Past due",
+      "CANCELED": "Canceled",
+      "EXPIRED": "Expired"
+    },
+    "filters": {
+      "status": "Status",
+      "allStatuses": "All statuses",
+      "userScope": "Filtered by user",
+      "clear": "Clear"
+    },
+    "entitlements": {
+      "limits": "{{applications}} applications · {{favorites}} favorites",
+      "featuredProfile": "Featured profile",
+      "analytics": "Analytics",
+      "prioritySupport": "Priority support"
+    },
+    "plansColumns": {
+      "name": "Plan",
+      "tier": "Tier",
+      "price": "Price",
+      "entitlements": "Entitlements",
+      "status": "Status",
+      "updated": "Updated",
+      "actions": "Actions"
+    },
+    "plansEmpty": "No plans yet.",
+    "planForm": {
+      "add": "Add plan",
+      "allTiersUsed": "Every tier already has a plan.",
+      "createTitle": "Create plan",
+      "editTitle": "Edit plan",
+      "subtitle": "A plan sets a tier’s price and the capabilities it unlocks.",
+      "tier": "Tier",
+      "name": "Name",
+      "nameRequired": "Enter a name (up to 60 characters).",
+      "price": "Monthly price",
+      "priceInvalid": "Enter a valid amount (at most two decimals).",
+      "currency": "Currency",
+      "currencyInvalid": "Use a 3-letter code (e.g. AZN).",
+      "entitlements": "Entitlements",
+      "maxActiveApplications": "Max active applications",
+      "maxFavorites": "Max favorites",
+      "limitInvalid": "Enter a whole number (0 or more).",
+      "featuredProfile": "Featured profile",
+      "analytics": "Analytics",
+      "prioritySupport": "Priority support",
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "availability": "Availability",
+      "active": "Active",
+      "retired": "Retired",
+      "error": "Couldn’t save the plan. Please try again.",
+      "save": "Save changes",
+      "create": "Create plan"
+    },
+    "subscriptionsColumns": {
+      "subscriber": "Subscriber",
+      "plan": "Plan",
+      "status": "Status",
+      "period": "Current period",
+      "created": "Started"
+    },
+    "subscriptionsEmpty": "No subscriptions match these filters.",
+    "transactionsColumns": {
+      "payer": "Payer",
+      "amount": "Amount",
+      "status": "Status",
+      "provider": "Provider",
+      "created": "Date",
+      "actions": "Actions",
+      "reconcile": "Reconcile"
+    },
+    "transactionsEmpty": "No transactions match these filters.",
+    "reconcile": {
+      "title": "Reconcile payment",
+      "subtitle": "Move the payment to a settled state. A refund can’t be undone.",
+      "terminal": "This payment is in a final state and can’t change.",
+      "newStatus": "New status",
+      "providerRef": "Provider reference",
+      "providerRefPlaceholder": "e.g. gateway transaction id",
+      "error": "Couldn’t update the payment. Please try again.",
+      "save": "Apply"
     }
   }
 }

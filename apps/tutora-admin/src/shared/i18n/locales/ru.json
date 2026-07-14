@@ -5,6 +5,7 @@
     "cancel": "Отмена",
     "save": "Сохранить",
     "close": "Закрыть",
+    "edit": "Изменить",
     "yes": "Да",
     "no": "Нет"
   },
@@ -371,6 +372,112 @@
       "description": "«{{name}}» будет удалён. Это действие необратимо.",
       "confirm": "Удалить",
       "error": "Не удалось удалить. Возможно, он ещё используется."
+    }
+  },
+  "payments": {
+    "title": "Платежи и планы",
+    "subtitle": "Управляйте планами подписки, контролируйте подписки и сверяйте транзакции.",
+    "tabsLabel": "Разделы платежей",
+    "perMonth": "/ мес",
+    "tabs": {
+      "plans": "Планы",
+      "subscriptions": "Подписки",
+      "transactions": "Транзакции"
+    },
+    "tier": {
+      "FREE": "Бесплатный",
+      "PRO": "Pro"
+    },
+    "paymentStatus": {
+      "PENDING": "Ожидает",
+      "SUCCEEDED": "Успешно",
+      "FAILED": "Ошибка",
+      "REFUNDED": "Возвращён"
+    },
+    "subscriptionStatus": {
+      "ACTIVE": "Активна",
+      "PAST_DUE": "Просрочена",
+      "CANCELED": "Отменена",
+      "EXPIRED": "Истекла"
+    },
+    "filters": {
+      "status": "Статус",
+      "allStatuses": "Все статусы",
+      "userScope": "Фильтр по пользователю",
+      "clear": "Очистить"
+    },
+    "entitlements": {
+      "limits": "{{applications}} заявок · {{favorites}} избранных",
+      "featuredProfile": "Продвигаемый профиль",
+      "analytics": "Аналитика",
+      "prioritySupport": "Приоритетная поддержка"
+    },
+    "plansColumns": {
+      "name": "План",
+      "tier": "Уровень",
+      "price": "Цена",
+      "entitlements": "Возможности",
+      "status": "Статус",
+      "updated": "Обновлён",
+      "actions": "Действия"
+    },
+    "plansEmpty": "Планов пока нет.",
+    "planForm": {
+      "add": "Добавить план",
+      "allTiersUsed": "У каждого уровня уже есть план.",
+      "createTitle": "Создать план",
+      "editTitle": "Изменить план",
+      "subtitle": "План задаёт цену уровня и возможности, которые он открывает.",
+      "tier": "Уровень",
+      "name": "Название",
+      "nameRequired": "Введите название (до 60 символов).",
+      "price": "Цена в месяц",
+      "priceInvalid": "Введите корректную сумму (не более двух знаков после запятой).",
+      "currency": "Валюта",
+      "currencyInvalid": "Используйте 3-буквенный код (например, AZN).",
+      "entitlements": "Возможности",
+      "maxActiveApplications": "Макс. активных заявок",
+      "maxFavorites": "Макс. избранных",
+      "limitInvalid": "Введите целое число (0 или больше).",
+      "featuredProfile": "Продвигаемый профиль",
+      "analytics": "Аналитика",
+      "prioritySupport": "Приоритетная поддержка",
+      "enabled": "Включено",
+      "disabled": "Выключено",
+      "availability": "Доступность",
+      "active": "Активен",
+      "retired": "Архивирован",
+      "error": "Не удалось сохранить план. Попробуйте ещё раз.",
+      "save": "Сохранить изменения",
+      "create": "Создать план"
+    },
+    "subscriptionsColumns": {
+      "subscriber": "Подписчик",
+      "plan": "План",
+      "status": "Статус",
+      "period": "Текущий период",
+      "created": "Начата"
+    },
+    "subscriptionsEmpty": "Нет подписок по этим фильтрам.",
+    "transactionsColumns": {
+      "payer": "Плательщик",
+      "amount": "Сумма",
+      "status": "Статус",
+      "provider": "Провайдер",
+      "created": "Дата",
+      "actions": "Действия",
+      "reconcile": "Сверить"
+    },
+    "transactionsEmpty": "Нет транзакций по этим фильтрам.",
+    "reconcile": {
+      "title": "Сверка платежа",
+      "subtitle": "Переведите платёж в завершённый статус. Возврат нельзя отменить.",
+      "terminal": "Этот платёж в финальном статусе и не может измениться.",
+      "newStatus": "Новый статус",
+      "providerRef": "Ссылка провайдера",
+      "providerRefPlaceholder": "например, id транзакции шлюза",
+      "error": "Не удалось обновить платёж. Попробуйте ещё раз.",
+      "save": "Применить"
     }
   }
 }
