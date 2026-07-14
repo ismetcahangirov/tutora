@@ -1,9 +1,78 @@
 {
   "common": {
-    "selectLanguage": "Select language"
+    "selectLanguage": "Select language",
+    "loading": "Loading…"
+  },
+  "auth": {
+    "title": "Sign in to Tutora Admin",
+    "subtitle": "Use your administrator Google account to continue.",
+    "adminOnly": "Access is restricted to Tutora administrators.",
+    "googleNotConfigured": "Google sign-in is not configured.",
+    "googleLoadError": "Couldn’t load Google sign-in. Please try again.",
+    "errors": {
+      "not_authorized": "This account doesn’t have admin access.",
+      "sign_in_failed": "Sign-in failed. Please try again.",
+      "network_error": "Network error. Check your connection and try again."
+    }
+  },
+  "nav": {
+    "primary": "Primary navigation",
+    "openMenu": "Open menu",
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "verifications": "Verifications",
+    "reviews": "Reviews & reports",
+    "taxonomy": "Taxonomy",
+    "notifications": "Notifications",
+    "cms": "Content",
+    "payments": "Payments",
+    "roles": "Roles & permissions",
+    "settings": "Settings",
+    "logs": "Audit logs"
+  },
+  "theme": {
+    "toggle": "Toggle theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "user": {
+    "menu": "Account menu",
+    "signOut": "Sign out"
   },
   "dashboard": {
-    "title": "Admin Panel",
-    "subtitle": "Manage tutors, students, and content across Tutora."
+    "subtitle": "Manage tutors, students, and content across Tutora.",
+    "kpi": {
+      "students": "Students",
+      "tutors": "Tutors",
+      "sessions": "Sessions",
+      "revenue": "Revenue"
+    },
+    "empty": {
+      "title": "Analytics coming soon",
+      "description": "KPIs, trends, and charts will appear here."
+    }
+  },
+  "section": {
+    "comingSoon": {
+      "title": "Coming soon",
+      "description": "This section is being built."
+    }
+  },
+  "errors": {
+    "forbidden": {
+      "title": "Access denied",
+      "description": "You don’t have permission to view this page."
+    },
+    "notFound": {
+      "title": "Page not found",
+      "description": "The page you’re looking for doesn’t exist.",
+      "backHome": "Back to dashboard"
+    },
+    "generic": {
+      "title": "Something went wrong",
+      "description": "An unexpected error occurred. Please try again.",
+      "retry": "Reload"
+    }
   }
 }

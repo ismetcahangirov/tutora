@@ -1,32 +1,52 @@
-# React + TypeScript + Vite
+# Tutora Admin (`@tutora/admin`)
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Enterprise admin panel for Tutora — React + Vite SPA with RBAC, moderation, CMS,
+and analytics (epic [#59](https://github.com/)).
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **React 19** + **Vite** + **TypeScript** (strict)
+- **Tailwind CSS v4** with design tokens mirroring the mobile design system
+  (indigo primary on soft slate neutrals — no gradients); shadcn-style primitives
+- **React Router v7** (data router) with protected, permission-aware routes
+- **TanStack Query** (server state) · **Zustand** (session + theme)
+- **i18next** (az / en / ru) · Google-OAuth sign-in (admins only)
 
-## React Compiler
+## Architecture
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Feature-first with a Clean-Architecture dependency direction (`app → features → shared`):
 
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```
+src/
+├── app/          composition root — providers, layout (shell), navigation, router, pages
+├── features/
+│   └── auth/     Google sign-in, session store, RBAC guards
+└── shared/       ui (primitives), lib (api client + cn), rbac, theme, i18n, components, config
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+- **Auth** is Google-OAuth only; the panel is ADMIN-only and fails closed.
+- **RBAC** gates navigation and routes on _permissions_ (not the raw role), so
+  fine-grained, backend-driven permissions ([#69](https://github.com/)) can slot
+  in without touching call sites.
+- The shared **api client** attaches the access token and transparently refreshes
+  on 401 (single-flight).
+
+## Environment
+
+Client env is validated with Zod (`src/shared/config/env.ts`); both vars are
+optional with safe defaults:
+
+| Variable                | Description                          | Default                 |
+| ----------------------- | ------------------------------------ | ----------------------- |
+| `VITE_API_URL`          | Base URL of the Tutora API           | `http://localhost:3000` |
+| `VITE_GOOGLE_CLIENT_ID` | Google OAuth client ID for admin SSO | _(empty)_               |
+
+## Scripts
+
+```bash
+pnpm --filter @tutora/admin dev        # start the dev server
+pnpm --filter @tutora/admin build      # typecheck + production build
+pnpm --filter @tutora/admin lint       # eslint
+pnpm --filter @tutora/admin typecheck  # tsc --noEmit
+pnpm --filter @tutora/admin test       # vitest
+```
