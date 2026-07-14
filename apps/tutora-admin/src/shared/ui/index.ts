@@ -8,6 +8,7 @@ export { badgeVariants, type BadgeVariants } from './badge-variants';
 export { Input } from './input';
 export { Label } from './label';
 export { Select } from './select';
+export { Textarea } from './textarea';
 export { Skeleton } from './skeleton';
 export { Separator } from './separator';
 export { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from './table';

@@ -225,5 +225,105 @@
       "rejectDescription": "The tutor will be rejected and unpublished from search."
     },
     "error": "Couldn’t complete the action. Please try again."
+  },
+  "reviews": {
+    "title": "Reviews & reports",
+    "subtitle": "Moderate reviews and resolve abuse or spam reports.",
+    "filters": {
+      "status": "Status",
+      "allStatuses": "All statuses",
+      "tutorScope": "Filtered by tutor",
+      "clear": "Clear"
+    },
+    "status": {
+      "PUBLISHED": "Published",
+      "HIDDEN": "Hidden",
+      "REMOVED": "Removed"
+    },
+    "columns": {
+      "author": "Author",
+      "tutor": "Tutor",
+      "rating": "Rating",
+      "comment": "Comment",
+      "status": "Status",
+      "submitted": "Submitted",
+      "actions": "Actions"
+    },
+    "ratingLabel": "{{rating}} out of 5",
+    "actions": {
+      "moderate": "Moderate"
+    },
+    "empty": {
+      "title": "No reviews found"
+    },
+    "moderate": {
+      "title": "Moderate review",
+      "subtitle": "Set this review’s visibility. Hidden and removed reviews don’t count toward the tutor’s rating.",
+      "forTutor": "For {{tutor}}",
+      "noComment": "No comment provided.",
+      "lastModerated": "Last moderated {{date}}",
+      "decision": "Visibility",
+      "reason": "Reason",
+      "reasonPlaceholder": "Explain why this review is hidden or removed.",
+      "reasonRequired": "A reason is required when hiding or removing a review.",
+      "save": "Apply",
+      "error": "Couldn’t moderate the review. Please try again."
+    }
+  },
+  "taxonomy": {
+    "title": "Taxonomy",
+    "subtitle": "Manage categories, subjects, districts, and languages.",
+    "tabsLabel": "Taxonomy kinds",
+    "kinds": {
+      "categories": "Categories",
+      "subjects": "Subjects",
+      "districts": "Districts",
+      "languages": "Languages"
+    },
+    "singular": {
+      "categories": "category",
+      "subjects": "subject",
+      "districts": "district",
+      "languages": "language"
+    },
+    "add": "Add {{kind}}",
+    "search": "Search by name or slug",
+    "columns": {
+      "name": "Name",
+      "slug": "Slug",
+      "code": "Code",
+      "category": "Category",
+      "actions": "Actions"
+    },
+    "actions": {
+      "menu": "Open actions",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "empty": {
+      "title": "Nothing here yet"
+    },
+    "form": {
+      "createTitle": "Add {{kind}}",
+      "editTitle": "Edit {{kind}}",
+      "subtitle": "Names appear in the app; slugs and codes must be unique.",
+      "name": "Name",
+      "slug": "Slug",
+      "code": "Code",
+      "category": "Category",
+      "noCategory": "No category",
+      "nameRequired": "Enter a name.",
+      "invalidSlug": "Use lowercase letters, numbers, and hyphens only.",
+      "invalidCode": "Use 2–10 lowercase letters (e.g. az, en, ru).",
+      "create": "Create",
+      "save": "Save changes",
+      "error": "Couldn’t save. The slug or code may already be in use."
+    },
+    "delete": {
+      "title": "Delete this item?",
+      "description": "“{{name}}” will be removed. This can’t be undone.",
+      "confirm": "Delete",
+      "error": "Couldn’t delete. It may still be in use."
+    }
   }
 }
