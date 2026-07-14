@@ -51,12 +51,22 @@
     "kpi": {
       "students": "Ученики",
       "tutors": "Репетиторы",
-      "sessions": "Занятия",
-      "revenue": "Доход"
+      "pendingVerifications": "Ожидают проверки",
+      "activeSubscriptions": "Активные подписки",
+      "publishedReviews": "Опубликованные отзывы",
+      "revenue": "Доход за месяц"
     },
-    "empty": {
-      "title": "Аналитика скоро появится",
-      "description": "Здесь появятся KPI, тренды и графики."
+    "charts": {
+      "signups": {
+        "title": "Новые регистрации",
+        "description": "Новые ученики и репетиторы за последние 30 дней.",
+        "students": "Ученики",
+        "tutors": "Репетиторы"
+      },
+      "tutorStatus": {
+        "title": "Репетиторы по проверке",
+        "description": "Статус проверки по всем профилям репетиторов."
+      }
     }
   },
   "section": {

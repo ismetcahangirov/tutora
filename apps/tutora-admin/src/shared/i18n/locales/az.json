@@ -51,12 +51,22 @@
     "kpi": {
       "students": "Şagirdlər",
       "tutors": "Repetitorlar",
-      "sessions": "Sessiyalar",
-      "revenue": "Gəlir"
+      "pendingVerifications": "Gözləyən təsdiqlər",
+      "activeSubscriptions": "Aktiv abunələr",
+      "publishedReviews": "Dərc olunmuş rəylər",
+      "revenue": "Bu ayın gəliri"
     },
-    "empty": {
-      "title": "Analitika tezliklə",
-      "description": "KPI-lar, trendlər və qrafiklər burada görünəcək."
+    "charts": {
+      "signups": {
+        "title": "Yeni qeydiyyatlar",
+        "description": "Son 30 gündə yeni şagird və repetitorlar.",
+        "students": "Şagirdlər",
+        "tutors": "Repetitorlar"
+      },
+      "tutorStatus": {
+        "title": "Təsdiqə görə repetitorlar",
+        "description": "Bütün repetitor profilləri üzrə təsdiq statusu."
+      }
     }
   },
   "section": {

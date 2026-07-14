@@ -51,12 +51,22 @@
     "kpi": {
       "students": "Students",
       "tutors": "Tutors",
-      "sessions": "Sessions",
-      "revenue": "Revenue"
+      "pendingVerifications": "Pending verifications",
+      "activeSubscriptions": "Active subscriptions",
+      "publishedReviews": "Published reviews",
+      "revenue": "Revenue this month"
     },
-    "empty": {
-      "title": "Analytics coming soon",
-      "description": "KPIs, trends, and charts will appear here."
+    "charts": {
+      "signups": {
+        "title": "New signups",
+        "description": "New students and tutors over the last 30 days.",
+        "students": "Students",
+        "tutors": "Tutors"
+      },
+      "tutorStatus": {
+        "title": "Tutors by verification",
+        "description": "Verification status across all tutor profiles."
+      }
     }
   },
   "section": {
