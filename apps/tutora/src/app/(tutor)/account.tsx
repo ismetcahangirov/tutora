@@ -6,8 +6,11 @@
  * tab; the tab *label* still reads "Profile". Guarded upstream by the `(tutor)`
  * layout.
  */
+import { useRouter } from 'expo-router';
+
 import { TutorProfileScreen } from '@features/tutor-profile';
 
 export default function TutorAccountRoute() {
-  return <TutorProfileScreen />;
+  const router = useRouter();
+  return <TutorProfileScreen onManageSubscription={() => router.navigate('/subscription')} />;
 }

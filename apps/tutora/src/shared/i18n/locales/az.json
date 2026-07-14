@@ -426,6 +426,64 @@
         "declineSuccess": "Müraciət rədd edildi.",
         "completeSuccess": "Tamamlandı olaraq işarələndi."
       }
+    },
+    "subscription": {
+      "entry": "Üzvlük",
+      "title": "Üzvlük",
+      "subtitle": "Premium görünürlük aç və daha sürətli böyü.",
+      "errorTitle": "Planlar yüklənmədi",
+      "errorDescription": "İnternet bağlantını yoxla və yenidən cəhd et.",
+      "currentTitle": "Planın",
+      "onPlan": "Sən {{plan}} planındasan.",
+      "perMonth": "/ay",
+      "currentBadge": "Cari plan",
+      "cta": "{{plan}} planına keç",
+      "tier": {
+        "FREE": "Pulsuz",
+        "PRO": "Pro"
+      },
+      "included": "Daxildir",
+      "features": {
+        "featuredProfile": "Axtarışda önə çıxarılma",
+        "analytics": "Analitika paneli",
+        "prioritySupport": "Prioritet dəstək",
+        "yes": "Var",
+        "no": "Yoxdur"
+      },
+      "status": {
+        "ACTIVE": "Aktiv",
+        "PAST_DUE": "Ödəniş gözlənilir",
+        "CANCELED": "Ləğv olunur",
+        "EXPIRED": "Bitib"
+      },
+      "renews": "Yenilənir: {{date}}",
+      "accessUntil": "Girişin var: {{date}}",
+      "cancel": {
+        "action": "Abunəliyi ləğv et",
+        "title": "Abunəlik ləğv olunsun?",
+        "message": "Cari ödəniş dövrünün sonuna qədər imkanların qalacaq.",
+        "confirm": "Abunəliyi ləğv et",
+        "keep": "Abunəliyi saxla",
+        "success": "Abunəlik ləğv olundu.",
+        "error": "Abunəlik ləğv olunmadı. Yenidən cəhd et."
+      },
+      "subscribe": {
+        "title": "{{plan}} planına abunə olunsun?",
+        "message": "Hər ay {{price}} tutulacaq. İstənilən vaxt ləğv edə bilərsən.",
+        "confirm": "Abunə ol",
+        "success": "Artıq {{plan}} planındasan.",
+        "error": "Abunəlik tamamlanmadı. Yenidən cəhd et."
+      },
+      "payments": {
+        "title": "Ödəniş tarixçəsi",
+        "empty": "Hələ ödəniş yoxdur.",
+        "status": {
+          "PENDING": "Gözləyir",
+          "SUCCEEDED": "Ödənilib",
+          "FAILED": "Uğursuz",
+          "REFUNDED": "Geri qaytarılıb"
+        }
+      }
     }
   }
 }

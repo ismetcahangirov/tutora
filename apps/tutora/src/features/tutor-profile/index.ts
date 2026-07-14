@@ -5,7 +5,7 @@
  * screen into the route file and the data hook into the dashboard:
  *   `import { TutorProfileScreen, useMyTutorProfile } from '@features/tutor-profile';`
  */
-export { TutorProfileScreen } from './screens/TutorProfileScreen';
+export { TutorProfileScreen, type TutorProfileScreenProps } from './screens/TutorProfileScreen';
 
 export { useMyTutorProfile, type UseMyTutorProfileResult } from './hooks/useMyTutorProfile';
 
