@@ -225,5 +225,105 @@
       "rejectDescription": "Repetitor rədd ediləcək və axtarışdan çıxarılacaq."
     },
     "error": "Əməliyyat tamamlanmadı. Yenidən cəhd edin."
+  },
+  "reviews": {
+    "title": "Rəylər və şikayətlər",
+    "subtitle": "Rəyləri moderasiya edin və sui-istifadə və ya spam şikayətlərini həll edin.",
+    "filters": {
+      "status": "Status",
+      "allStatuses": "Bütün statuslar",
+      "tutorScope": "Repetitor üzrə süzülüb",
+      "clear": "Təmizlə"
+    },
+    "status": {
+      "PUBLISHED": "Dərc edilib",
+      "HIDDEN": "Gizlədilib",
+      "REMOVED": "Silinib"
+    },
+    "columns": {
+      "author": "Müəllif",
+      "tutor": "Repetitor",
+      "rating": "Reytinq",
+      "comment": "Şərh",
+      "status": "Status",
+      "submitted": "Göndərilib",
+      "actions": "Əməliyyatlar"
+    },
+    "ratingLabel": "5-dən {{rating}}",
+    "actions": {
+      "moderate": "Moderasiya et"
+    },
+    "empty": {
+      "title": "Rəy tapılmadı"
+    },
+    "moderate": {
+      "title": "Rəyi moderasiya et",
+      "subtitle": "Bu rəyin görünüşünü təyin edin. Gizlədilmiş və silinmiş rəylər repetitorun reytinqinə daxil edilmir.",
+      "forTutor": "{{tutor}} üçün",
+      "noComment": "Şərh yazılmayıb.",
+      "lastModerated": "Son moderasiya: {{date}}",
+      "decision": "Görünüş",
+      "reason": "Səbəb",
+      "reasonPlaceholder": "Bu rəyin niyə gizlədildiyini və ya silindiyini izah edin.",
+      "reasonRequired": "Rəyi gizlədərkən və ya silərkən səbəb tələb olunur.",
+      "save": "Tətbiq et",
+      "error": "Rəy moderasiya edilmədi. Yenidən cəhd edin."
+    }
+  },
+  "taxonomy": {
+    "title": "Taksonomiya",
+    "subtitle": "Kateqoriyaları, fənləri, rayonları və dilləri idarə edin.",
+    "tabsLabel": "Taksonomiya növləri",
+    "kinds": {
+      "categories": "Kateqoriyalar",
+      "subjects": "Fənlər",
+      "districts": "Rayonlar",
+      "languages": "Dillər"
+    },
+    "singular": {
+      "categories": "kateqoriya",
+      "subjects": "fənn",
+      "districts": "rayon",
+      "languages": "dil"
+    },
+    "add": "{{kind}} əlavə et",
+    "search": "Ad və ya slaq üzrə axtar",
+    "columns": {
+      "name": "Ad",
+      "slug": "Slaq",
+      "code": "Kod",
+      "category": "Kateqoriya",
+      "actions": "Əməliyyatlar"
+    },
+    "actions": {
+      "menu": "Əməliyyatları aç",
+      "edit": "Redaktə et",
+      "delete": "Sil"
+    },
+    "empty": {
+      "title": "Hələ heç nə yoxdur"
+    },
+    "form": {
+      "createTitle": "{{kind}} əlavə et",
+      "editTitle": "{{kind}} redaktə et",
+      "subtitle": "Adlar tətbiqdə görünür; slaq və kodlar unikal olmalıdır.",
+      "name": "Ad",
+      "slug": "Slaq",
+      "code": "Kod",
+      "category": "Kateqoriya",
+      "noCategory": "Kateqoriyasız",
+      "nameRequired": "Ad daxil edin.",
+      "invalidSlug": "Yalnız kiçik hərflər, rəqəmlər və defis istifadə edin.",
+      "invalidCode": "2–10 kiçik hərf istifadə edin (məs. az, en, ru).",
+      "create": "Yarat",
+      "save": "Dəyişiklikləri yadda saxla",
+      "error": "Yadda saxlanmadı. Slaq və ya kod artıq istifadə oluna bilər."
+    },
+    "delete": {
+      "title": "Bu element silinsin?",
+      "description": "“{{name}}” silinəcək. Bunu geri qaytarmaq olmaz.",
+      "confirm": "Sil",
+      "error": "Silinmədi. Hələ də istifadədə ola bilər."
+    }
   }
 }
