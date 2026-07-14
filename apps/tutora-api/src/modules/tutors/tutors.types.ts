@@ -1,4 +1,12 @@
-import type { CertificateStatus, LessonFormat, VerificationStatus } from '@prisma/client';
+import type { CertificateStatus, LessonFormat, VerificationStatus, Weekday } from '@prisma/client';
+
+/** A recurring weekly availability window (minutes from local midnight). */
+export interface AvailabilitySlotView {
+  id: string;
+  weekday: Weekday;
+  startMinute: number;
+  endMinute: number;
+}
 
 export interface TutorSubjectView {
   subjectId: string;

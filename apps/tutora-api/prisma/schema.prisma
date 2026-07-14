@@ -25,6 +25,16 @@ enum LessonFormat {
   AT_TUTOR_PLACE
 }
 
+enum Weekday {
+  MON
+  TUE
+  WED
+  THU
+  FRI
+  SAT
+  SUN
+}
+
 enum EducationLevel {
   SCHOOL
   UNIVERSITY
@@ -200,6 +210,7 @@ model TutorProfile {
   districts    TutorDistrict[]
   languages    TutorLanguage[]
   certificates Certificate[]
+  availability TutorAvailability[]
   favorites    Favorite[]
   applications Application[]
   reviews      Review[]
@@ -262,6 +273,21 @@ model TutorLanguage {
 
   @@id([tutorId, languageId])
   @@index([languageId])
+}
+
+// A recurring weekly availability window. Times are stored as minutes from local
+// midnight (0–1440), timezone-agnostic wall-clock; `startMinute < endMinute` and
+// same-weekday windows never overlap (both enforced in the service layer).
+model TutorAvailability {
+  id          String       @id @default(cuid())
+  tutorId     String
+  tutor       TutorProfile @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  weekday     Weekday
+  startMinute Int
+  endMinute   Int
+  createdAt   DateTime     @default(now())
+
+  @@index([tutorId])
 }
 
 model Certificate {

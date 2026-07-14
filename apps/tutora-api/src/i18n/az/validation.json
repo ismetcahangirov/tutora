@@ -15,6 +15,7 @@
     "isUrl": "Bu sahə düzgün URL olmalıdır.",
     "notEmpty": "Bu sahə boş olmamalıdır.",
     "isArray": "Bu sahə massiv olmalıdır.",
+    "arrayMaxSize": "Bu sahədə həddindən çox element var.",
     "isObject": "Bu sahə obyekt olmalıdır.",
     "isId": "Bu sahə düzgün identifikator olmalıdır.",
     "isCurrency": "Bu sahə düzgün 3 hərfli valyuta kodu olmalıdır.",

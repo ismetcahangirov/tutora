@@ -21,11 +21,13 @@ import type { AuthenticatedUser } from '@modules/auth/types/auth.types';
 import { AddTutorDistrictDto } from './dto/add-tutor-district.dto';
 import { AddTutorLanguageDto } from './dto/add-tutor-language.dto';
 import { CreateCertificateDto } from './dto/create-certificate.dto';
+import { SetAvailabilityDto } from './dto/set-availability.dto';
 import { UpdateTutorProfileDto } from './dto/update-tutor-profile.dto';
 import { UpsertTutorSubjectDto } from './dto/upsert-tutor-subject.dto';
+import { TutorAvailabilityService } from './tutor-availability.service';
 import { TutorRelationsService } from './tutor-relations.service';
 import { TutorsService } from './tutors.service';
-import type { CertificateView, TutorProfileView } from './tutors.types';
+import type { AvailabilitySlotView, CertificateView, TutorProfileView } from './tutors.types';
 
 /**
  * A tutor managing their own profile (#29). Every route requires the TUTOR role;
@@ -41,6 +43,7 @@ export class TutorsController {
   constructor(
     private readonly tutors: TutorsService,
     private readonly relations: TutorRelationsService,
+    private readonly availability: TutorAvailabilityService,
   ) {}
 
   @Get('me')
@@ -117,6 +120,21 @@ export class TutorsController {
     @Param('languageId') languageId: string,
   ): Promise<TutorProfileView> {
     return this.relations.removeLanguage(user.id, languageId);
+  }
+
+  @Get('me/availability')
+  @ApiOperation({ summary: 'Get the weekly availability windows' })
+  getAvailability(@CurrentUser() user: AuthenticatedUser): Promise<AvailabilitySlotView[]> {
+    return this.availability.getOwnAvailability(user.id);
+  }
+
+  @Put('me/availability')
+  @ApiOperation({ summary: 'Replace the weekly availability windows' })
+  setAvailability(
+    @CurrentUser() user: AuthenticatedUser,
+    @Body() dto: SetAvailabilityDto,
+  ): Promise<AvailabilitySlotView[]> {
+    return this.availability.setOwnAvailability(user.id, dto);
   }
 
   @Get('me/certificates')

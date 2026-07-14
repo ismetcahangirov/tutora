@@ -12,5 +12,10 @@ import { TutorProfileScreen } from '@features/tutor-profile';
 
 export default function TutorAccountRoute() {
   const router = useRouter();
-  return <TutorProfileScreen onManageSubscription={() => router.navigate('/subscription')} />;
+  return (
+    <TutorProfileScreen
+      onManageAvailability={() => router.navigate('/availability')}
+      onManageSubscription={() => router.navigate('/subscription')}
+    />
+  );
 }
