@@ -27,7 +27,12 @@ import { useSubmitTutorVerification } from '../hooks/useSubmitTutorVerification'
 import { useUpdateTutorProfile } from '../hooks/useUpdateTutorProfile';
 import type { UpdateTutorProfileInput } from '../types';
 
-export function TutorProfileScreen() {
+export type TutorProfileScreenProps = {
+  /** Navigate to the membership / subscription hub (#58). Omitted → entry hidden. */
+  onManageSubscription?: () => void;
+};
+
+export function TutorProfileScreen({ onManageSubscription }: TutorProfileScreenProps = {}) {
   const { t } = useTranslation();
   const colors = useColors();
   const toast = useToast();
@@ -112,6 +117,15 @@ export function TutorProfileScreen() {
           <CertificatesSection profile={profile} />
 
           <View style={[styles.settings, { borderTopColor: colors.border }]}>
+            {onManageSubscription ? (
+              <Button
+                label={t('tutor.subscription.entry')}
+                variant="outline"
+                leadingIcon="award"
+                onPress={onManageSubscription}
+                fullWidth
+              />
+            ) : null}
             <View style={styles.settingRow}>
               <Text variant="body">{t('profile.language')}</Text>
               <LanguageSwitcher />

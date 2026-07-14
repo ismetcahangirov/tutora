@@ -426,6 +426,64 @@
         "declineSuccess": "Application declined.",
         "completeSuccess": "Marked as complete."
       }
+    },
+    "subscription": {
+      "entry": "Membership",
+      "title": "Membership",
+      "subtitle": "Unlock premium visibility and grow faster.",
+      "errorTitle": "Couldn’t load plans",
+      "errorDescription": "Check your connection and try again.",
+      "currentTitle": "Your plan",
+      "onPlan": "You’re on the {{plan}} plan.",
+      "perMonth": "/mo",
+      "currentBadge": "Current plan",
+      "cta": "Upgrade to {{plan}}",
+      "tier": {
+        "FREE": "Free",
+        "PRO": "Pro"
+      },
+      "included": "What’s included",
+      "features": {
+        "featuredProfile": "Featured placement in search",
+        "analytics": "Analytics dashboard",
+        "prioritySupport": "Priority support",
+        "yes": "Included",
+        "no": "Not included"
+      },
+      "status": {
+        "ACTIVE": "Active",
+        "PAST_DUE": "Past due",
+        "CANCELED": "Canceling",
+        "EXPIRED": "Expired"
+      },
+      "renews": "Renews {{date}}",
+      "accessUntil": "Access until {{date}}",
+      "cancel": {
+        "action": "Cancel subscription",
+        "title": "Cancel subscription?",
+        "message": "You’ll keep your benefits until the end of the current billing period.",
+        "confirm": "Cancel subscription",
+        "keep": "Keep subscription",
+        "success": "Subscription canceled.",
+        "error": "Couldn’t cancel your subscription. Please try again."
+      },
+      "subscribe": {
+        "title": "Subscribe to {{plan}}?",
+        "message": "You’ll be charged {{price}} each month. You can cancel anytime.",
+        "confirm": "Subscribe",
+        "success": "You’re now on the {{plan}} plan.",
+        "error": "Couldn’t complete the subscription. Please try again."
+      },
+      "payments": {
+        "title": "Payment history",
+        "empty": "No payments yet.",
+        "status": {
+          "PENDING": "Pending",
+          "SUCCEEDED": "Paid",
+          "FAILED": "Failed",
+          "REFUNDED": "Refunded"
+        }
+      }
     }
   }
 }
