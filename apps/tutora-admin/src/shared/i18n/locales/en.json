@@ -1,7 +1,12 @@
 {
   "common": {
     "selectLanguage": "Select language",
-    "loading": "Loading…"
+    "loading": "Loading…",
+    "cancel": "Cancel",
+    "save": "Save",
+    "close": "Close",
+    "yes": "Yes",
+    "no": "No"
   },
   "auth": {
     "title": "Sign in to Tutora Admin",
@@ -74,5 +79,151 @@
       "description": "An unexpected error occurred. Please try again.",
       "retry": "Reload"
     }
+  },
+  "roles": {
+    "STUDENT": "Student",
+    "TUTOR": "Tutor",
+    "ADMIN": "Admin",
+    "none": "—"
+  },
+  "table": {
+    "total": "{{total}} total",
+    "page": "Page {{page}} of {{totalPages}}",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "users": {
+    "title": "Users",
+    "subtitle": "Search, review, and manage students, tutors, and admins.",
+    "search": "Search by name or email",
+    "add": "Add user",
+    "filters": {
+      "role": "Role",
+      "allRoles": "All roles",
+      "includeSuspended": "Show suspended"
+    },
+    "columns": {
+      "user": "User",
+      "role": "Role",
+      "status": "Status",
+      "joined": "Joined",
+      "actions": "Actions"
+    },
+    "status": {
+      "active": "Active",
+      "suspended": "Suspended"
+    },
+    "actions": {
+      "menu": "Open actions",
+      "view": "View details",
+      "edit": "Edit",
+      "review": "Review verification",
+      "suspend": "Suspend",
+      "restore": "Restore"
+    },
+    "empty": {
+      "title": "No users found"
+    },
+    "detail": {
+      "title": "User details",
+      "role": "Role",
+      "status": "Status",
+      "provider": "Provider",
+      "locale": "Language",
+      "emailVerified": "Email verified",
+      "onboarding": "Onboarding complete",
+      "joined": "Joined",
+      "updated": "Last updated"
+    },
+    "edit": {
+      "title": "Edit user",
+      "name": "Name",
+      "role": "Role",
+      "emailVerified": "Email verified",
+      "onboarding": "Onboarding complete",
+      "save": "Save changes",
+      "error": "Couldn’t save changes. Please try again."
+    },
+    "create": {
+      "title": "Add user",
+      "subtitle": "Provision an account by email. It links on first Google sign-in.",
+      "email": "Email",
+      "name": "Name",
+      "role": "Role",
+      "submit": "Create user",
+      "invalidEmail": "Enter a valid email address.",
+      "error": "Couldn’t create the user. Please try again."
+    },
+    "suspend": {
+      "title": "Suspend user?",
+      "description": "{{name}} will lose access until restored.",
+      "confirm": "Suspend"
+    },
+    "restore": {
+      "title": "Restore user?",
+      "description": "{{name}} will regain access to their account.",
+      "confirm": "Restore"
+    },
+    "lifecycleError": "Couldn’t complete the action. Please try again."
+  },
+  "verifications": {
+    "title": "Verifications",
+    "subtitle": "Review tutor identity and certificates.",
+    "search": "Search tutors",
+    "filters": {
+      "status": "Status",
+      "allStatuses": "All statuses"
+    },
+    "columns": {
+      "tutor": "Tutor",
+      "status": "Status",
+      "rate": "Rate",
+      "rating": "Rating",
+      "submitted": "Submitted",
+      "actions": "Actions"
+    },
+    "actions": {
+      "review": "Review"
+    },
+    "status": {
+      "UNVERIFIED": "Unverified",
+      "PENDING": "Pending",
+      "VERIFIED": "Verified",
+      "REJECTED": "Rejected"
+    },
+    "certStatus": {
+      "PENDING": "Pending",
+      "VERIFIED": "Verified",
+      "REJECTED": "Rejected"
+    },
+    "empty": {
+      "title": "Nothing to review"
+    },
+    "detail": {
+      "title": "Tutor verification",
+      "identity": "Identity verification",
+      "certificates": "Certificates",
+      "noCertificates": "No certificates uploaded.",
+      "viewFile": "View file",
+      "approve": "Approve",
+      "reject": "Reject",
+      "approveIdentity": "Verify tutor",
+      "rejectIdentity": "Reject tutor",
+      "experience": "Experience (years)",
+      "rate": "Hourly rate",
+      "rating": "Rating",
+      "published": "Published",
+      "joined": "Joined",
+      "subjects": "Subjects",
+      "languages": "Languages",
+      "districts": "Districts"
+    },
+    "confirm": {
+      "verifyTitle": "Verify this tutor?",
+      "verifyDescription": "The tutor will be marked verified and can be published.",
+      "rejectTitle": "Reject this tutor?",
+      "rejectDescription": "The tutor will be rejected and unpublished from search."
+    },
+    "error": "Couldn’t complete the action. Please try again."
   }
 }

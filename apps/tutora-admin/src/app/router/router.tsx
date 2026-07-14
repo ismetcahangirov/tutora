@@ -18,6 +18,10 @@ const SectionPlaceholder = lazy(() =>
 const NotFoundPage = lazy(() =>
   import('../pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage })),
 );
+const UsersPage = lazy(() => import('@features/users').then((m) => ({ default: m.UsersPage })));
+const VerificationsPage = lazy(() =>
+  import('@features/verifications').then((m) => ({ default: m.VerificationsPage })),
+);
 
 /**
  * Section pages that already exist. Everything else falls back to a placeholder,
@@ -25,6 +29,8 @@ const NotFoundPage = lazy(() =>
  */
 const SECTION_ELEMENTS: Record<string, ReactElement> = {
   dashboard: <DashboardPage />,
+  users: <UsersPage />,
+  verifications: <VerificationsPage />,
 };
 
 /** One route per nav item, each gated by the section's permission. */

@@ -1,10 +1,8 @@
 import type { LucideIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-import { EmptyState } from '@shared/components';
+import { EmptyState, Page, PageHeader } from '@shared/components';
 import { Card, CardContent } from '@shared/ui';
-
-import { Page, PageHeader } from '../layout/Page';
 
 /**
  * Placeholder page for a section whose feature is not built yet. Each epic #59

@@ -1,7 +1,12 @@
 {
   "common": {
     "selectLanguage": "Dili seçin",
-    "loading": "Yüklənir…"
+    "loading": "Yüklənir…",
+    "cancel": "Ləğv et",
+    "save": "Yadda saxla",
+    "close": "Bağla",
+    "yes": "Bəli",
+    "no": "Xeyr"
   },
   "auth": {
     "title": "Tutora Admin-ə daxil olun",
@@ -74,5 +79,151 @@
       "description": "Gözlənilməz xəta baş verdi. Yenidən cəhd edin.",
       "retry": "Yenilə"
     }
+  },
+  "roles": {
+    "STUDENT": "Şagird",
+    "TUTOR": "Repetitor",
+    "ADMIN": "Admin",
+    "none": "—"
+  },
+  "table": {
+    "total": "Cəmi {{total}}",
+    "page": "Səhifə {{page}} / {{totalPages}}",
+    "previous": "Əvvəlki",
+    "next": "Növbəti"
+  },
+  "users": {
+    "title": "İstifadəçilər",
+    "subtitle": "Şagirdləri, repetitorları və adminləri axtarın, nəzərdən keçirin və idarə edin.",
+    "search": "Ad və ya e-poçt üzrə axtar",
+    "add": "İstifadəçi əlavə et",
+    "filters": {
+      "role": "Rol",
+      "allRoles": "Bütün rollar",
+      "includeSuspended": "Dayandırılanları göstər"
+    },
+    "columns": {
+      "user": "İstifadəçi",
+      "role": "Rol",
+      "status": "Status",
+      "joined": "Qoşulub",
+      "actions": "Əməliyyatlar"
+    },
+    "status": {
+      "active": "Aktiv",
+      "suspended": "Dayandırılıb"
+    },
+    "actions": {
+      "menu": "Əməliyyatları aç",
+      "view": "Ətraflı bax",
+      "edit": "Redaktə et",
+      "review": "Təsdiqi yoxla",
+      "suspend": "Dayandır",
+      "restore": "Bərpa et"
+    },
+    "empty": {
+      "title": "İstifadəçi tapılmadı"
+    },
+    "detail": {
+      "title": "İstifadəçi məlumatları",
+      "role": "Rol",
+      "status": "Status",
+      "provider": "Provayder",
+      "locale": "Dil",
+      "emailVerified": "E-poçt təsdiqlənib",
+      "onboarding": "Onboardinq tamamlanıb",
+      "joined": "Qoşulub",
+      "updated": "Son yenilənmə"
+    },
+    "edit": {
+      "title": "İstifadəçini redaktə et",
+      "name": "Ad",
+      "role": "Rol",
+      "emailVerified": "E-poçt təsdiqlənib",
+      "onboarding": "Onboardinq tamamlanıb",
+      "save": "Dəyişiklikləri yadda saxla",
+      "error": "Dəyişikliklər yadda saxlanmadı. Yenidən cəhd edin."
+    },
+    "create": {
+      "title": "İstifadəçi əlavə et",
+      "subtitle": "E-poçt üzrə hesab yaradın. İlk Google girişində bağlanır.",
+      "email": "E-poçt",
+      "name": "Ad",
+      "role": "Rol",
+      "submit": "İstifadəçi yarat",
+      "invalidEmail": "Düzgün e-poçt ünvanı daxil edin.",
+      "error": "İstifadəçi yaradılmadı. Yenidən cəhd edin."
+    },
+    "suspend": {
+      "title": "İstifadəçi dayandırılsın?",
+      "description": "{{name}} bərpa olunana qədər girişini itirəcək.",
+      "confirm": "Dayandır"
+    },
+    "restore": {
+      "title": "İstifadəçi bərpa olunsun?",
+      "description": "{{name}} hesabına yenidən giriş əldə edəcək.",
+      "confirm": "Bərpa et"
+    },
+    "lifecycleError": "Əməliyyat tamamlanmadı. Yenidən cəhd edin."
+  },
+  "verifications": {
+    "title": "Təsdiqləmələr",
+    "subtitle": "Repetitorun kimliyini və sertifikatlarını yoxlayın.",
+    "search": "Repetitor axtar",
+    "filters": {
+      "status": "Status",
+      "allStatuses": "Bütün statuslar"
+    },
+    "columns": {
+      "tutor": "Repetitor",
+      "status": "Status",
+      "rate": "Qiymət",
+      "rating": "Reytinq",
+      "submitted": "Göndərilib",
+      "actions": "Əməliyyatlar"
+    },
+    "actions": {
+      "review": "Yoxla"
+    },
+    "status": {
+      "UNVERIFIED": "Təsdiqlənməyib",
+      "PENDING": "Gözləyir",
+      "VERIFIED": "Təsdiqlənib",
+      "REJECTED": "Rədd edilib"
+    },
+    "certStatus": {
+      "PENDING": "Gözləyir",
+      "VERIFIED": "Təsdiqlənib",
+      "REJECTED": "Rədd edilib"
+    },
+    "empty": {
+      "title": "Yoxlanılacaq heç nə yoxdur"
+    },
+    "detail": {
+      "title": "Repetitor təsdiqi",
+      "identity": "Kimlik təsdiqi",
+      "certificates": "Sertifikatlar",
+      "noCertificates": "Sertifikat yüklənməyib.",
+      "viewFile": "Faylı aç",
+      "approve": "Təsdiqlə",
+      "reject": "Rədd et",
+      "approveIdentity": "Repetitoru təsdiqlə",
+      "rejectIdentity": "Repetitoru rədd et",
+      "experience": "Təcrübə (il)",
+      "rate": "Saatlıq qiymət",
+      "rating": "Reytinq",
+      "published": "Dərc edilib",
+      "joined": "Qoşulub",
+      "subjects": "Fənlər",
+      "languages": "Dillər",
+      "districts": "Rayonlar"
+    },
+    "confirm": {
+      "verifyTitle": "Bu repetitor təsdiqlənsin?",
+      "verifyDescription": "Repetitor təsdiqlənmiş kimi işarələnəcək və dərc oluna biləcək.",
+      "rejectTitle": "Bu repetitor rədd edilsin?",
+      "rejectDescription": "Repetitor rədd ediləcək və axtarışdan çıxarılacaq."
+    },
+    "error": "Əməliyyat tamamlanmadı. Yenidən cəhd edin."
   }
 }
