@@ -270,6 +270,53 @@
       "error": "Couldn’t moderate the review. Please try again."
     }
   },
+  "notifications": {
+    "title": "Notifications",
+    "subtitle": "Compose and send a push notification to an audience segment.",
+    "form": {
+      "audience": "Audience",
+      "type": "Type",
+      "titleLabel": "Title",
+      "titlePlaceholder": "e.g. New subjects available",
+      "bodyLabel": "Message",
+      "bodyPlaceholder": "Write the notification your audience will receive…",
+      "charCount": "{{current}}/{{max}}",
+      "submit": "Review & send",
+      "titleRequired": "A title is required.",
+      "bodyRequired": "A message is required."
+    },
+    "audiences": {
+      "ALL": "Everyone",
+      "STUDENTS": "Students",
+      "TUTORS": "Tutors"
+    },
+    "audienceHint": {
+      "ALL": "Reaches every active student and tutor.",
+      "STUDENTS": "Reaches active students only.",
+      "TUTORS": "Reaches active tutors only."
+    },
+    "types": {
+      "ANNOUNCEMENT": "Announcement",
+      "SYSTEM": "System"
+    },
+    "preview": {
+      "label": "Preview",
+      "appName": "Tutora",
+      "titlePlaceholder": "Notification title",
+      "bodyPlaceholder": "Your message appears here."
+    },
+    "confirm": {
+      "title": "Send this notification?",
+      "description": "This sends the notification to {{audience}} immediately. It can’t be undone.",
+      "send": "Send now"
+    },
+    "result": {
+      "success": "Delivered to {{total}} recipients.",
+      "empty": "No users matched this segment — nothing was sent.",
+      "composeAnother": "Compose another"
+    },
+    "error": "Couldn’t send the notification. Please try again."
+  },
   "taxonomy": {
     "title": "Taxonomy",
     "subtitle": "Manage categories, subjects, districts, and languages.",

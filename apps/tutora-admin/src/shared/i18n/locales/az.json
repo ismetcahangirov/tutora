@@ -270,6 +270,53 @@
       "error": "Rəy moderasiya edilmədi. Yenidən cəhd edin."
     }
   },
+  "notifications": {
+    "title": "Bildirişlər",
+    "subtitle": "Auditoriya seqmentinə push bildiriş yazın və göndərin.",
+    "form": {
+      "audience": "Auditoriya",
+      "type": "Növ",
+      "titleLabel": "Başlıq",
+      "titlePlaceholder": "məsələn, Yeni fənlər əlçatandır",
+      "bodyLabel": "Mesaj",
+      "bodyPlaceholder": "Auditoriyanızın alacağı bildirişi yazın…",
+      "charCount": "{{current}}/{{max}}",
+      "submit": "Yoxla və göndər",
+      "titleRequired": "Başlıq tələb olunur.",
+      "bodyRequired": "Mesaj tələb olunur."
+    },
+    "audiences": {
+      "ALL": "Hamı",
+      "STUDENTS": "Şagirdlər",
+      "TUTORS": "Repetitorlar"
+    },
+    "audienceHint": {
+      "ALL": "Bütün aktiv şagird və repetitorlara çatır.",
+      "STUDENTS": "Yalnız aktiv şagirdlərə çatır.",
+      "TUTORS": "Yalnız aktiv repetitorlara çatır."
+    },
+    "types": {
+      "ANNOUNCEMENT": "Elan",
+      "SYSTEM": "Sistem"
+    },
+    "preview": {
+      "label": "Önizləmə",
+      "appName": "Tutora",
+      "titlePlaceholder": "Bildiriş başlığı",
+      "bodyPlaceholder": "Mesajınız burada görünür."
+    },
+    "confirm": {
+      "title": "Bu bildiriş göndərilsin?",
+      "description": "Bu, bildirişi dərhal “{{audience}}” auditoriyasına göndərir. Geri qaytarmaq mümkün deyil.",
+      "send": "İndi göndər"
+    },
+    "result": {
+      "success": "{{total}} alıcıya çatdırıldı.",
+      "empty": "Bu seqmentə uyğun istifadəçi tapılmadı — heç nə göndərilmədi.",
+      "composeAnother": "Yenisini yaz"
+    },
+    "error": "Bildiriş göndərilmədi. Yenidən cəhd edin."
+  },
   "taxonomy": {
     "title": "Taksonomiya",
     "subtitle": "Kateqoriyaları, fənləri, rayonları və dilləri idarə edin.",

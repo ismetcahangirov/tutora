@@ -28,6 +28,9 @@ const ReviewsPage = lazy(() =>
 const TaxonomyPage = lazy(() =>
   import('@features/taxonomy').then((m) => ({ default: m.TaxonomyPage })),
 );
+const NotificationsPage = lazy(() =>
+  import('@features/notifications').then((m) => ({ default: m.NotificationsPage })),
+);
 
 /**
  * Section pages that already exist. Everything else falls back to a placeholder,
@@ -39,6 +42,7 @@ const SECTION_ELEMENTS: Record<string, ReactElement> = {
   verifications: <VerificationsPage />,
   reviews: <ReviewsPage />,
   taxonomy: <TaxonomyPage />,
+  notifications: <NotificationsPage />,
 };
 
 /** One route per nav item, each gated by the section's permission. */
