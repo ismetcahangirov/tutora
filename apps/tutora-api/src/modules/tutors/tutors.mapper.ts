@@ -1,7 +1,8 @@
-import { type Certificate, Prisma } from '@prisma/client';
+import { type Certificate, Prisma, type TutorAvailability } from '@prisma/client';
 import type {
   AdminTutorListItem,
   AdminTutorView,
+  AvailabilitySlotView,
   CertificateView,
   PublicTutorView,
   TutorProfileView,
@@ -44,6 +45,15 @@ function num(value: Prisma.Decimal | number): number {
 
 function numOrNull(value: Prisma.Decimal | null): number | null {
   return value === null ? null : Number(value);
+}
+
+export function toAvailabilitySlotView(a: TutorAvailability): AvailabilitySlotView {
+  return {
+    id: a.id,
+    weekday: a.weekday,
+    startMinute: a.startMinute,
+    endMinute: a.endMinute,
+  };
 }
 
 export function toCertificateView(c: Certificate): CertificateView {

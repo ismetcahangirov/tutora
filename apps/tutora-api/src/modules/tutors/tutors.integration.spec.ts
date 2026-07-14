@@ -56,6 +56,11 @@ describe('Tutors module (integration)', () => {
       create: jest.fn().mockResolvedValue(makeProfile()),
       update: jest.fn().mockResolvedValue(makeProfile()),
     },
+    tutorAvailability: {
+      findMany: jest.fn().mockResolvedValue([]),
+      deleteMany: jest.fn().mockResolvedValue({ count: 0 }),
+      createMany: jest.fn().mockResolvedValue({ count: 0 }),
+    },
     $transaction: jest.fn((ops: Promise<unknown>[]) => Promise.all(ops)),
   };
 
@@ -132,6 +137,60 @@ describe('Tutors module (integration)', () => {
       .patch('/api/v1/tutors/me')
       .set('Authorization', `Bearer ${token('TUTOR')}`)
       .send({ hourlyRate: -5 })
+      .expect(400);
+  });
+
+  it('GET /tutors/me/availability forbids a STUDENT and returns a list for a TUTOR', async () => {
+    await request(httpServer)
+      .get('/api/v1/tutors/me/availability')
+      .set('Authorization', `Bearer ${token('STUDENT')}`)
+      .expect(403);
+
+    prismaMock.tutorAvailability.findMany.mockResolvedValueOnce([
+      {
+        id: 'a1',
+        tutorId: 'tp1',
+        weekday: 'MON',
+        startMinute: 540,
+        endMinute: 660,
+        createdAt: new Date(),
+      },
+    ]);
+    const res = await request(httpServer)
+      .get('/api/v1/tutors/me/availability')
+      .set('Authorization', `Bearer ${token('TUTOR')}`)
+      .expect(200);
+    expect(res.body).toEqual([{ id: 'a1', weekday: 'MON', startMinute: 540, endMinute: 660 }]);
+  });
+
+  it('PUT /tutors/me/availability replaces the week for a TUTOR', async () => {
+    await request(httpServer)
+      .put('/api/v1/tutors/me/availability')
+      .set('Authorization', `Bearer ${token('TUTOR')}`)
+      .send({ slots: [{ weekday: 'MON', startMinute: 540, endMinute: 660 }] })
+      .expect(200);
+    expect(prismaMock.tutorAvailability.deleteMany).toHaveBeenCalled();
+    expect(prismaMock.tutorAvailability.createMany).toHaveBeenCalled();
+  });
+
+  it('PUT /tutors/me/availability rejects overlapping windows with 400', async () => {
+    await request(httpServer)
+      .put('/api/v1/tutors/me/availability')
+      .set('Authorization', `Bearer ${token('TUTOR')}`)
+      .send({
+        slots: [
+          { weekday: 'MON', startMinute: 540, endMinute: 660 },
+          { weekday: 'MON', startMinute: 600, endMinute: 780 },
+        ],
+      })
+      .expect(400);
+  });
+
+  it('PUT /tutors/me/availability rejects an out-of-range minute with 400', async () => {
+    await request(httpServer)
+      .put('/api/v1/tutors/me/availability')
+      .set('Authorization', `Bearer ${token('TUTOR')}`)
+      .send({ slots: [{ weekday: 'MON', startMinute: -1, endMinute: 660 }] })
       .expect(400);
   });
 

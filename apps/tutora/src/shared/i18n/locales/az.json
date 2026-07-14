@@ -427,6 +427,38 @@
         "completeSuccess": "Tamamlandı olaraq işarələndi."
       }
     },
+    "availability": {
+      "entry": "Əlçatanlıq",
+      "title": "Əlçatanlıq",
+      "subtitle": "Dərs keçməyə hazır olduğunuz həftəlik saatları təyin edin.",
+      "weekTitle": "Həftəlik saatlar",
+      "weekday": {
+        "MON": "Bazar ertəsi",
+        "TUE": "Çərşənbə axşamı",
+        "WED": "Çərşənbə",
+        "THU": "Cümə axşamı",
+        "FRI": "Cümə",
+        "SAT": "Şənbə",
+        "SUN": "Bazar"
+      },
+      "unavailable": "Əlçatan deyil",
+      "editHint": "Bu günün saatlarını redaktə edin",
+      "rowA11y": "{{day}}: {{ranges}}",
+      "rowEmptyA11y": "{{day}}: əlçatan deyil",
+      "saved": "Əlçatanlıq yeniləndi.",
+      "error": "Əlçatanlığınız yadda saxlanmadı. Yenidən cəhd edin.",
+      "errorTitle": "Əlçatanlığınız yüklənmədi",
+      "errorDescription": "Bağlantınızı yoxlayıb yenidən cəhd edin.",
+      "formats": {
+        "title": "Dərs formatları",
+        "hint": "Təklif etdiyiniz formatları profilinizdə dəyişin."
+      },
+      "editor": {
+        "title": "{{day}} saatları",
+        "hint": "Dərs keçə biləcəyiniz hər saata toxunun.",
+        "clear": "Təmizlə"
+      }
+    },
     "subscription": {
       "entry": "Üzvlük",
       "title": "Üzvlük",

@@ -28,11 +28,16 @@ import { useUpdateTutorProfile } from '../hooks/useUpdateTutorProfile';
 import type { UpdateTutorProfileInput } from '../types';
 
 export type TutorProfileScreenProps = {
+  /** Navigate to the weekly availability editor (#55). Omitted → entry hidden. */
+  onManageAvailability?: () => void;
   /** Navigate to the membership / subscription hub (#58). Omitted → entry hidden. */
   onManageSubscription?: () => void;
 };
 
-export function TutorProfileScreen({ onManageSubscription }: TutorProfileScreenProps = {}) {
+export function TutorProfileScreen({
+  onManageAvailability,
+  onManageSubscription,
+}: TutorProfileScreenProps = {}) {
   const { t } = useTranslation();
   const colors = useColors();
   const toast = useToast();
@@ -117,6 +122,15 @@ export function TutorProfileScreen({ onManageSubscription }: TutorProfileScreenP
           <CertificatesSection profile={profile} />
 
           <View style={[styles.settings, { borderTopColor: colors.border }]}>
+            {onManageAvailability ? (
+              <Button
+                label={t('tutor.availability.entry')}
+                variant="outline"
+                leadingIcon="clock"
+                onPress={onManageAvailability}
+                fullWidth
+              />
+            ) : null}
             {onManageSubscription ? (
               <Button
                 label={t('tutor.subscription.entry')}

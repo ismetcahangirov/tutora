@@ -427,6 +427,38 @@
         "completeSuccess": "Marked as complete."
       }
     },
+    "availability": {
+      "entry": "Availability",
+      "title": "Availability",
+      "subtitle": "Set the weekly hours when you’re free to teach.",
+      "weekTitle": "Weekly hours",
+      "weekday": {
+        "MON": "Monday",
+        "TUE": "Tuesday",
+        "WED": "Wednesday",
+        "THU": "Thursday",
+        "FRI": "Friday",
+        "SAT": "Saturday",
+        "SUN": "Sunday"
+      },
+      "unavailable": "Unavailable",
+      "editHint": "Edit this day’s hours",
+      "rowA11y": "{{day}}: {{ranges}}",
+      "rowEmptyA11y": "{{day}}: unavailable",
+      "saved": "Availability updated.",
+      "error": "Couldn’t save your availability. Please try again.",
+      "errorTitle": "Couldn’t load your availability",
+      "errorDescription": "Check your connection and try again.",
+      "formats": {
+        "title": "Lesson formats",
+        "hint": "Change the formats you offer on your profile."
+      },
+      "editor": {
+        "title": "{{day}} hours",
+        "hint": "Tap each hour you’re available to teach.",
+        "clear": "Clear"
+      }
+    },
     "subscription": {
       "entry": "Membership",
       "title": "Membership",
