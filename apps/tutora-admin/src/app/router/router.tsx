@@ -10,7 +10,7 @@ import { RootErrorPage } from '../pages/RootErrorPage';
 // Route-level code splitting: pages load on demand behind the AppShell's
 // Suspense boundary, keeping the initial bundle lean as sections grow.
 const DashboardPage = lazy(() =>
-  import('../pages/DashboardPage').then((m) => ({ default: m.DashboardPage })),
+  import('@features/dashboard').then((m) => ({ default: m.DashboardPage })),
 );
 const SectionPlaceholder = lazy(() =>
   import('../pages/SectionPlaceholder').then((m) => ({ default: m.SectionPlaceholder })),
