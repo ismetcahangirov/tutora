@@ -596,5 +596,96 @@
       "metadata": "Metadata",
       "noMetadata": "No metadata for this entry."
     }
+  },
+  "cms": {
+    "title": "Content",
+    "subtitle": "Manage landing sections, FAQ entries, and blog posts served to the marketing site.",
+    "add": "Add content",
+    "tabsLabel": "Content types",
+    "search": "Search by title or slug",
+    "types": {
+      "LANDING_SECTION": "Landing",
+      "FAQ": "FAQ",
+      "BLOG_POST": "Blog"
+    },
+    "status": {
+      "DRAFT": "Draft",
+      "PUBLISHED": "Published"
+    },
+    "filters": {
+      "locale": "Language",
+      "allLocales": "All languages",
+      "status": "Status",
+      "allStatuses": "All statuses",
+      "clear": "Clear"
+    },
+    "columns": {
+      "title": "Title",
+      "locale": "Language",
+      "status": "Status",
+      "order": "Order",
+      "updated": "Updated",
+      "actions": "Actions"
+    },
+    "empty": {
+      "title": "No content yet"
+    },
+    "form": {
+      "createTitle": "Create content",
+      "editTitle": "Edit content",
+      "subtitle": "Landing sections, FAQ, and blog posts are localized — one entry per language.",
+      "type": "Type",
+      "locale": "Language",
+      "title": "Title",
+      "titleInvalid": "Enter a title (up to 200 characters).",
+      "slug": "Slug",
+      "slugInvalid": "Use lowercase letters, numbers, and hyphens only.",
+      "excerpt": "Excerpt",
+      "excerptInvalid": "Excerpt is too long (max 300 characters).",
+      "body": "Body",
+      "bodyInvalid": "Enter the body content.",
+      "coverImageUrl": "Cover image URL",
+      "coverImageUrlInvalid": "Enter a valid URL.",
+      "order": "Order",
+      "status": "Status",
+      "error": "Couldn’t save the content. The slug may already be in use for this language.",
+      "create": "Create"
+    },
+    "delete": {
+      "title": "Delete this content?",
+      "description": "“{{title}}” will be removed. This can’t be undone.",
+      "error": "Couldn’t delete the content. Please try again."
+    }
+  },
+  "rbac": {
+    "title": "Roles & permissions",
+    "subtitle": "Review what each role can do across the admin panel.",
+    "assignmentHint": "The admin panel is restricted to administrators. Assign a member’s role in the Users section.",
+    "summary": {
+      "members": "members",
+      "permissions": "{{value}} permissions"
+    },
+    "roleDescriptions": {
+      "ADMIN": "Full access to every admin capability.",
+      "TUTOR": "Tutor app access; no admin panel capabilities.",
+      "STUDENT": "Student app access; no admin panel capabilities."
+    },
+    "matrix": {
+      "title": "Permission matrix",
+      "permission": "Permission"
+    },
+    "permissions": {
+      "dashboard_view": "View dashboard",
+      "users_manage": "Manage users",
+      "verifications_review": "Review verifications",
+      "reviews_moderate": "Moderate reviews",
+      "taxonomy_manage": "Manage taxonomy",
+      "notifications_send": "Send notifications",
+      "cms_manage": "Manage content",
+      "payments_manage": "Manage payments",
+      "roles_manage": "Manage roles",
+      "settings_manage": "Manage settings",
+      "logs_view": "View audit logs"
+    }
   }
 }

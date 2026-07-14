@@ -596,5 +596,96 @@
       "metadata": "Metadata",
       "noMetadata": "Bu qeyd üçün metadata yoxdur."
     }
+  },
+  "cms": {
+    "title": "Məzmun",
+    "subtitle": "Marketinq saytına təqdim olunan landing bölmələrini, FAQ və bloq yazılarını idarə et.",
+    "add": "Məzmun əlavə et",
+    "tabsLabel": "Məzmun növləri",
+    "search": "Başlıq və ya slug üzrə axtar",
+    "types": {
+      "LANDING_SECTION": "Landing",
+      "FAQ": "FAQ",
+      "BLOG_POST": "Bloq"
+    },
+    "status": {
+      "DRAFT": "Qaralama",
+      "PUBLISHED": "Dərc edilib"
+    },
+    "filters": {
+      "locale": "Dil",
+      "allLocales": "Bütün dillər",
+      "status": "Status",
+      "allStatuses": "Bütün statuslar",
+      "clear": "Təmizlə"
+    },
+    "columns": {
+      "title": "Başlıq",
+      "locale": "Dil",
+      "status": "Status",
+      "order": "Sıra",
+      "updated": "Yeniləndi",
+      "actions": "Əməliyyatlar"
+    },
+    "empty": {
+      "title": "Hələ məzmun yoxdur"
+    },
+    "form": {
+      "createTitle": "Məzmun yarat",
+      "editTitle": "Məzmunu redaktə et",
+      "subtitle": "Landing bölmələri, FAQ və bloq yazıları lokallaşdırılır — hər dil üçün ayrı qeyd.",
+      "type": "Növ",
+      "locale": "Dil",
+      "title": "Başlıq",
+      "titleInvalid": "Başlıq daxil et (ən çox 200 simvol).",
+      "slug": "Slug",
+      "slugInvalid": "Yalnız kiçik hərflər, rəqəmlər və defis istifadə et.",
+      "excerpt": "Qısa mətn",
+      "excerptInvalid": "Qısa mətn çox uzundur (ən çox 300 simvol).",
+      "body": "Mətn",
+      "bodyInvalid": "Mətn məzmununu daxil et.",
+      "coverImageUrl": "Örtük şəkli URL-i",
+      "coverImageUrlInvalid": "Düzgün URL daxil et.",
+      "order": "Sıra",
+      "status": "Status",
+      "error": "Məzmunu saxlamaq olmadı. Slug bu dil üçün artıq istifadə oluna bilər.",
+      "create": "Yarat"
+    },
+    "delete": {
+      "title": "Bu məzmunu silmək?",
+      "description": "“{{title}}” silinəcək. Bunu geri qaytarmaq olmaz.",
+      "error": "Məzmunu silmək olmadı. Yenidən cəhd et."
+    }
+  },
+  "rbac": {
+    "title": "Rollar və icazələr",
+    "subtitle": "Admin paneldə hər rolun nə edə biləcəyini nəzərdən keçir.",
+    "assignmentHint": "Admin panel yalnız administratorlar üçündür. İstifadəçinin rolunu İstifadəçilər bölməsində təyin et.",
+    "summary": {
+      "members": "üzv",
+      "permissions": "{{value}} icazə"
+    },
+    "roleDescriptions": {
+      "ADMIN": "Bütün admin imkanlarına tam giriş.",
+      "TUTOR": "Repetitor tətbiqinə giriş; admin panel imkanları yoxdur.",
+      "STUDENT": "Tələbə tətbiqinə giriş; admin panel imkanları yoxdur."
+    },
+    "matrix": {
+      "title": "İcazə matrisi",
+      "permission": "İcazə"
+    },
+    "permissions": {
+      "dashboard_view": "İdarə panelinə bax",
+      "users_manage": "İstifadəçiləri idarə et",
+      "verifications_review": "Təsdiqləri nəzərdən keçir",
+      "reviews_moderate": "Rəyləri moderasiya et",
+      "taxonomy_manage": "Taksonomiyanı idarə et",
+      "notifications_send": "Bildirişlər göndər",
+      "cms_manage": "Məzmunu idarə et",
+      "payments_manage": "Ödənişləri idarə et",
+      "roles_manage": "Rolları idarə et",
+      "settings_manage": "Parametrləri idarə et",
+      "logs_view": "Audit jurnallarına bax"
+    }
   }
 }
