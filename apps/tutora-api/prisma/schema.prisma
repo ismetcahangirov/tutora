@@ -112,6 +112,21 @@ enum AuditCategory {
   SYSTEM
 }
 
+/// The kind of managed content (#67). A `LANDING_SECTION` is a block on the
+/// marketing site, `FAQ` a question/answer pair, and `BLOG_POST` an article.
+enum ContentType {
+  LANDING_SECTION
+  FAQ
+  BLOG_POST
+}
+
+/// Publication state of a content entry (#67). Only `PUBLISHED` entries are
+/// served to the public site; `DRAFT` entries are visible in the admin only.
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+}
+
 // ---------- Identity ----------
 
 model User {
@@ -140,6 +155,7 @@ model User {
   auditLogs      AuditLog[]      @relation("AuditLogActor")
   featureFlags   FeatureFlag[]   @relation("FeatureFlagUpdatedBy")
   systemSettings SystemSetting[] @relation("SystemSettingUpdatedBy")
+  contentEntries ContentEntry[]  @relation("ContentEntryAuthor")
 }
 
 model RefreshToken {
@@ -552,4 +568,35 @@ model AuditLog {
   @@index([action])
   @@index([actorId])
   @@index([entityType, entityId])
+}
+
+// ---------- Content management (#67) ----------
+
+/// A single piece of CMS-managed content: a landing section, an FAQ entry, or a
+/// blog post (`type`). Content is localized — one row per (`type`, `locale`,
+/// `slug`) — so each language has its own editable copy. `order` sequences
+/// sibling entries of the same type/locale; only `PUBLISHED` rows reach the
+/// public site, gated by `status` (and `publishedAt`, set when first published).
+/// `author` records the last editor and nulls out if that admin is removed.
+model ContentEntry {
+  id            String        @id @default(cuid())
+  type          ContentType
+  locale        String        @default("en")
+  slug          String
+  title         String
+  excerpt       String?
+  body          String
+  coverImageUrl String?
+  order         Int           @default(0)
+  status        ContentStatus @default(DRAFT)
+  publishedAt   DateTime?
+  authorId      String?
+  author        User?         @relation("ContentEntryAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@unique([type, locale, slug])
+  @@index([type, status, order])
+  @@index([status, publishedAt])
+  @@index([authorId])
 }

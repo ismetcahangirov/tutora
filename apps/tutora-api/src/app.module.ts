@@ -23,6 +23,7 @@ import { JobsModule } from '@modules/jobs/jobs.module';
 import { DashboardModule } from '@modules/dashboard/dashboard.module';
 import { AuditModule } from '@modules/audit/audit.module';
 import { SettingsModule } from '@modules/settings/settings.module';
+import { CmsModule } from '@modules/cms/cms.module';
 import { HealthModule } from '@modules/health/health.module';
 
 @Module({
@@ -53,6 +54,7 @@ import { HealthModule } from '@modules/health/health.module';
     DashboardModule,
     AuditModule,
     SettingsModule,
+    CmsModule,
     HealthModule,
   ],
 })

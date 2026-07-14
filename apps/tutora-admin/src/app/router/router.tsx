@@ -34,6 +34,8 @@ const NotificationsPage = lazy(() =>
 const PaymentsPage = lazy(() =>
   import('@features/payments').then((m) => ({ default: m.PaymentsPage })),
 );
+const ContentPage = lazy(() => import('@features/cms').then((m) => ({ default: m.ContentPage })));
+const RolesPage = lazy(() => import('@features/roles').then((m) => ({ default: m.RolesPage })));
 const SettingsPage = lazy(() =>
   import('@features/settings').then((m) => ({ default: m.SettingsPage })),
 );
@@ -52,7 +54,9 @@ const SECTION_ELEMENTS: Record<string, ReactElement> = {
   reviews: <ReviewsPage />,
   taxonomy: <TaxonomyPage />,
   notifications: <NotificationsPage />,
+  cms: <ContentPage />,
   payments: <PaymentsPage />,
+  roles: <RolesPage />,
   settings: <SettingsPage />,
   logs: <AuditLogsPage />,
 };
