@@ -1,10 +1,8 @@
 import { BarChart3 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-import { EmptyState } from '@shared/components';
+import { EmptyState, Page, PageHeader } from '@shared/components';
 import { Card, CardContent, CardHeader, CardDescription, Skeleton } from '@shared/ui';
-
-import { Page, PageHeader } from '../layout/Page';
 
 /** KPI keys rendered as placeholder metric cards until analytics land (#61). */
 const KPI_KEYS = ['students', 'tutors', 'sessions', 'revenue'] as const;
