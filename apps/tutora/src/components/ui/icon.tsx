@@ -40,7 +40,8 @@ export type IconName =
   | 'moon'
   | 'edit'
   | 'trash'
-  | 'bell';
+  | 'bell'
+  | 'upload';
 
 export type IconProps = {
   name: IconName;
@@ -236,6 +237,14 @@ function IconShape({ name, stroke, filled }: { name: IconName; stroke: string; f
         <>
           <Path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
           <Path d="M13.73 21a2 2 0 0 1-3.46 0" />
+        </>
+      );
+    case 'upload':
+      return (
+        <>
+          <Path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <Polyline points="17 8 12 3 7 8" />
+          <Line x1={12} y1={3} x2={12} y2={15} />
         </>
       );
   }

@@ -373,6 +373,31 @@
         "pickerTitle": "Dil əlavə et",
         "search": "Dilləri axtar",
         "pickerEmpty": "Dil tapılmadı."
+      },
+      "certificates": {
+        "title": "Sertifikatlar",
+        "empty": "Etibar qazanmaq üçün sertifikat əlavə edin — hər biri profilinizdə görünməzdən əvvəl yoxlanılır.",
+        "add": "Sertifikat əlavə et",
+        "remove": "{{certificate}} sertifikatını sil",
+        "removeError": "Sertifikat silinmədi. Yenidən cəhd edin.",
+        "pickerTitle": "Sertifikat əlavə et",
+        "titleLabel": "Ad",
+        "titlePlaceholder": "məs. IELTS 8.0",
+        "issuedByLabel": "Verən qurum (istəyə bağlı)",
+        "issuedByPlaceholder": "məs. British Council",
+        "selectFile": "Fayl seç",
+        "changeFile": "Faylı dəyiş",
+        "added": "Sertifikat əlavə edildi — indi yoxlanılır.",
+        "uploadError": "Sertifikat yüklənmədi. Yenidən cəhd edin.",
+        "file": {
+          "type": "Bu fayl növü dəstəklənmir. JPG, PNG, WEBP və ya PDF istifadə edin.",
+          "size": "Fayl çox böyükdür. Maksimum ölçü 10 MB-dır."
+        },
+        "status": {
+          "VERIFIED": "Təsdiqlənmiş",
+          "PENDING": "Yoxlanılır",
+          "REJECTED": "Rədd edilmiş"
+        }
       }
     },
     "applications": {
