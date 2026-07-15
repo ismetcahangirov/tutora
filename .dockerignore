@@ -1,0 +1,38 @@
+# Keep the build context small and deterministic. The images install
+# dependencies from the committed lockfile inside the build stage, so nothing
+# generated locally should ever be shipped into the context.
+
+# Dependencies & build output (rebuilt in-image)
+**/node_modules
+**/dist
+**/build
+**/.next
+**/.expo
+**/.turbo
+**/coverage
+**/*.tsbuildinfo
+
+# VCS & CI
+.git
+.github
+.husky
+
+# Secrets & local env — never bake into an image layer
+.env
+.env.*
+!.env.example
+!.env.production.example
+**/*.pem
+**/*.key
+**/*-service-account*.json
+
+# Editor / OS noise
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+
+# Docs & meta not needed at build time
+docs
+*.md
+!README.md

@@ -1,0 +1,20 @@
+name: Setup workspace
+description: Install pnpm, Node (from .nvmrc) and the workspace dependencies with a frozen lockfile.
+
+runs:
+  using: composite
+  steps:
+    # action-setup reads the pinned version from the root package.json
+    # "packageManager" field, so the pnpm version stays single-sourced.
+    - name: Install pnpm
+      uses: pnpm/action-setup@v4
+
+    - name: Install Node
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: .nvmrc
+        cache: pnpm
+
+    - name: Install dependencies
+      shell: bash
+      run: pnpm install --frozen-lockfile
