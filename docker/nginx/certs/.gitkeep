@@ -1,0 +1,3 @@
+# TLS certificates are mounted here at runtime and are never committed.
+# Local/staging: run scripts/nginx/generate-dev-certs.sh
+# Production: provision via certbot (see docs/deployment.md).

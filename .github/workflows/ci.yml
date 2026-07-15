@@ -1,0 +1,64 @@
+name: CI
+
+# Quality gate for every change. Required checks here block merges into the
+# protected branches (see the branch protection settings for main / develop).
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+# Cancel superseded runs on the same ref so pushes don't pile up.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # Formatting + commit message conventions. Cheap, so kept separate from the
+  # heavier per-task matrix and fails fast on style/convention drift.
+  format:
+    name: Format & commits
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # commitlint needs the full range between base and head.
+          fetch-depth: 0
+
+      - name: Setup workspace
+        uses: ./.github/actions/setup
+
+      - name: Prettier
+        run: pnpm run format:check
+
+      - name: Lint commit messages
+        if: github.event_name == 'pull_request'
+        run: >-
+          pnpm exec commitlint
+          --from ${{ github.event.pull_request.base.sha }}
+          --to ${{ github.event.pull_request.head.sha }}
+          --verbose
+
+  # One leg per task across all workspace packages. Turbo fans each task out
+  # over the packages internally, so the matrix keeps the four gates visible as
+  # independent required checks while still building the dependency graph once.
+  verify:
+    name: ${{ matrix.task }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        task: [lint, typecheck, test, build]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup workspace
+        uses: ./.github/actions/setup
+
+      - name: Run ${{ matrix.task }}
+        run: pnpm run ${{ matrix.task }}

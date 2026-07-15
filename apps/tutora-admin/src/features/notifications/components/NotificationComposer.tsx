@@ -83,7 +83,10 @@ export function NotificationComposer() {
     <>
       {broadcast.isSuccess ? (
         <div className="mb-6">
-          <ResultBanner recipients={broadcast.data.recipients} onDismiss={() => broadcast.reset()} />
+          <ResultBanner
+            recipients={broadcast.data.recipients}
+            onDismiss={() => broadcast.reset()}
+          />
         </div>
       ) : null}
 
@@ -105,7 +108,9 @@ export function NotificationComposer() {
                 </option>
               ))}
             </Select>
-            <p className="text-xs text-muted-foreground">{t(`notifications.audienceHint.${audience}`)}</p>
+            <p className="text-xs text-muted-foreground">
+              {t(`notifications.audienceHint.${audience}`)}
+            </p>
           </div>
 
           <div className="space-y-1.5">
