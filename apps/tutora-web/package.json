@@ -11,6 +11,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "lucide-react": "^1.24.0",
     "next": "16.2.10",
     "next-intl": "^4.13.2",
     "react": "19.2.4",
@@ -18,12 +19,14 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.2",
     "@tutora/config": "workspace:*",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.10",
+    "tailwindcss": "^4.3.2",
     "typescript": "^5",
     "vitest": "^4.1.10"
   },

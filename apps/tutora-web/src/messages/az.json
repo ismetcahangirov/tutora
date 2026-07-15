@@ -1,11 +1,262 @@
 {
   "common": {
-    "selectLanguage": "Dili seçin"
+    "selectLanguage": "Dili seçin",
+    "skipToContent": "Əsas məzmuna keç"
   },
-  "home": {
+  "nav": {
+    "why": "Niyə Tutora",
+    "howItWorks": "Necə işləyir",
+    "advantages": "İmkanlar",
+    "tutors": "Repetitorlar üçün",
+    "faq": "Suallar",
+    "getStarted": "Başlayın"
+  },
+  "metadata": {
+    "title": "Tutora — Etibarlı repetitoru dəqiqələr içində tapın",
+    "description": "Tutora şagirdləri və valideynləri büdcə, rayon, fənn, reytinq, format və dilə görə yoxlanılmış repetitorlarla birləşdirir. Şəffaf qiymətlər, real rəylər və sürətli uyğunlaşma.",
+    "keywords": "repetitor, özəl müəllim, repetitor tapmaq, onlayn təhsil, repetitor platforması, yoxlanılmış repetitorlar, imtahan hazırlığı"
+  },
+  "hero": {
+    "badge": "Yoxlanılmış repetitorlar, şəffaf qiymətlər",
     "title": "Uyğun repetitoru tez tapın",
-    "tagline": "Etibarlı repetitorları büdcə, rayon, fənn və formata görə dəqiqələr içində axtarın.",
-    "description": "Büdcə, rayon, fənn və formata görə etibarlı repetitorları tapın.",
-    "cta": "Başlayın"
+    "subtitle": "Etibarlı, yoxlanılmış repetitorları büdcə, rayon, fənn, reytinq və formata görə axtarın — həftələrlə deyil, dəqiqələr içində əminliklə seçin.",
+    "ctaPrimary": "Repetitor tap",
+    "ctaSecondary": "Repetitor ol",
+    "trustNote": "Yoxlanılmış profillər · Şəffaf qiymətlər · Real rəylər"
+  },
+  "why": {
+    "eyebrow": "Niyə Tutora",
+    "title": "Repetitor tapmaq təxmin oyununa çevrilməməlidir",
+    "description": "Sosial şəbəkələr və tanışlıq sizi qiyməti, sübutu və rəyi olmayan yad adamları müqayisə etməyə məcbur edir. Tutora bu qeyri-müəyyənliyi strukturla əvəz edir.",
+    "problemHeading": "Köhnə üsul",
+    "solutionHeading": "Tutora ilə",
+    "rows": [
+      {
+        "problem": "Repetitorları yan-yana müqayisə etmək mümkün deyil",
+        "solution": "Qiymət, reytinq və formata görə süz və müqayisə et"
+      },
+      {
+        "problem": "Qiymətlər gizli və ya qeyri-sabitdir",
+        "solution": "Şəffaf qiymətlər əvvəlcədən göstərilir"
+      },
+      {
+        "problem": "Şəxsiyyəti və ya sənədləri yoxlamaq olmur",
+        "solution": "Hər repetitorun şəxsiyyəti və sənədləri yoxlanılıb"
+      },
+      {
+        "problem": "Reputasiya yalnız söz-söhbətdir",
+        "solution": "Keçmiş şagirdlərdən real, moderasiya edilmiş rəylər"
+      },
+      {
+        "problem": "Kimisə tapmaq günlər və ya həftələr çəkir",
+        "solution": "Həftələrlə deyil, dəqiqələr içində düzgün uyğunlaşma"
+      }
+    ]
+  },
+  "howItWorks": {
+    "eyebrow": "Necə işləyir",
+    "title": "Axtarışdan ilk dərsə qədər dörd addım",
+    "description": "Vahid, nizamlı axın — dağınıq elanlar arasında gəzməyə ehtiyac yoxdur.",
+    "steps": [
+      {
+        "title": "Axtar və süz",
+        "description": "Repetitorları büdcə, rayon, fənn, reytinq, format və dilə görə daralt."
+      },
+      {
+        "title": "Müqayisə et və seç",
+        "description": "Yoxlanılmış profilləri yan-yana nəzərdən keçir və sevimlilərini yadda saxla."
+      },
+      {
+        "title": "Yaz və razılaş",
+        "description": "Tətbiq içində repetitorlarla yaz, sualları ver, cədvəl və qiymətdə razılaş."
+      },
+      {
+        "title": "Rezerv et və öyrən",
+        "description": "Dərslərə onlayn və ya canlı başla, sonra isə rəyini yaz."
+      }
+    ]
+  },
+  "advantages": {
+    "eyebrow": "İmkanlar",
+    "title": "Əminliklə seçmək üçün lazım olan hər şey",
+    "description": "Axtarışı sürətli, müqayisəni ədalətli və etibarı standart etmək üçün qurulub.",
+    "items": [
+      {
+        "title": "Güclü süzgəclər",
+        "description": "Rayon, fənn, qiymət, reytinq, onlayn və ya canlı, həmçinin tədris dili."
+      },
+      {
+        "title": "Yan-yana müqayisə",
+        "description": "Repetitorları sizin üçün önəmli olan meyarlara görə tərəzidə çək."
+      },
+      {
+        "title": "Yoxlanılmış repetitorlar",
+        "description": "Profil yayımlanmadan öncə şəxsiyyət və sənəd yoxlaması."
+      },
+      {
+        "title": "Real rəylər",
+        "description": "Həqiqətən dərs alan şagirdlərdən moderasiya edilmiş reytinq və rəylər."
+      },
+      {
+        "title": "Tətbiqdaxili söhbət",
+        "description": "Dərsə razılaşmadan öncə repetitorla birbaşa danış."
+      },
+      {
+        "title": "Şəffaf qiymətlər",
+        "description": "Fənn və formata görə aydın tariflər — heç vaxt gizli xərc yoxdur."
+      }
+    ]
+  },
+  "stats": {
+    "title": "Şagirdlərin, valideynlərin və repetitorların etibarı",
+    "items": [
+      { "value": "10 000+", "label": "Uyğunlaşdırılmış şagird" },
+      { "value": "2 500+", "label": "Yoxlanılmış repetitor" },
+      { "value": "40+", "label": "Əhatə olunan fənn" },
+      { "value": "4,9/5", "label": "Orta reytinq" }
+    ]
+  },
+  "tutors": {
+    "eyebrow": "Repetitorlar üçün",
+    "title": "Sosial şəbəkə yorğunluğu olmadan davamlı şagird axını",
+    "description": "Bir dəfə yoxlanılmış profil qur və uyğun şagirdlərin sənə gəlməsinə imkan ver. Cədvəlini, qiymətlərini və reputasiyanı bir yerdən idarə et.",
+    "benefits": [
+      "Proqnozlaşdırıla bilən, keyfiyyətli şagird müraciətləri",
+      "Dərhal etibar yaradan yoxlanılmış profil",
+      "Cədvəl, format və qiymətlər üzərində tam nəzarət",
+      "Profil baxışları, müraciətlər və reytinqlər üzrə statistika",
+      "Daha çox görünürlük üçün könüllü premium planlar"
+    ],
+    "cta": "Repetitor ol"
+  },
+  "students": {
+    "eyebrow": "Şagirdlər və valideynlər üçün",
+    "title": "Məqsədinizə və büdcənizə uyğun repetitor",
+    "description": "Yoxlanılmış repetitorları qiymət, reytinq və formata görə müqayisə et, real rəyləri oxu və etibar etdiyin biri ilə öyrənməyə başla.",
+    "benefits": [
+      "Büdcə, rayon, fənn və formata görə süz",
+      "Repetitorları müqayisə et və sevimliləri saxla",
+      "Qərar verməzdən öncə real, moderasiya edilmiş rəyləri oxu",
+      "Uyğun olduğuna əmin olmaq üçün rezervdən öncə yaz",
+      "Onlayn və ya canlı öyrən — seçim səninkidir"
+    ],
+    "cta": "Repetitor tap"
+  },
+  "app": {
+    "eyebrow": "Tətbiq",
+    "title": "Repetitor axtarışın cibində",
+    "description": "Tutora tətbiqindən axtar, müqayisə et, yaz və rezerv et — hər ekranda sürətli və premium hiss üçün hazırlanıb.",
+    "screens": [
+      { "title": "Ağıllı axtarış", "subtitle": "Mükəmməl uyğunluğa qədər süz" },
+      { "title": "Yoxlanılmış profillər", "subtitle": "Sənədlər və real rəylər" },
+      { "title": "Tətbiqdaxili söhbət", "subtitle": "Rezervdən öncə razılaş" }
+    ],
+    "iosLabel": "App Store-dan yüklə",
+    "androidLabel": "Google Play-dən al"
+  },
+  "testimonials": {
+    "eyebrow": "Rəylər",
+    "title": "Həm şagirdlərin, həm də repetitorların sevimlisi",
+    "description": "Tutora-da uyğununu tapan insanların real hekayələri.",
+    "items": [
+      {
+        "quote": "Öz rayonumda yoxlanılmış riyaziyyat repetitorunu on dəqiqədən az müddətdə tapdım. Rəylər qərarı asanlaşdırdı.",
+        "name": "Leyla M.",
+        "role": "Valideyn"
+      },
+      {
+        "quote": "Şəffaf qiymətlər və real rəylər xoşagəlməz sürprizləri aradan qaldırdı. Oğlum bir semestrdə tam bir bal irəlilədi.",
+        "name": "Rauf A.",
+        "role": "Valideyn"
+      },
+      {
+        "quote": "Repetitor olaraq Tutora reklama pul xərcləmədən mənə davamlı ciddi şagird axını verdi. Cədvəlim nəhayət doludur.",
+        "name": "Nigar S.",
+        "role": "Fizika repetitoru"
+      }
+    ]
+  },
+  "faq": {
+    "eyebrow": "Suallar",
+    "title": "Tez-tez verilən suallar",
+    "description": "Başlamazdan öncə bilməli olduğunuz hər şey.",
+    "items": [
+      {
+        "question": "Tutora repetitorları necə yoxlayır?",
+        "answer": "Hər repetitor şəxsiyyət yoxlamasından keçir və sənədlərini təqdim edir; komandamız profil yayımlanmadan öncə onları nəzərdən keçirir. Yoxlanılmış repetitorların profilində nişan olur."
+      },
+      {
+        "question": "Tutora şagirdlər üçün pulsuzdur?",
+        "answer": "Bəli. Repetitorları axtarmaq, müqayisə etmək və onlarla əlaqə saxlamaq şagirdlər və valideynlər üçün pulsuzdur. Yalnız razılaşdığınız dərslər üçün repetitora ödəniş edirsiniz."
+      },
+      {
+        "question": "Qiymətlər necə göstərilir?",
+        "answer": "Hər repetitor fənn və formata görə şəffaf tariflər qeyd edir, beləliklə müraciət etməzdən öncə qiyməti həmişə görürsünüz — gizli xərc yoxdur."
+      },
+      {
+        "question": "Dərsləri onlayn və ya canlı ala bilərəm?",
+        "answer": "Hər ikisi. Repetitorları formata görə süzə bilərsiniz — onlayn, sizin evinizdə və ya repetitorun yerində — və sizə ən uyğun olanı seçə bilərsiniz."
+      },
+      {
+        "question": "Tutora hansı dilləri dəstəkləyir?",
+        "answer": "Platforma Azərbaycan, İngilis və Rus dillərində mövcuddur və repetitorları tədris dilinə görə süzə bilərsiniz."
+      },
+      {
+        "question": "Repetitor necə ola bilərəm?",
+        "answer": "Profil yarat, fənnlərini, təcrübəni və sənədlərini əlavə et və yoxlamanı tamamla. Təsdiqləndikdən sonra şagirdlər səni tapıb əlaqə saxlaya bilər."
+      }
+    ]
+  },
+  "blog": {
+    "eyebrow": "Bloqdan",
+    "title": "Şagirdlər, valideynlər və repetitorlar üçün məsləhətlər",
+    "description": "Repetitor seçimi, imtahan hazırlığı və yaxşı tədris haqqında praktik bələdçilər.",
+    "badge": "Tezliklə",
+    "posts": [
+      {
+        "category": "Valideynlər üçün",
+        "title": "Övladınız üçün düzgün repetitoru necə seçmək olar",
+        "excerpt": "Verilməli beş sual və əla repetitoru yaxşıdan ayıran əlamətlər.",
+        "readingTime": "5 dəq oxu"
+      },
+      {
+        "category": "İmtahan hazırlığı",
+        "title": "Effektiv imtahan hazırlığı cədvəli qurmaq",
+        "excerpt": "Şagirdi yormadan ardıcıl saxlayan sadə və real bir plan.",
+        "readingTime": "6 dəq oxu"
+      },
+      {
+        "category": "Repetitorlar üçün",
+        "title": "Sevdiyiniz repetitorluq fəaliyyətini böyütmək",
+        "excerpt": "Yoxlanılmış profillər və rəylər necə dolu, proqnozlaşdırıla bilən cədvələ çevrilir.",
+        "readingTime": "4 dəq oxu"
+      }
+    ]
+  },
+  "cta": {
+    "title": "Repetitorunu tapmağa hazırsan?",
+    "description": "Tutora-da artıq uyğunlaşan minlərlə şagird və repetitora qoşul. Başlamaq cəmi bir neçə dəqiqə çəkir."
+  },
+  "footer": {
+    "tagline": "Etibarlı repetitoru həftələrlə deyil, dəqiqələr içində tapın.",
+    "columns": {
+      "product": "Məhsul",
+      "company": "Şirkət",
+      "legal": "Hüquqi"
+    },
+    "links": {
+      "howItWorks": "Necə işləyir",
+      "advantages": "İmkanlar",
+      "tutors": "Repetitorlar üçün",
+      "students": "Şagirdlər üçün",
+      "faq": "Suallar",
+      "about": "Haqqımızda",
+      "blog": "Bloq",
+      "contact": "Əlaqə",
+      "privacy": "Məxfilik Siyasəti",
+      "terms": "İstifadə Şərtləri"
+    },
+    "rights": "© {year} Tutora. Bütün hüquqlar qorunur.",
+    "builtIn": "Azərbaycanda qayğı ilə hazırlanıb."
   }
 }

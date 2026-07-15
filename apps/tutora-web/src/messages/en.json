@@ -1,11 +1,262 @@
 {
   "common": {
-    "selectLanguage": "Select language"
+    "selectLanguage": "Select language",
+    "skipToContent": "Skip to content"
   },
-  "home": {
+  "nav": {
+    "why": "Why Tutora",
+    "howItWorks": "How it works",
+    "advantages": "Features",
+    "tutors": "For tutors",
+    "faq": "FAQ",
+    "getStarted": "Get started"
+  },
+  "metadata": {
+    "title": "Tutora — Find a trusted tutor in minutes",
+    "description": "Tutora connects students and parents with verified tutors by budget, district, subject, rating, format, and language. Transparent pricing, real reviews, and fast matching.",
+    "keywords": "tutor, private tutor, find a tutor, online tutoring, tutoring platform, verified tutors, exam prep, repetitor"
+  },
+  "hero": {
+    "badge": "Verified tutors, transparent pricing",
     "title": "Find the right tutor, fast",
-    "tagline": "Search trusted tutors by budget, district, subject, and format — in minutes.",
-    "description": "Find trusted tutors by budget, district, subject, and format.",
-    "cta": "Get started"
+    "subtitle": "Search trusted, verified tutors by budget, district, subject, rating, and format — and book with confidence in minutes, not weeks.",
+    "ctaPrimary": "Find a tutor",
+    "ctaSecondary": "Become a tutor",
+    "trustNote": "Verified profiles · Transparent pricing · Real reviews"
+  },
+  "why": {
+    "eyebrow": "Why Tutora",
+    "title": "Finding a tutor shouldn't be a guessing game",
+    "description": "Social feeds and word-of-mouth leave you comparing strangers with no prices, no proof, and no reviews. Tutora replaces the guesswork with structure.",
+    "problemHeading": "The old way",
+    "solutionHeading": "With Tutora",
+    "rows": [
+      {
+        "problem": "No way to compare tutors side by side",
+        "solution": "Filter and compare by price, rating, and format"
+      },
+      {
+        "problem": "Pricing is hidden or inconsistent",
+        "solution": "Transparent pricing shown up front"
+      },
+      {
+        "problem": "You can't verify identity or credentials",
+        "solution": "Every tutor is identity- and certificate-verified"
+      },
+      {
+        "problem": "Reputation is just anecdotes",
+        "solution": "Real, moderated reviews from past students"
+      },
+      {
+        "problem": "It takes days or weeks to find someone",
+        "solution": "The right match in minutes, not weeks"
+      }
+    ]
+  },
+  "howItWorks": {
+    "eyebrow": "How it works",
+    "title": "From search to first lesson in four steps",
+    "description": "A single, structured flow — no scrolling through disorganized posts.",
+    "steps": [
+      {
+        "title": "Search & filter",
+        "description": "Narrow tutors by budget, district, subject, rating, format, and language."
+      },
+      {
+        "title": "Compare & shortlist",
+        "description": "Review verified profiles side by side and save your favorites."
+      },
+      {
+        "title": "Chat & agree",
+        "description": "Message tutors in-app, ask questions, and align on schedule and price."
+      },
+      {
+        "title": "Book & learn",
+        "description": "Start lessons online or in person, then leave a review afterwards."
+      }
+    ]
+  },
+  "advantages": {
+    "eyebrow": "Features",
+    "title": "Everything you need to choose with confidence",
+    "description": "Built to make discovery fast, comparison fair, and trust the default.",
+    "items": [
+      {
+        "title": "Powerful filters",
+        "description": "District, subject, price, rating, online or offline, and teaching language."
+      },
+      {
+        "title": "Side-by-side comparison",
+        "description": "Weigh tutors against each other on the things that matter to you."
+      },
+      {
+        "title": "Verified tutors",
+        "description": "Identity and certificate checks before a profile goes live."
+      },
+      {
+        "title": "Real reviews",
+        "description": "Moderated ratings and reviews from students who actually studied."
+      },
+      {
+        "title": "In-app chat",
+        "description": "Talk directly with a tutor before you commit to a lesson."
+      },
+      {
+        "title": "Transparent pricing",
+        "description": "Clear rates per subject and format — no hidden costs, ever."
+      }
+    ]
+  },
+  "stats": {
+    "title": "Trusted by students, parents, and tutors",
+    "items": [
+      { "value": "10,000+", "label": "Students matched" },
+      { "value": "2,500+", "label": "Verified tutors" },
+      { "value": "40+", "label": "Subjects covered" },
+      { "value": "4.9/5", "label": "Average rating" }
+    ]
+  },
+  "tutors": {
+    "eyebrow": "For tutors",
+    "title": "A steady stream of students — without the social-media grind",
+    "description": "Build a verified profile once and let qualified students come to you. Manage your schedule, pricing, and reputation from one place.",
+    "benefits": [
+      "Predictable, qualified student applications",
+      "A verified profile that builds instant trust",
+      "Full control over schedule, formats, and pricing",
+      "Stats on profile views, applications, and ratings",
+      "Optional premium plans for greater visibility"
+    ],
+    "cta": "Become a tutor"
+  },
+  "students": {
+    "eyebrow": "For students & parents",
+    "title": "The right tutor for your goals and budget",
+    "description": "Compare verified tutors on price, rating, and format, read real reviews, and start learning with someone you can trust.",
+    "benefits": [
+      "Filter by budget, district, subject, and format",
+      "Compare tutors and save favorites",
+      "Read real, moderated reviews before you decide",
+      "Chat before booking to make sure it's a fit",
+      "Learn online or in person — your choice"
+    ],
+    "cta": "Find a tutor"
+  },
+  "app": {
+    "eyebrow": "The app",
+    "title": "Your tutor search, in your pocket",
+    "description": "Search, compare, chat, and book from the Tutora app — designed to feel fast and premium on every screen.",
+    "screens": [
+      { "title": "Smart search", "subtitle": "Filter to the perfect match" },
+      { "title": "Verified profiles", "subtitle": "Credentials and real reviews" },
+      { "title": "In-app chat", "subtitle": "Agree before you book" }
+    ],
+    "iosLabel": "Download on the App Store",
+    "androidLabel": "Get it on Google Play"
+  },
+  "testimonials": {
+    "eyebrow": "Testimonials",
+    "title": "Loved by students and tutors alike",
+    "description": "Real stories from people who found their match on Tutora.",
+    "items": [
+      {
+        "quote": "I found a verified maths tutor in my district in under ten minutes. The reviews made the decision easy.",
+        "name": "Leyla M.",
+        "role": "Parent"
+      },
+      {
+        "quote": "Transparent pricing and real reviews meant no awkward surprises. My son improved a full grade in a term.",
+        "name": "Rauf A.",
+        "role": "Parent"
+      },
+      {
+        "quote": "As a tutor, Tutora gave me a steady stream of serious students without paying for ads. My schedule is finally full.",
+        "name": "Nigar S.",
+        "role": "Physics tutor"
+      }
+    ]
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Frequently asked questions",
+    "description": "Everything you need to know before getting started.",
+    "items": [
+      {
+        "question": "How does Tutora verify tutors?",
+        "answer": "Every tutor completes identity verification and submits their certificates, which our team reviews before the profile goes live. Verified tutors carry a badge on their profile."
+      },
+      {
+        "question": "Is Tutora free for students?",
+        "answer": "Yes. Searching, comparing, and contacting tutors is free for students and parents. You only pay the tutor for the lessons you agree on."
+      },
+      {
+        "question": "How is pricing shown?",
+        "answer": "Every tutor lists transparent rates per subject and format, so you always see the price before you reach out — no hidden costs."
+      },
+      {
+        "question": "Can I take lessons online or in person?",
+        "answer": "Both. You can filter tutors by format — online, at your home, or at the tutor's place — and choose what works best for you."
+      },
+      {
+        "question": "Which languages does Tutora support?",
+        "answer": "The platform is available in Azerbaijani, English, and Russian, and you can filter tutors by their teaching language."
+      },
+      {
+        "question": "How do I become a tutor?",
+        "answer": "Create a profile, add your subjects, experience, and certificates, and complete verification. Once approved, students can find and contact you."
+      }
+    ]
+  },
+  "blog": {
+    "eyebrow": "From the blog",
+    "title": "Tips for students, parents, and tutors",
+    "description": "Practical guides on choosing tutors, exam prep, and teaching well.",
+    "badge": "Coming soon",
+    "posts": [
+      {
+        "category": "For parents",
+        "title": "How to choose the right tutor for your child",
+        "excerpt": "Five questions to ask and the signals that separate a great tutor from a good one.",
+        "readingTime": "5 min read"
+      },
+      {
+        "category": "Exam prep",
+        "title": "Building an effective exam-prep schedule",
+        "excerpt": "A simple, realistic plan that keeps students consistent without burning out.",
+        "readingTime": "6 min read"
+      },
+      {
+        "category": "For tutors",
+        "title": "Growing a tutoring practice you love",
+        "excerpt": "How verified profiles and reviews compound into a full, predictable schedule.",
+        "readingTime": "4 min read"
+      }
+    ]
+  },
+  "cta": {
+    "title": "Ready to find your tutor?",
+    "description": "Join thousands of students and tutors already matching on Tutora. It takes minutes to get started."
+  },
+  "footer": {
+    "tagline": "Find a trusted tutor in minutes — not weeks.",
+    "columns": {
+      "product": "Product",
+      "company": "Company",
+      "legal": "Legal"
+    },
+    "links": {
+      "howItWorks": "How it works",
+      "advantages": "Features",
+      "tutors": "For tutors",
+      "students": "For students",
+      "faq": "FAQ",
+      "about": "About",
+      "blog": "Blog",
+      "contact": "Contact",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service"
+    },
+    "rights": "© {year} Tutora. All rights reserved.",
+    "builtIn": "Built with care in Azerbaijan."
   }
 }
