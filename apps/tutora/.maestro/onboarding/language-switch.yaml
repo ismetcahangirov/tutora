@@ -1,0 +1,18 @@
+# The language switcher swaps UI copy across az / en / ru without a reload
+# (issue #97). The Google CTA label is asserted in each language to prove the
+# active locale actually changed.
+appId: ${APP_ID}
+tags:
+  - smoke
+---
+- runFlow: ../common/launch-onboarding.yaml
+- assertVisible: Continue with Google
+- tapOn:
+    id: language-az
+- assertVisible: Google ilə davam et
+- tapOn:
+    id: language-ru
+- assertVisible: Продолжить с Google
+- tapOn:
+    id: language-en
+- assertVisible: Continue with Google

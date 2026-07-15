@@ -68,7 +68,10 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "jest --passWithNoTests",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "test:e2e": "maestro test -e APP_ID=com.tutora.mobile .maestro",
+    "test:e2e:smoke": "maestro test -e APP_ID=com.tutora.mobile --include-tags smoke .maestro",
+    "e2e:studio": "maestro studio"
   },
   "private": true,
   "prettier": "@tutora/config/prettier"

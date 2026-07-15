@@ -37,7 +37,7 @@ export function OnboardingCarousel({ slides }: OnboardingCarouselProps) {
   );
 
   return (
-    <View style={styles.container}>
+    <View testID="onboarding-carousel" style={styles.container}>
       <FlatList
         data={slides}
         keyExtractor={(slide) => slide.key}
