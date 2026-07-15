@@ -89,6 +89,7 @@ services:
       args:
         # Baked into the bundle at build time.
         VITE_API_URL: ${PUBLIC_API_URL:-https://api.${DOMAIN:-localhost}}
+        VITE_SENTRY_DSN: ${ADMIN_SENTRY_DSN:-}
     restart: unless-stopped
 
   web:
@@ -98,6 +99,7 @@ services:
       dockerfile: apps/tutora-web/Dockerfile
       args:
         NEXT_PUBLIC_API_URL: ${PUBLIC_API_URL:-https://api.${DOMAIN:-localhost}}
+        NEXT_PUBLIC_SENTRY_DSN: ${WEB_SENTRY_DSN:-}
     restart: unless-stopped
 
   nginx:

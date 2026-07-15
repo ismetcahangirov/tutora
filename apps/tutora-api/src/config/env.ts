@@ -49,6 +49,12 @@ export const envSchema = z.object({
   // service account) the upload endpoint reports 503 while the rest of the API
   // runs — so dev/test/CI need no storage credentials.
   FIREBASE_STORAGE_BUCKET: z.string().optional(),
+
+  // Error + performance monitoring (Sentry — #92). Optional: with no SENTRY_DSN
+  // the SDK is never initialized (see instrument.ts), so dev/test/CI run without
+  // any Sentry credentials. SENTRY_ENVIRONMENT tags events per deployment.
+  SENTRY_DSN: z.string().optional(),
+  SENTRY_ENVIRONMENT: z.string().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;

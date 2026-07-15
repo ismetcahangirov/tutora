@@ -11,12 +11,16 @@ packages:
 # prebuilt and the SDK runs without their build scripts, so false.
 # msgpackr-extract: optional native accelerator for msgpackr (bullmq serializer,
 # #38); msgpackr falls back to a pure-JS path without it, so false.
+# @sentry/cli: downloads a binary used only to upload source maps at build/EAS
+# time (guarded by an auth token, which CI does not set); not needed to install,
+# typecheck, test, or build, so false. See docs/monitoring.md.
 allowBuilds:
   '@firebase/util': false
   '@parcel/watcher': false
   '@prisma/client': true
   '@prisma/engines': true
   '@scarf/scarf': false
+  '@sentry/cli': false
   '@swc/core': false
   msgpackr-extract: false
   prisma: true

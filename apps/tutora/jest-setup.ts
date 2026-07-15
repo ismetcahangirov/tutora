@@ -65,6 +65,16 @@ jest.mock('expo-notifications', () => ({
 // expo-device reports whether we're on a physical device (push needs one).
 jest.mock('expo-device', () => ({ isDevice: true }));
 
+// @sentry/react-native is a native module with no Jest binding — stub the
+// surface the observability layer (#92) uses so importing the root layout (and
+// anything that wraps a component in Sentry) loads cleanly. `wrap` is identity.
+jest.mock('@sentry/react-native', () => ({
+  __esModule: true,
+  init: jest.fn(),
+  wrap: <T>(component: T): T => component,
+  captureException: jest.fn(),
+}));
+
 jest.mock('@gorhom/bottom-sheet', () => {
   const React = jest.requireActual('react') as typeof import('react');
   const { View } = jest.requireActual('react-native') as typeof import('react-native');

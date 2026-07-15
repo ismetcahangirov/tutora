@@ -5,7 +5,12 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
+import * as Sentry from '@sentry/nestjs';
 import { AllExceptionsFilter } from './all-exceptions.filter';
+
+jest.mock('@sentry/nestjs', () => ({ captureException: jest.fn() }));
+
+const captureException = Sentry.captureException as jest.Mock;
 
 interface CapturedResponse {
   statusCode: number;
@@ -77,5 +82,26 @@ describe('AllExceptionsFilter', () => {
     const { host, getBody } = createHost();
     new AllExceptionsFilter().catch(new HttpException('Nope', HttpStatus.BAD_REQUEST), host);
     expect(getBody().error).toBe('BadRequest');
+  });
+
+  describe('Sentry reporting', () => {
+    beforeEach(() => captureException.mockClear());
+
+    it('reports unexpected 5xx failures to Sentry', () => {
+      const { host } = createHost();
+      jest.spyOn(Logger.prototype, 'error').mockImplementation(() => undefined);
+      const error = new Error('db connection dropped');
+
+      new AllExceptionsFilter().catch(error, host);
+
+      expect(captureException).toHaveBeenCalledWith(error);
+    });
+
+    it('does not report 4xx client errors', () => {
+      const { host } = createHost();
+      new AllExceptionsFilter().catch(new NotFoundException('Tutor not found'), host);
+
+      expect(captureException).not.toHaveBeenCalled();
+    });
   });
 });

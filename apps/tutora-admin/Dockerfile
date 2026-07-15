@@ -14,9 +14,11 @@ ENV PNPM_HOME=/pnpm
 ENV PATH=$PNPM_HOME:$PATH
 
 # Vite inlines only VITE_* vars, and it does so at BUILD time — so the API URL
-# must be provided as a build argument, not a runtime env var.
+# and Sentry DSN must be provided as build arguments, not runtime env vars.
 ARG VITE_API_URL
 ENV VITE_API_URL=$VITE_API_URL
+ARG VITE_SENTRY_DSN
+ENV VITE_SENTRY_DSN=$VITE_SENTRY_DSN
 
 COPY . .
 RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \

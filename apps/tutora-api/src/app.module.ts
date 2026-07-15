@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { SentryModule } from '@sentry/nestjs/setup';
 import { validateEnv } from '@config/env';
 import { AppI18nModule } from '@/i18n/i18n.module';
 import { PrismaModule } from '@/prisma/prisma.module';
@@ -33,6 +34,9 @@ import { HealthModule } from '@modules/health/health.module';
       isGlobal: true,
       validate: validateEnv,
     }),
+    // Wires Sentry request isolation + tracing (#92). A no-op when the SDK was
+    // not initialized in instrument.ts (no SENTRY_DSN), so it is safe always-on.
+    SentryModule.forRoot(),
     AppI18nModule,
     RedisModule,
     CacheModule,

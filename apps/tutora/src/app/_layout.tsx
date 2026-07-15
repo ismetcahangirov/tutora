@@ -21,15 +21,20 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ToastProvider } from '@/components/ui';
 import { AuthProvider } from '@features/auth';
 import { NotificationsBridge } from '@features/notifications';
+import { useOtaUpdates } from '@/shared/hooks/useOtaUpdates';
 import { I18nProvider } from '@/shared/i18n';
+import { initSentry, wrapWithSentry } from '@/shared/observability/sentry';
 import { QueryProvider } from '@/shared/query';
 import { ThemeProvider, useAppFonts } from '@/theme';
 import { getStoredAppearance, setStoredAppearance } from '@/theme/appearance-storage';
 
+// Start crash reporting before anything renders so early errors are captured.
+initSentry();
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
+function RootLayout() {
   const { fontsLoaded, fontError } = useAppFonts();
+  useOtaUpdates();
 
   useEffect(() => {
     if (fontsLoaded || fontError) {
@@ -70,3 +75,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+// Wrap the root so Sentry captures render errors and navigation breadcrumbs.
+export default wrapWithSentry(RootLayout);

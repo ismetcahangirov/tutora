@@ -1,3 +1,7 @@
+// Must be imported first: initializes Sentry before any other module loads so
+// its auto-instrumentation can patch dependencies at require time (#92).
+import './instrument';
+
 import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { i18nValidationErrorFactory } from 'nestjs-i18n';
