@@ -1,0 +1,15 @@
+# Shared entry point for the onboarding journeys (issue #97).
+#
+# Cold-launches the app on the first-run welcome screen (a cleared state signs
+# the user out, so the routing gate lands on `/welcome`) and pins the UI to
+# English, so copy assertions stay valid regardless of the device's system
+# language. Pulled into each journey with `runFlow`.
+appId: ${APP_ID}
+---
+- launchApp:
+    clearState: true
+- assertVisible:
+    id: welcome-screen
+- tapOn:
+    id: language-en
+- assertVisible: Continue with Google

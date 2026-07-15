@@ -1,0 +1,19 @@
+# The onboarding carousel pages through all three value-proposition slides
+# (issue #97). Each swipe advances the paged list; the slide copy confirms the
+# active page.
+appId: ${APP_ID}
+tags:
+  - smoke
+---
+- runFlow: ../common/launch-onboarding.yaml
+- assertVisible:
+    id: onboarding-carousel
+- assertVisible: Find the right tutor
+- swipe:
+    start: 90%, 55%
+    end: 10%, 55%
+- assertVisible: Clear and transparent
+- swipe:
+    start: 90%, 55%
+    end: 10%, 55%
+- assertVisible: Learn your way

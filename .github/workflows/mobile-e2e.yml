@@ -1,0 +1,91 @@
+name: Mobile E2E
+
+# Maestro UI journeys for the mobile app (issue #97).
+#
+# Deliberately kept OUT of the required PR gates: this needs an Android emulator
+# and a native debug build, which are far heavier and slower than the browser /
+# API E2E in e2e.yml. Trigger it on demand from the Actions tab (or wire it to a
+# nightly schedule) when you want a full on-device run.
+on:
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: Maestro tag filter (e.g. smoke)
+        required: false
+        default: smoke
+
+concurrency:
+  group: mobile-e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  maestro:
+    name: e2e (mobile)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      APP_ID: com.tutora.mobile
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup workspace
+        uses: ./.github/actions/setup
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      # Generate the native Android project from the Expo config, then assemble a
+      # debug APK. `--no-install` keeps the pnpm workspace lockfile authoritative.
+      - name: Prebuild Android project
+        working-directory: apps/tutora
+        run: pnpm exec expo prebuild --platform android --no-install
+
+      - name: Build debug APK
+        working-directory: apps/tutora/android
+        run: ./gradlew :app:assembleDebug
+
+      - name: Install Maestro
+        run: |
+          curl -fsSL "https://get.maestro.mobile.dev" | bash
+          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+
+      # The emulator needs hardware acceleration to boot in a reasonable time.
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Run Maestro flows on emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          script: |
+            adb install -r apps/tutora/android/app/build/outputs/apk/debug/app-debug.apk
+            maestro test \
+              -e APP_ID=$APP_ID \
+              --include-tags "${{ inputs.tags }}" \
+              --format junit \
+              --output apps/tutora/.maestro/report.xml \
+              apps/tutora/.maestro
+
+      - name: Upload Maestro report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: maestro-report
+          path: |
+            apps/tutora/.maestro/report.xml
+            ~/.maestro/tests
+          retention-days: 7
+          if-no-files-found: ignore

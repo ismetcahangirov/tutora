@@ -18,7 +18,10 @@ export function SignInScreen() {
   const { t } = useTranslation();
 
   return (
-    <SafeAreaView style={[styles.screen, { backgroundColor: colors.background }]}>
+    <SafeAreaView
+      testID="sign-in-screen"
+      style={[styles.screen, { backgroundColor: colors.background }]}
+    >
       <View style={styles.content}>
         <View style={styles.hero}>
           <Text variant="display" align="center">

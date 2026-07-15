@@ -36,7 +36,10 @@ export function WelcomeScreen() {
   );
 
   return (
-    <SafeAreaView style={[styles.screen, { backgroundColor: colors.background }]}>
+    <SafeAreaView
+      testID="welcome-screen"
+      style={[styles.screen, { backgroundColor: colors.background }]}
+    >
       <View style={styles.brand}>
         <Text variant="title" color="primary" align="center">
           {APP_NAME}

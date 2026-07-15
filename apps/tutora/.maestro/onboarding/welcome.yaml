@@ -1,0 +1,15 @@
+# Onboarding entry renders for signed-out users (issue #97): the brand, the first
+# value-proposition slide, and the Google CTA. No backend is required to reach
+# this surface, which makes it a reliable smoke check.
+appId: ${APP_ID}
+tags:
+  - smoke
+---
+- runFlow: ../common/launch-onboarding.yaml
+- assertVisible: Tutora
+- assertVisible:
+    id: onboarding-carousel
+- assertVisible: Find the right tutor
+- assertVisible:
+    id: google-signin-button
+- assertVisible: Continue with Google

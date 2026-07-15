@@ -25,6 +25,7 @@ export function LanguageSwitcher() {
         return (
           <Pressable
             key={lang}
+            testID={`language-${lang}`}
             onPress={() => setLanguage(lang)}
             accessibilityRole="button"
             accessibilityState={{ selected: isActive }}

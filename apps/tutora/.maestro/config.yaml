@@ -1,0 +1,14 @@
+# Maestro workspace configuration for the Tutora mobile app (issue #97).
+#
+# `flows` scopes test discovery to the journey folders, so the reusable building
+# blocks in `common/` (pulled in with `runFlow`) are never executed as standalone
+# tests. Animations are disabled to keep assertions deterministic on CI
+# emulators and simulators.
+flows:
+  - onboarding/*
+  - auth/*
+platform:
+  android:
+    disableAnimations: true
+  ios:
+    disableAnimations: true

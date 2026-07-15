@@ -1,0 +1,15 @@
+# The standalone /sign-in re-authentication screen is reachable through the app's
+# `tutora://` deep-link scheme and shows the shared Google CTA (issue #97). The
+# onboarding launch runs first so the UI is pinned to English and the hero copy
+# is deterministic.
+appId: ${APP_ID}
+tags:
+  - smoke
+---
+- runFlow: ../common/launch-onboarding.yaml
+- openLink: tutora://sign-in
+- assertVisible:
+    id: sign-in-screen
+- assertVisible: Welcome to Tutora
+- assertVisible:
+    id: google-signin-button

@@ -30,6 +30,7 @@ export function GoogleSignInButton() {
       ) : null}
 
       <Button
+        testID="google-signin-button"
         label={continueLabel}
         size="large"
         fullWidth
