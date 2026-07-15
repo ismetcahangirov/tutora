@@ -8,7 +8,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { UserRole } from '@prisma/client';
 import { CurrentUser } from '@modules/auth/decorators/current-user.decorator';
 import { Roles } from '@modules/auth/decorators/roles.decorator';
@@ -16,13 +16,16 @@ import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 import { RolesGuard } from '@modules/auth/guards/roles.guard';
 import type { AuthenticatedUser } from '@modules/auth/types/auth.types';
 import type { Paginated } from '@common/pagination/page';
+import { ApiPaginatedResponse, ApiStandardErrorResponses } from '@common/swagger';
 import { ApplicationsService } from './applications.service';
 import type { ApplicationView } from './applications.types';
+import { ApplicationViewDto } from './dto/application-response.dto';
 import { ListApplicationsQueryDto } from './dto/list-applications-query.dto';
 
 /** A tutor acting on the applications addressed to them (#32). */
 @ApiTags('tutor: applications')
 @ApiBearerAuth('bearer')
+@ApiStandardErrorResponses('unauthorized', 'forbidden')
 @Controller({ path: 'tutor/applications', version: '1' })
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(UserRole.TUTOR)
@@ -31,6 +34,7 @@ export class TutorApplicationsController {
 
   @Get()
   @ApiOperation({ summary: 'List applications addressed to the tutor (paginated)' })
+  @ApiPaginatedResponse(ApplicationViewDto)
   list(
     @CurrentUser() user: AuthenticatedUser,
     @Query() query: ListApplicationsQueryDto,
@@ -41,6 +45,9 @@ export class TutorApplicationsController {
   @Post(':id/accept')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Accept a pending application' })
+  @ApiParam({ name: 'id', description: 'Application id.' })
+  @ApiOkResponse({ description: 'The accepted application.', type: ApplicationViewDto })
+  @ApiStandardErrorResponses('notFound', 'conflict')
   accept(
     @CurrentUser() user: AuthenticatedUser,
     @Param('id') id: string,
@@ -51,6 +58,9 @@ export class TutorApplicationsController {
   @Post(':id/decline')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Decline a pending application' })
+  @ApiParam({ name: 'id', description: 'Application id.' })
+  @ApiOkResponse({ description: 'The declined application.', type: ApplicationViewDto })
+  @ApiStandardErrorResponses('notFound', 'conflict')
   decline(
     @CurrentUser() user: AuthenticatedUser,
     @Param('id') id: string,
@@ -61,6 +71,9 @@ export class TutorApplicationsController {
   @Post(':id/complete')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Mark an accepted application as completed' })
+  @ApiParam({ name: 'id', description: 'Application id.' })
+  @ApiOkResponse({ description: 'The completed application.', type: ApplicationViewDto })
+  @ApiStandardErrorResponses('notFound', 'conflict')
   complete(
     @CurrentUser() user: AuthenticatedUser,
     @Param('id') id: string,
