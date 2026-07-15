@@ -260,6 +260,10 @@ The admin panel provides **full control** over the marketplace. Modules:
 
 ## System Architecture
 
+> Current-state overview: [`docs/architecture.md`](docs/architecture.md). The
+> reasoning behind major choices is recorded as
+> [Architecture Decision Records](docs/adr/README.md).
+
 ```
                          ┌────────────────────────┐
                          │      Tutora Clients      │
@@ -732,7 +736,10 @@ Full workflow: [`.claude/context/git-workflow.md`](.claude/context/git-workflow.
 
 ## Getting Started
 
-> Each application lives in its own package/repo. Clone and set up the surface you’re working on.
+> **This is a pnpm + Turborepo monorepo** — one `pnpm install` at the root sets up
+> every app. The snippets below are a quick reference; the authoritative,
+> step-by-step local setup (with troubleshooting) is
+> [`docs/onboarding.md`](docs/onboarding.md).
 
 ### Prerequisites
 
@@ -861,12 +868,16 @@ pnpm test:e2e       # end-to-end tests
 
 ## Contributing
 
+See **[`CONTRIBUTING.md`](CONTRIBUTING.md)** for the full guide. In short:
+
 1. Pick or open an issue.
-2. `git checkout main && git pull` → create a `feature/*` branch.
+2. `git checkout main && git pull` → create a `<type>/<description>` branch.
 3. Follow the [coding standards](.claude/context/coding-standards.md) and [`CLAUDE.md`](CLAUDE.md).
 4. Open a **Draft PR** using the template; request review.
 5. Ensure lint, types, and tests pass; satisfy the **Definition of Done**.
 6. Squash‑merge after approval and delete the branch.
+
+New here? Start with the [onboarding guide](docs/onboarding.md).
 
 ---
 
