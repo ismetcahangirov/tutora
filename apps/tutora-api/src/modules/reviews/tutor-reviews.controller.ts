@@ -1,7 +1,9 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import type { Paginated } from '@common/pagination/page';
 import { PaginationQueryDto } from '@common/pagination/pagination-query.dto';
+import { ApiPaginatedResponse } from '@common/swagger';
+import { ReviewViewDto } from './dto/review-response.dto';
 import { ReviewsService } from './reviews.service';
 import type { ReviewView } from './reviews.types';
 
@@ -18,6 +20,8 @@ export class TutorReviewsController {
 
   @Get()
   @ApiOperation({ summary: 'List a tutor’s published reviews (paginated)' })
+  @ApiParam({ name: 'tutorId', description: 'Tutor profile id.' })
+  @ApiPaginatedResponse(ReviewViewDto)
   list(
     @Param('tutorId') tutorId: string,
     @Query() query: PaginationQueryDto,

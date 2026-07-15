@@ -11,7 +11,14 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiNoContentResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UserRole } from '@prisma/client';
 import { CurrentUser } from '@modules/auth/decorators/current-user.decorator';
 import { Roles } from '@modules/auth/decorators/roles.decorator';
@@ -20,13 +27,16 @@ import { RolesGuard } from '@modules/auth/guards/roles.guard';
 import type { AuthenticatedUser } from '@modules/auth/types/auth.types';
 import type { Paginated } from '@common/pagination/page';
 import { PaginationQueryDto } from '@common/pagination/pagination-query.dto';
+import { ApiPaginatedResponse, ApiStandardErrorResponses } from '@common/swagger';
 import { UpdateStudentProfileDto } from './dto/update-student-profile.dto';
+import { FavoriteTutorViewDto, StudentProfileViewDto } from './dto/student-response.dto';
 import { StudentsService } from './students.service';
 import type { FavoriteTutorView, StudentProfileView } from './students.types';
 
 /** A student managing their own profile, preferences and favorites (#30). */
 @ApiTags('students')
 @ApiBearerAuth('bearer')
+@ApiStandardErrorResponses('unauthorized', 'forbidden')
 @Controller({ path: 'students', version: '1' })
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(UserRole.STUDENT)
@@ -35,12 +45,15 @@ export class StudentsController {
 
   @Get('me')
   @ApiOperation({ summary: 'Get the authenticated student profile' })
+  @ApiOkResponse({ description: 'The authenticated student profile.', type: StudentProfileViewDto })
   getMe(@CurrentUser() user: AuthenticatedUser): Promise<StudentProfileView> {
     return this.students.getOwnProfile(user.id);
   }
 
   @Patch('me')
   @ApiOperation({ summary: 'Update the authenticated student profile' })
+  @ApiOkResponse({ description: 'The updated student profile.', type: StudentProfileViewDto })
+  @ApiStandardErrorResponses('badRequest')
   updateMe(
     @CurrentUser() user: AuthenticatedUser,
     @Body() dto: UpdateStudentProfileDto,
@@ -50,6 +63,7 @@ export class StudentsController {
 
   @Get('me/favorites')
   @ApiOperation({ summary: 'List favorited tutors (paginated)' })
+  @ApiPaginatedResponse(FavoriteTutorViewDto)
   listFavorites(
     @CurrentUser() user: AuthenticatedUser,
     @Query() query: PaginationQueryDto,
@@ -60,6 +74,9 @@ export class StudentsController {
   @Put('me/favorites/:tutorId')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Favorite a tutor (idempotent)' })
+  @ApiParam({ name: 'tutorId', description: 'Tutor profile id to favorite.' })
+  @ApiNoContentResponse({ description: 'The tutor is favorited.' })
+  @ApiStandardErrorResponses('notFound')
   async addFavorite(
     @CurrentUser() user: AuthenticatedUser,
     @Param('tutorId') tutorId: string,
@@ -70,6 +87,8 @@ export class StudentsController {
   @Delete('me/favorites/:tutorId')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Remove a favorited tutor (idempotent)' })
+  @ApiParam({ name: 'tutorId', description: 'Tutor profile id to unfavorite.' })
+  @ApiNoContentResponse({ description: 'The tutor is no longer favorited.' })
   async removeFavorite(
     @CurrentUser() user: AuthenticatedUser,
     @Param('tutorId') tutorId: string,

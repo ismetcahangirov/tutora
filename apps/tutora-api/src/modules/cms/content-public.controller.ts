@@ -1,7 +1,9 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiStandardErrorResponses } from '@common/swagger';
 import type { PublicContentView } from './cms.types';
 import { ContentService } from './content.service';
+import { PublicContentViewDto } from './dto/content-response.dto';
 import { ListPublicContentQueryDto } from './dto/list-public-content-query.dto';
 
 /**
@@ -16,6 +18,11 @@ export class ContentPublicController {
 
   @Get()
   @ApiOperation({ summary: 'List published content, optionally by type and locale' })
+  @ApiOkResponse({
+    description: 'Published content entries, ordered for display.',
+    type: [PublicContentViewDto],
+  })
+  @ApiStandardErrorResponses('badRequest')
   list(@Query() query: ListPublicContentQueryDto): Promise<PublicContentView[]> {
     return this.content.listPublic(query);
   }

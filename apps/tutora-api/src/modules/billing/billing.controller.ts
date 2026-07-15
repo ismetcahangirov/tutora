@@ -8,7 +8,13 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UserRole } from '@prisma/client';
 import { CurrentUser } from '@modules/auth/decorators/current-user.decorator';
 import { Roles } from '@modules/auth/decorators/roles.decorator';
@@ -17,14 +23,21 @@ import { RolesGuard } from '@modules/auth/guards/roles.guard';
 import type { AuthenticatedUser } from '@modules/auth/types/auth.types';
 import type { Paginated } from '@common/pagination/page';
 import { PaginationQueryDto } from '@common/pagination/pagination-query.dto';
+import { ApiPaginatedResponse, ApiStandardErrorResponses } from '@common/swagger';
 import { PaymentsService } from './payments.service';
 import { SubscriptionsService } from './subscriptions.service';
 import type { EntitlementSummary, PaymentView, SubscriptionView } from './billing.types';
+import {
+  EntitlementSummaryDto,
+  PaymentViewDto,
+  SubscriptionViewDto,
+} from './dto/billing-response.dto';
 import { SubscribeDto } from './dto/subscribe.dto';
 
 /** The signed-in user's own subscription, entitlements and payment history (#36). */
 @ApiTags('billing')
 @ApiBearerAuth('bearer')
+@ApiStandardErrorResponses('unauthorized', 'forbidden')
 @Controller({ path: 'billing', version: '1' })
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(UserRole.STUDENT, UserRole.TUTOR, UserRole.ADMIN)
@@ -36,12 +49,18 @@ export class BillingController {
 
   @Get('subscription')
   @ApiOperation({ summary: "The caller's current subscription and entitlements" })
+  @ApiOkResponse({
+    description: "The caller's effective billing standing.",
+    type: EntitlementSummaryDto,
+  })
   summary(@CurrentUser() user: AuthenticatedUser): Promise<EntitlementSummary> {
     return this.subscriptions.getSummary(user.id);
   }
 
   @Post('subscribe')
   @ApiOperation({ summary: 'Subscribe to a plan' })
+  @ApiCreatedResponse({ description: 'The created subscription.', type: SubscriptionViewDto })
+  @ApiStandardErrorResponses('badRequest', 'notFound', 'conflict')
   subscribe(
     @CurrentUser() user: AuthenticatedUser,
     @Body() dto: SubscribeDto,
@@ -52,12 +71,15 @@ export class BillingController {
   @Post('cancel')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Cancel the caller’s subscription at period end' })
+  @ApiOkResponse({ description: 'The cancelled subscription.', type: SubscriptionViewDto })
+  @ApiStandardErrorResponses('notFound', 'conflict')
   cancel(@CurrentUser() user: AuthenticatedUser): Promise<SubscriptionView> {
     return this.subscriptions.cancel(user.id);
   }
 
   @Get('payments')
   @ApiOperation({ summary: 'The caller’s payment history (paginated, newest first)' })
+  @ApiPaginatedResponse(PaymentViewDto)
   listPayments(
     @CurrentUser() user: AuthenticatedUser,
     @Query() query: PaginationQueryDto,

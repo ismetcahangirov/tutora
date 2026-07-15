@@ -1,5 +1,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiStandardErrorResponses } from '@common/swagger';
+import { PublicTutorViewDto } from './dto/tutor-response.dto';
 import { TutorsService } from './tutors.service';
 import type { PublicTutorView } from './tutors.types';
 
@@ -15,6 +17,9 @@ export class TutorPublicController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Get a public tutor profile by id' })
+  @ApiParam({ name: 'id', description: 'Tutor profile id.' })
+  @ApiOkResponse({ description: 'The public tutor profile.', type: PublicTutorViewDto })
+  @ApiStandardErrorResponses('notFound')
   getById(@Param('id') id: string): Promise<PublicTutorView> {
     return this.tutors.getPublicById(id);
   }

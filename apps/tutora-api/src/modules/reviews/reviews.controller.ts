@@ -11,7 +11,15 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UserRole } from '@prisma/client';
 import { CurrentUser } from '@modules/auth/decorators/current-user.decorator';
 import { Roles } from '@modules/auth/decorators/roles.decorator';
@@ -20,7 +28,9 @@ import { RolesGuard } from '@modules/auth/guards/roles.guard';
 import type { AuthenticatedUser } from '@modules/auth/types/auth.types';
 import type { Paginated } from '@common/pagination/page';
 import { PaginationQueryDto } from '@common/pagination/pagination-query.dto';
+import { ApiPaginatedResponse, ApiStandardErrorResponses } from '@common/swagger';
 import { CreateReviewDto } from './dto/create-review.dto';
+import { ReviewViewDto } from './dto/review-response.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { ReviewsService } from './reviews.service';
 import type { ReviewView } from './reviews.types';
@@ -28,6 +38,7 @@ import type { ReviewView } from './reviews.types';
 /** A student authoring reviews for tutors they completed a session with (#33). */
 @ApiTags('reviews')
 @ApiBearerAuth('bearer')
+@ApiStandardErrorResponses('unauthorized', 'forbidden')
 @Controller({ path: 'reviews', version: '1' })
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(UserRole.STUDENT)
@@ -36,6 +47,8 @@ export class ReviewsController {
 
   @Post()
   @ApiOperation({ summary: 'Review a completed session' })
+  @ApiCreatedResponse({ description: 'The created review.', type: ReviewViewDto })
+  @ApiStandardErrorResponses('badRequest', 'notFound', 'conflict')
   create(
     @CurrentUser() user: AuthenticatedUser,
     @Body() dto: CreateReviewDto,
@@ -45,6 +58,7 @@ export class ReviewsController {
 
   @Get('me')
   @ApiOperation({ summary: 'List the student’s own reviews (paginated)' })
+  @ApiPaginatedResponse(ReviewViewDto)
   listMine(
     @CurrentUser() user: AuthenticatedUser,
     @Query() query: PaginationQueryDto,
@@ -54,6 +68,9 @@ export class ReviewsController {
 
   @Patch(':id')
   @ApiOperation({ summary: 'Edit one of the student’s own reviews' })
+  @ApiParam({ name: 'id', description: 'Review id.' })
+  @ApiOkResponse({ description: 'The updated review.', type: ReviewViewDto })
+  @ApiStandardErrorResponses('badRequest', 'notFound')
   update(
     @CurrentUser() user: AuthenticatedUser,
     @Param('id') id: string,
@@ -65,6 +82,9 @@ export class ReviewsController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete one of the student’s own reviews' })
+  @ApiParam({ name: 'id', description: 'Review id.' })
+  @ApiNoContentResponse({ description: 'The review was deleted.' })
+  @ApiStandardErrorResponses('notFound')
   async remove(@CurrentUser() user: AuthenticatedUser, @Param('id') id: string): Promise<void> {
     await this.reviews.remove(user.id, id);
   }

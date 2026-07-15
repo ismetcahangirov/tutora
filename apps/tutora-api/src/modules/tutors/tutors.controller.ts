@@ -11,17 +11,31 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UserRole } from '@prisma/client';
 import { CurrentUser } from '@modules/auth/decorators/current-user.decorator';
 import { Roles } from '@modules/auth/decorators/roles.decorator';
 import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 import { RolesGuard } from '@modules/auth/guards/roles.guard';
 import type { AuthenticatedUser } from '@modules/auth/types/auth.types';
+import { ApiStandardErrorResponses } from '@common/swagger';
 import { AddTutorDistrictDto } from './dto/add-tutor-district.dto';
 import { AddTutorLanguageDto } from './dto/add-tutor-language.dto';
 import { CreateCertificateDto } from './dto/create-certificate.dto';
 import { SetAvailabilityDto } from './dto/set-availability.dto';
+import {
+  AvailabilitySlotViewDto,
+  CertificateViewDto,
+  TutorProfileViewDto,
+} from './dto/tutor-response.dto';
 import { UpdateTutorProfileDto } from './dto/update-tutor-profile.dto';
 import { UpsertTutorSubjectDto } from './dto/upsert-tutor-subject.dto';
 import { TutorAvailabilityService } from './tutor-availability.service';
@@ -36,6 +50,7 @@ import type { AvailabilitySlotView, CertificateView, TutorProfileView } from './
  */
 @ApiTags('tutors')
 @ApiBearerAuth('bearer')
+@ApiStandardErrorResponses('unauthorized', 'forbidden')
 @Controller({ path: 'tutors', version: '1' })
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(UserRole.TUTOR)
@@ -48,12 +63,16 @@ export class TutorsController {
 
   @Get('me')
   @ApiOperation({ summary: 'Get the authenticated tutor profile' })
+  @ApiOkResponse({ description: 'The authenticated tutor profile.', type: TutorProfileViewDto })
+  @ApiStandardErrorResponses('notFound')
   getMe(@CurrentUser() user: AuthenticatedUser): Promise<TutorProfileView> {
     return this.tutors.getOwnProfile(user.id);
   }
 
   @Patch('me')
   @ApiOperation({ summary: 'Update the authenticated tutor profile' })
+  @ApiOkResponse({ description: 'The updated tutor profile.', type: TutorProfileViewDto })
+  @ApiStandardErrorResponses('badRequest', 'conflict')
   updateMe(
     @CurrentUser() user: AuthenticatedUser,
     @Body() dto: UpdateTutorProfileDto,
@@ -64,12 +83,19 @@ export class TutorsController {
   @Post('me/verification')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Submit the profile for admin verification' })
+  @ApiOkResponse({
+    description: 'The profile submitted for verification.',
+    type: TutorProfileViewDto,
+  })
+  @ApiStandardErrorResponses('conflict')
   submitVerification(@CurrentUser() user: AuthenticatedUser): Promise<TutorProfileView> {
     return this.tutors.submitForVerification(user.id);
   }
 
   @Put('me/subjects')
   @ApiOperation({ summary: 'Add or update a taught subject' })
+  @ApiOkResponse({ description: 'The updated tutor profile.', type: TutorProfileViewDto })
+  @ApiStandardErrorResponses('badRequest', 'notFound')
   upsertSubject(
     @CurrentUser() user: AuthenticatedUser,
     @Body() dto: UpsertTutorSubjectDto,
@@ -79,6 +105,9 @@ export class TutorsController {
 
   @Delete('me/subjects/:subjectId')
   @ApiOperation({ summary: 'Remove a taught subject' })
+  @ApiParam({ name: 'subjectId', description: 'Subject id.' })
+  @ApiOkResponse({ description: 'The updated tutor profile.', type: TutorProfileViewDto })
+  @ApiStandardErrorResponses('notFound')
   removeSubject(
     @CurrentUser() user: AuthenticatedUser,
     @Param('subjectId') subjectId: string,
@@ -88,6 +117,8 @@ export class TutorsController {
 
   @Put('me/districts')
   @ApiOperation({ summary: 'Add a service district' })
+  @ApiOkResponse({ description: 'The updated tutor profile.', type: TutorProfileViewDto })
+  @ApiStandardErrorResponses('badRequest', 'notFound')
   addDistrict(
     @CurrentUser() user: AuthenticatedUser,
     @Body() dto: AddTutorDistrictDto,
@@ -97,6 +128,9 @@ export class TutorsController {
 
   @Delete('me/districts/:districtId')
   @ApiOperation({ summary: 'Remove a service district' })
+  @ApiParam({ name: 'districtId', description: 'District id.' })
+  @ApiOkResponse({ description: 'The updated tutor profile.', type: TutorProfileViewDto })
+  @ApiStandardErrorResponses('notFound')
   removeDistrict(
     @CurrentUser() user: AuthenticatedUser,
     @Param('districtId') districtId: string,
@@ -106,6 +140,8 @@ export class TutorsController {
 
   @Put('me/languages')
   @ApiOperation({ summary: 'Add a spoken language' })
+  @ApiOkResponse({ description: 'The updated tutor profile.', type: TutorProfileViewDto })
+  @ApiStandardErrorResponses('badRequest', 'notFound')
   addLanguage(
     @CurrentUser() user: AuthenticatedUser,
     @Body() dto: AddTutorLanguageDto,
@@ -115,6 +151,9 @@ export class TutorsController {
 
   @Delete('me/languages/:languageId')
   @ApiOperation({ summary: 'Remove a spoken language' })
+  @ApiParam({ name: 'languageId', description: 'Language id.' })
+  @ApiOkResponse({ description: 'The updated tutor profile.', type: TutorProfileViewDto })
+  @ApiStandardErrorResponses('notFound')
   removeLanguage(
     @CurrentUser() user: AuthenticatedUser,
     @Param('languageId') languageId: string,
@@ -124,12 +163,21 @@ export class TutorsController {
 
   @Get('me/availability')
   @ApiOperation({ summary: 'Get the weekly availability windows' })
+  @ApiOkResponse({
+    description: 'The weekly availability windows.',
+    type: [AvailabilitySlotViewDto],
+  })
   getAvailability(@CurrentUser() user: AuthenticatedUser): Promise<AvailabilitySlotView[]> {
     return this.availability.getOwnAvailability(user.id);
   }
 
   @Put('me/availability')
   @ApiOperation({ summary: 'Replace the weekly availability windows' })
+  @ApiOkResponse({
+    description: 'The replaced availability windows.',
+    type: [AvailabilitySlotViewDto],
+  })
+  @ApiStandardErrorResponses('badRequest')
   setAvailability(
     @CurrentUser() user: AuthenticatedUser,
     @Body() dto: SetAvailabilityDto,
@@ -139,12 +187,15 @@ export class TutorsController {
 
   @Get('me/certificates')
   @ApiOperation({ summary: 'List the tutor certificates' })
+  @ApiOkResponse({ description: 'The tutor certificates.', type: [CertificateViewDto] })
   listCertificates(@CurrentUser() user: AuthenticatedUser): Promise<CertificateView[]> {
     return this.relations.listCertificates(user.id);
   }
 
   @Post('me/certificates')
   @ApiOperation({ summary: 'Add a certificate (enters PENDING review)' })
+  @ApiCreatedResponse({ description: 'The created certificate.', type: CertificateViewDto })
+  @ApiStandardErrorResponses('badRequest')
   addCertificate(
     @CurrentUser() user: AuthenticatedUser,
     @Body() dto: CreateCertificateDto,
@@ -155,6 +206,9 @@ export class TutorsController {
   @Delete('me/certificates/:certificateId')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete a certificate' })
+  @ApiParam({ name: 'certificateId', description: 'Certificate id.' })
+  @ApiNoContentResponse({ description: 'The certificate was deleted.' })
+  @ApiStandardErrorResponses('notFound')
   async removeCertificate(
     @CurrentUser() user: AuthenticatedUser,
     @Param('certificateId') certificateId: string,
