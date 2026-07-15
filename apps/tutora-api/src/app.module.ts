@@ -24,6 +24,7 @@ import { DashboardModule } from '@modules/dashboard/dashboard.module';
 import { AuditModule } from '@modules/audit/audit.module';
 import { SettingsModule } from '@modules/settings/settings.module';
 import { CmsModule } from '@modules/cms/cms.module';
+import { TranslationsModule } from '@modules/translations/translations.module';
 import { HealthModule } from '@modules/health/health.module';
 
 @Module({
@@ -55,6 +56,7 @@ import { HealthModule } from '@modules/health/health.module';
     AuditModule,
     SettingsModule,
     CmsModule,
+    TranslationsModule,
     HealthModule,
   ],
 })

@@ -25,6 +25,7 @@
     "max": "Bu sahə icazə verilən maksimumdan yuxarıdır.",
     "maxLength": "Bu sahə çox uzundur.",
     "slug": "Bu sahə kiçik hərflərlə slug olmalıdır (hərflər, rəqəmlər və defis).",
-    "key": "Bu sahə kiçik hərflərlə açar olmalıdır (hərflər, rəqəmlər və alt xətt)."
+    "key": "Bu sahə kiçik hərflərlə açar olmalıdır (hərflər, rəqəmlər və alt xətt).",
+    "i18nKey": "Bu sahə düzgün tərcümə açarı olmalıdır (hərflər, rəqəmlər, nöqtə və alt xətt)."
   }
 }

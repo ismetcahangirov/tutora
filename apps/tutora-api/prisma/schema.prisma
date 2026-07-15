@@ -156,6 +156,7 @@ model User {
   featureFlags   FeatureFlag[]   @relation("FeatureFlagUpdatedBy")
   systemSettings SystemSetting[] @relation("SystemSettingUpdatedBy")
   contentEntries ContentEntry[]  @relation("ContentEntryAuthor")
+  translations   Translation[]   @relation("TranslationUpdatedBy")
 }
 
 model RefreshToken {
@@ -601,4 +602,29 @@ model ContentEntry {
   @@index([type, status, order])
   @@index([status, publishedAt])
   @@index([authorId])
+}
+
+// ---------- Localization (#85) ----------
+
+/// A single managed translation key (epic #81, #85). `key` is the dot-namespaced
+/// identifier consumers look up (e.g. `filter.district`), scoped by `namespace`
+/// (e.g. `search`) so the effective public key is `namespace.key`. `values` holds
+/// the per-locale copy — a partial `{ az?, en?, ru? }` map — so a key can be
+/// filled in one language and completed later. `updatedBy` records the last
+/// editor and nulls out if that admin is removed. Together with the static
+/// catalogs these form an over-the-air localization layer clients can merge.
+model Translation {
+  id          String   @id @default(cuid())
+  namespace   String   @default("common")
+  key         String
+  description String?
+  values      Json     @default("{}")
+  updatedById String?
+  updatedBy   User?    @relation("TranslationUpdatedBy", fields: [updatedById], references: [id], onDelete: SetNull)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([namespace, key])
+  @@index([namespace])
+  @@index([updatedById])
 }
