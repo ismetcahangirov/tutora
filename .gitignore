@@ -40,6 +40,13 @@ ios/
 prisma/*.db
 prisma/*.db-journal
 
+# Playwright E2E (issue #98) — reports, traces, and run metadata
+**/e2e/.results/
+**/e2e/.report/
+**/playwright-report/
+**/test-results/
+.playwright-mcp/
+
 # Logs & caches
 *.log
 npm-debug.log*
