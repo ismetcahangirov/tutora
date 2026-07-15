@@ -1,6 +1,7 @@
 name: E2E
 
-# Browser-driven end-to-end tests (issue #98). Kept separate from the unit-test
+# End-to-end tests: browser-driven web/admin journeys (Playwright, #98) and the
+# API critical-path suite (Supertest, #96). Kept separate from the unit-test
 # matrix in ci.yml so the fast gates aren't slowed by browser downloads and the
 # heavier server boots. One leg per surface keeps the checks independently
 # visible.
@@ -62,3 +63,19 @@ jobs:
           path: apps/tutora-${{ matrix.app }}/e2e/.report
           retention-days: 7
           if-no-files-found: ignore
+
+  # API critical-path E2E (#96). Boots the composed Nest app over Supertest with
+  # infrastructure (Prisma, Redis, mail, storage) mocked, so it needs no browser
+  # download and no Postgres/Redis service — just the workspace and a JS runtime.
+  api:
+    name: e2e (api)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup workspace
+        uses: ./.github/actions/setup
+
+      - name: Run API E2E
+        run: pnpm --filter @tutora/api run test:e2e
