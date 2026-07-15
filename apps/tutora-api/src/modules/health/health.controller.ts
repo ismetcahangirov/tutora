@@ -1,12 +1,20 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { SkipThrottle } from '@nestjs/throttler';
 import { Public } from '@modules/auth/decorators/public.decorator';
 
 /** Shape returned by the liveness endpoint. */
 export class HealthCheckResponse {
+  @ApiProperty({
+    description: 'Liveness marker; always `ok` when the service responds.',
+    example: 'ok',
+  })
   status!: 'ok';
+
+  @ApiProperty({ description: 'Process uptime in seconds.', example: 1234.56 })
   uptime!: number;
+
+  @ApiProperty({ type: String, format: 'date-time', description: 'When the check ran (ISO 8601).' })
   timestamp!: string;
 }
 
@@ -22,7 +30,8 @@ export class HealthController {
    */
   @Public()
   @Get()
-  @ApiOkResponse({ type: HealthCheckResponse })
+  @ApiOperation({ summary: 'Liveness probe' })
+  @ApiOkResponse({ description: 'Service is healthy.', type: HealthCheckResponse })
   check(): HealthCheckResponse {
     return {
       status: 'ok',

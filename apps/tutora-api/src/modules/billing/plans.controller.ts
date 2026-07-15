@@ -1,7 +1,8 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PlansService } from './plans.service';
 import type { PlanView } from './billing.types';
+import { PlanViewDto } from './dto/billing-response.dto';
 
 /**
  * Public subscription-plan catalogue (#36). Unauthenticated — pricing is shown
@@ -14,6 +15,7 @@ export class PlansController {
 
   @Get()
   @ApiOperation({ summary: 'List active subscription plans (public)' })
+  @ApiOkResponse({ description: 'Active plans available to subscribe to.', type: [PlanViewDto] })
   list(): Promise<PlanView[]> {
     return this.plans.listActive();
   }

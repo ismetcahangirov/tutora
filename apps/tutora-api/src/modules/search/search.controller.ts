@@ -1,6 +1,8 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { Paginated } from '@common/pagination/page';
+import { ApiPaginatedResponse, ApiStandardErrorResponses } from '@common/swagger';
+import { TutorSearchItemDto } from './dto/search-response.dto';
 import { SearchTutorsQueryDto } from './dto/search-tutors-query.dto';
 import { SearchService } from './search.service';
 import type { TutorSearchItem } from './search.types';
@@ -16,6 +18,8 @@ export class SearchController {
 
   @Get('tutors')
   @ApiOperation({ summary: 'Search published tutors by filters (paginated)' })
+  @ApiPaginatedResponse(TutorSearchItemDto)
+  @ApiStandardErrorResponses('badRequest')
   searchTutors(@Query() query: SearchTutorsQueryDto): Promise<Paginated<TutorSearchItem>> {
     return this.search.searchTutors(query);
   }
