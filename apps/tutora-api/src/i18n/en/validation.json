@@ -25,6 +25,7 @@
     "max": "This field is above the allowed maximum.",
     "maxLength": "This field is too long.",
     "slug": "This field must be a lowercase slug (letters, numbers and hyphens).",
-    "key": "This field must be a lowercase key (letters, numbers and underscores)."
+    "key": "This field must be a lowercase key (letters, numbers and underscores).",
+    "i18nKey": "This field must be a valid translation key (letters, numbers, dots and underscores)."
   }
 }

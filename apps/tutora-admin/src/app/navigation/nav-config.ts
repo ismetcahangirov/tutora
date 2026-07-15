@@ -9,6 +9,7 @@ import {
   Bell,
   CreditCard,
   FileText,
+  Languages,
   LayoutDashboard,
   type LucideIcon,
   MessageSquareWarning,
@@ -74,6 +75,13 @@ export const NAV_ITEMS: readonly NavItem[] = [
     permission: 'notifications:send',
   },
   { id: 'cms', path: '/cms', labelKey: 'nav.cms', icon: FileText, permission: 'cms:manage' },
+  {
+    id: 'translations',
+    path: '/translations',
+    labelKey: 'nav.translations',
+    icon: Languages,
+    permission: 'cms:manage',
+  },
   {
     id: 'payments',
     path: '/payments',

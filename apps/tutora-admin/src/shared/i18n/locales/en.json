@@ -32,6 +32,7 @@
     "taxonomy": "Taxonomy",
     "notifications": "Notifications",
     "cms": "Content",
+    "translations": "Translations",
     "payments": "Payments",
     "roles": "Roles & permissions",
     "settings": "Settings",
@@ -664,6 +665,50 @@
       "title": "Delete this content?",
       "description": "“{{title}}” will be removed. This can’t be undone.",
       "error": "Couldn’t delete the content. Please try again."
+    }
+  },
+  "translations": {
+    "title": "Translations",
+    "subtitle": "Manage over-the-air translation keys and their copy in each language.",
+    "add": "Add key",
+    "search": "Search by key",
+    "filters": {
+      "namespace": "Namespace",
+      "clear": "Clear"
+    },
+    "columns": {
+      "key": "Key",
+      "namespace": "Namespace",
+      "locales": "Languages",
+      "updated": "Updated",
+      "actions": "Actions"
+    },
+    "coverage": {
+      "present": "{{language}}: translated",
+      "missing": "{{language}}: missing"
+    },
+    "empty": {
+      "title": "No translation keys yet"
+    },
+    "form": {
+      "createTitle": "Add translation key",
+      "editTitle": "Edit translation key",
+      "subtitle": "A key is grouped by namespace; fill its copy in each language.",
+      "namespace": "Namespace",
+      "namespaceInvalid": "Use a single word: letters and numbers, starting with a letter.",
+      "key": "Key",
+      "keyInvalid": "Use dot-separated segments (letters, numbers, dots and underscores).",
+      "description": "Description",
+      "descriptionPlaceholder": "Optional context for translators.",
+      "descriptionInvalid": "Description is too long (max 300 characters).",
+      "values": "Translations",
+      "error": "Couldn’t save the translation. The key may already exist in this namespace.",
+      "create": "Create"
+    },
+    "delete": {
+      "title": "Delete this key?",
+      "description": "“{{key}}” will be removed. This can’t be undone.",
+      "error": "Couldn’t delete the key. Please try again."
     }
   },
   "rbac": {

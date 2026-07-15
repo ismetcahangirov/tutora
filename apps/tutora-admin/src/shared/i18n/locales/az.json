@@ -32,6 +32,7 @@
     "taxonomy": "Taksonomiya",
     "notifications": "Bildirişlər",
     "cms": "Məzmun",
+    "translations": "Tərcümələr",
     "payments": "Ödənişlər",
     "roles": "Rollar və icazələr",
     "settings": "Parametrlər",
@@ -664,6 +665,50 @@
       "title": "Bu məzmunu silmək?",
       "description": "“{{title}}” silinəcək. Bunu geri qaytarmaq olmaz.",
       "error": "Məzmunu silmək olmadı. Yenidən cəhd et."
+    }
+  },
+  "translations": {
+    "title": "Tərcümələr",
+    "subtitle": "Efirdən yenilənən tərcümə açarlarını və hər dildəki mətnini idarə et.",
+    "add": "Açar əlavə et",
+    "search": "Açara görə axtar",
+    "filters": {
+      "namespace": "Ad sahəsi",
+      "clear": "Təmizlə"
+    },
+    "columns": {
+      "key": "Açar",
+      "namespace": "Ad sahəsi",
+      "locales": "Dillər",
+      "updated": "Yeniləndi",
+      "actions": "Əməliyyatlar"
+    },
+    "coverage": {
+      "present": "{{language}}: tərcümə edilib",
+      "missing": "{{language}}: yoxdur"
+    },
+    "empty": {
+      "title": "Hələ tərcümə açarı yoxdur"
+    },
+    "form": {
+      "createTitle": "Tərcümə açarı əlavə et",
+      "editTitle": "Tərcümə açarını redaktə et",
+      "subtitle": "Açar ad sahəsinə görə qruplaşdırılır; mətnini hər dildə doldur.",
+      "namespace": "Ad sahəsi",
+      "namespaceInvalid": "Bir söz istifadə et: hərf və rəqəmlər, hərflə başlayaraq.",
+      "key": "Açar",
+      "keyInvalid": "Nöqtə ilə ayrılmış hissələr istifadə et (hərf, rəqəm, nöqtə və alt xətt).",
+      "description": "Təsvir",
+      "descriptionPlaceholder": "Tərcüməçilər üçün əlavə kontekst.",
+      "descriptionInvalid": "Təsvir çox uzundur (ən çox 300 simvol).",
+      "values": "Tərcümələr",
+      "error": "Tərcüməni saxlamaq olmadı. Açar bu ad sahəsində artıq mövcud ola bilər.",
+      "create": "Yarat"
+    },
+    "delete": {
+      "title": "Bu açarı silmək?",
+      "description": "“{{key}}” silinəcək. Bunu geri qaytarmaq olmaz.",
+      "error": "Açarı silmək olmadı. Yenidən cəhd et."
     }
   },
   "rbac": {
