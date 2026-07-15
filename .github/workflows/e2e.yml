@@ -1,0 +1,64 @@
+name: E2E
+
+# Browser-driven end-to-end tests (issue #98). Kept separate from the unit-test
+# matrix in ci.yml so the fast gates aren't slowed by browser downloads and the
+# heavier server boots. One leg per surface keeps the checks independently
+# visible.
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+concurrency:
+  group: e2e-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  playwright:
+    name: e2e (${{ matrix.app }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - app: web
+            filter: '@tutora/web'
+          - app: admin
+            filter: '@tutora/admin'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup workspace
+        uses: ./.github/actions/setup
+
+      # Pin the browser cache to the installed Playwright version so a bump
+      # invalidates it automatically.
+      - name: Resolve Playwright version
+        id: pw
+        run: echo "version=$(pnpm --filter ${{ matrix.filter }} exec playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}
+
+      - name: Install Playwright Chromium
+        run: pnpm --filter ${{ matrix.filter }} exec playwright install --with-deps chromium
+
+      - name: Run E2E
+        run: pnpm --filter ${{ matrix.filter }} run test:e2e
+
+      - name: Upload report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ matrix.app }}
+          path: apps/tutora-${{ matrix.app }}/e2e/.report
+          retention-days: 7
+          if-no-files-found: ignore
