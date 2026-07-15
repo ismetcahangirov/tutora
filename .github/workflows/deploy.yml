@@ -32,10 +32,14 @@ jobs:
             dockerfile: apps/tutora-api/Dockerfile
           - app: admin
             dockerfile: apps/tutora-admin/Dockerfile
-            build_args: VITE_API_URL=${{ vars.PUBLIC_API_URL }}
+            build_args: |
+              VITE_API_URL=${{ vars.PUBLIC_API_URL }}
+              VITE_SENTRY_DSN=${{ vars.ADMIN_SENTRY_DSN }}
           - app: web
             dockerfile: apps/tutora-web/Dockerfile
-            build_args: NEXT_PUBLIC_API_URL=${{ vars.PUBLIC_API_URL }}
+            build_args: |
+              NEXT_PUBLIC_API_URL=${{ vars.PUBLIC_API_URL }}
+              NEXT_PUBLIC_SENTRY_DSN=${{ vars.WEB_SENTRY_DSN }}
           - app: backup
             dockerfile: docker/backup/Dockerfile
     steps:

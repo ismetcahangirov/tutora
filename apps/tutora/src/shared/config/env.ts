@@ -17,6 +17,14 @@ const schema = z.object({
   EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID: z.string().default(''),
   EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID: z.string().default(''),
   EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID: z.string().default(''),
+  /**
+   * Sentry crash + performance reporting (issue #92). Optional: with an empty
+   * DSN the SDK is never initialized, so dev/CI builds run without any Sentry
+   * credentials. `ENVIRONMENT` tags events per release channel (development /
+   * preview / production) and is set by the matching EAS build profile.
+   */
+  EXPO_PUBLIC_SENTRY_DSN: z.string().default(''),
+  EXPO_PUBLIC_SENTRY_ENVIRONMENT: z.string().default('production'),
 });
 
 export type Env = z.infer<typeof schema>;
@@ -26,4 +34,6 @@ export const env: Env = schema.parse({
   EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
   EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
   EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID,
+  EXPO_PUBLIC_SENTRY_DSN: process.env.EXPO_PUBLIC_SENTRY_DSN,
+  EXPO_PUBLIC_SENTRY_ENVIRONMENT: process.env.EXPO_PUBLIC_SENTRY_ENVIRONMENT,
 });

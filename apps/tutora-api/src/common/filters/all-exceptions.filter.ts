@@ -6,6 +6,7 @@ import {
   HttpStatus,
   Logger,
 } from '@nestjs/common';
+import * as Sentry from '@sentry/nestjs';
 import type { Request, Response } from 'express';
 
 /** The project's standard error envelope (see CLAUDE.md → Error Handling). */
@@ -68,6 +69,12 @@ export class AllExceptionsFilter implements ExceptionFilter {
         `Unhandled exception on ${request.method} ${request.originalUrl}`,
         exception instanceof Error ? exception.stack : String(exception),
       );
+    }
+
+    // Report unexpected failures (5xx) to Sentry; 4xx client errors are noise.
+    // A no-op when Sentry was not initialized (no SENTRY_DSN — see instrument.ts).
+    if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
+      Sentry.captureException(exception);
     }
 
     const envelope: ErrorEnvelope = {

@@ -13,9 +13,12 @@ WORKDIR /app
 ENV PNPM_HOME=/pnpm
 ENV PATH=$PNPM_HOME:$PATH
 
-# NEXT_PUBLIC_* is inlined at build time.
+# NEXT_PUBLIC_* is inlined at build time (into both the server and client
+# bundles), so the API URL and Sentry DSN are provided as build arguments.
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ARG NEXT_PUBLIC_SENTRY_DSN
+ENV NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN
 ENV NEXT_TELEMETRY_DISABLED=1
 
 COPY . .
