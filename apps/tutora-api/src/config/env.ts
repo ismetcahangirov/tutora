@@ -21,6 +21,13 @@ export const envSchema = z.object({
   // Google OAuth — audience the mobile idToken is verified against.
   GOOGLE_CLIENT_ID: z.string().min(1, 'GOOGLE_CLIENT_ID is required'),
 
+  // Browser origins allowed to call the API (CORS). Comma-separated exact
+  // origins, e.g. "https://tutora.vercel.app,https://admin.tutora.vercel.app".
+  // Optional: when unset the API reflects the request origin so first-boot and
+  // local dev work before the web/admin URLs are known — set this to the exact
+  // deployed origins in production to lock cross-origin access down.
+  CORS_ORIGINS: z.string().optional(),
+
   // Mailer (localized transactional email — #84). All optional: when SMTP_HOST
   // is unset the mailer uses a no-network transport so the API runs without
   // credentials in dev/test/CI.

@@ -19,6 +19,18 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
   app.enableVersioning({ type: VersioningType.URI });
+
+  // CORS: let the browser frontends (web landing + admin panel) call the API.
+  // Exact origins come from CORS_ORIGINS (comma-separated); with none configured
+  // we reflect the request origin so first-boot works before the deployed URLs
+  // are known. `credentials` is on for cookie-based admin/web sessions.
+  const corsOrigins = process.env.CORS_ORIGINS?.split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+  app.enableCors({
+    origin: corsOrigins && corsOrigins.length > 0 ? corsOrigins : true,
+    credentials: true,
+  });
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
