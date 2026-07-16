@@ -29,6 +29,13 @@ RUN pnpm --filter @tutora/api build
 # generated Prisma client and the Prisma CLI both ship — the CLI lets a one-shot
 # "migrate" service run `prisma migrate deploy` from this same image. Slimming
 # with `pnpm deploy --prod` is a deliberate later optimization.
+#
+# NOTE: `.npmrc` sets `node-linker=hoisted`, so in this workspace pnpm resolves
+# each package's dependencies into that package's OWN node_modules — the API's
+# runtime tree (@nestjs/*, @sentry/*, @prisma/client + the generated client)
+# lives under apps/tutora-api/node_modules, NOT the workspace-root node_modules.
+# Both must ship: the root tree for hoisted/CLI bins, the app tree for the deps
+# `node dist/main.js` actually requires at startup.
 FROM base AS runner
 ENV NODE_ENV=production
 # Run as the unprivileged user that ships with the node image.
@@ -36,6 +43,7 @@ COPY --from=build --chown=node:node /app/node_modules ./node_modules
 COPY --from=build --chown=node:node /app/package.json ./package.json
 COPY --from=build --chown=node:node /app/pnpm-workspace.yaml ./pnpm-workspace.yaml
 COPY --from=build --chown=node:node /app/apps/tutora-api/package.json ./apps/tutora-api/package.json
+COPY --from=build --chown=node:node /app/apps/tutora-api/node_modules ./apps/tutora-api/node_modules
 COPY --from=build --chown=node:node /app/apps/tutora-api/dist ./apps/tutora-api/dist
 COPY --from=build --chown=node:node /app/apps/tutora-api/prisma ./apps/tutora-api/prisma
 
