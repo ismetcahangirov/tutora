@@ -24,11 +24,20 @@ const schema = z.object({
 
 export type Env = z.infer<typeof schema>;
 
+/**
+ * Docker build args (and unset shell vars) arrive as EMPTY STRINGS, not
+ * `undefined` — and `.default()` only fills in `undefined`. A blank
+ * `NEXT_PUBLIC_API_URL=` would otherwise reach `z.url()` and fail the build
+ * ("Invalid URL"). Collapse blanks to `undefined` so the defaults above apply.
+ */
+const blankToUndefined = (value: string | undefined): string | undefined =>
+  value && value.trim().length > 0 ? value : undefined;
+
 export const env: Env = schema.parse({
-  NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
-  NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
-  NEXT_PUBLIC_IOS_URL: process.env.NEXT_PUBLIC_IOS_URL,
-  NEXT_PUBLIC_ANDROID_URL: process.env.NEXT_PUBLIC_ANDROID_URL,
-  NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
-  NEXT_PUBLIC_SENTRY_ENVIRONMENT: process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT,
+  NEXT_PUBLIC_SITE_URL: blankToUndefined(process.env.NEXT_PUBLIC_SITE_URL),
+  NEXT_PUBLIC_API_URL: blankToUndefined(process.env.NEXT_PUBLIC_API_URL),
+  NEXT_PUBLIC_IOS_URL: blankToUndefined(process.env.NEXT_PUBLIC_IOS_URL),
+  NEXT_PUBLIC_ANDROID_URL: blankToUndefined(process.env.NEXT_PUBLIC_ANDROID_URL),
+  NEXT_PUBLIC_SENTRY_DSN: blankToUndefined(process.env.NEXT_PUBLIC_SENTRY_DSN),
+  NEXT_PUBLIC_SENTRY_ENVIRONMENT: blankToUndefined(process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT),
 });
