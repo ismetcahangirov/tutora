@@ -8,7 +8,9 @@
  *
  * `NotificationsBridge` (#50) sits inside the auth + query context so it can
  * register the device for push and react to notifications once a user is signed
- * in; it renders nothing.
+ * in; it renders nothing. `UpdatesBridge` sits alongside it and renders the
+ * OTA update prompt (dialog → progress bar → branded restart) when one is
+ * available; otherwise it also renders nothing.
  */
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -21,7 +23,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ToastProvider } from '@/components/ui';
 import { AuthProvider } from '@features/auth';
 import { NotificationsBridge } from '@features/notifications';
-import { useOtaUpdates } from '@/shared/hooks/useOtaUpdates';
+import { UpdatesBridge } from '@features/updates';
 import { I18nProvider } from '@/shared/i18n';
 import { initSentry, wrapWithSentry } from '@/shared/observability/sentry';
 import { QueryProvider } from '@/shared/query';
@@ -34,7 +36,6 @@ SplashScreen.preventAutoHideAsync();
 
 function RootLayout() {
   const { fontsLoaded, fontError } = useAppFonts();
-  useOtaUpdates();
 
   useEffect(() => {
     if (fontsLoaded || fontError) {
@@ -59,6 +60,7 @@ function RootLayout() {
                 <ToastProvider>
                   <StatusBar style="auto" />
                   <NotificationsBridge />
+                  <UpdatesBridge />
                   <Stack screenOptions={{ headerShown: false }} />
                 </ToastProvider>
               </AuthProvider>
