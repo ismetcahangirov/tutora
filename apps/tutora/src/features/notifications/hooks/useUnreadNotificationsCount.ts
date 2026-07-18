@@ -7,6 +7,8 @@
  */
 import { useQuery } from '@tanstack/react-query';
 
+import { useAuth } from '@features/auth';
+
 import { getUnreadCount } from '../api/notifications.api';
 import { UNREAD_POLL_INTERVAL, notificationKeys } from '../constants';
 
@@ -15,10 +17,14 @@ export type UseUnreadNotificationsCountResult = {
 };
 
 export function useUnreadNotificationsCount(): UseUnreadNotificationsCountResult {
+  const { isAuthenticated } = useAuth();
   const query = useQuery({
     queryKey: notificationKeys.unreadCount(),
     queryFn: getUnreadCount,
     refetchInterval: UNREAD_POLL_INTERVAL,
+    // Only poll once a session exists. Without this the badge races ahead of
+    // token restoration on cold start and 401s with no token to refresh.
+    enabled: isAuthenticated,
   });
 
   return { count: query.data?.count ?? 0 };

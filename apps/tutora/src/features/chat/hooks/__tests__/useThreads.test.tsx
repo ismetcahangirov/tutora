@@ -12,6 +12,8 @@ import type { ChatThread, Paginated } from '@features/chat/types';
 import { useThreads } from '../useThreads';
 
 jest.mock('@features/chat/api/chat.api', () => ({ listThreads: jest.fn() }));
+// The hook gates its query on the session; a signed-in user keeps it enabled.
+jest.mock('@features/auth', () => ({ useAuth: () => ({ isAuthenticated: true }) }));
 const mockedList = listThreads as jest.MockedFunction<typeof listThreads>;
 
 function makeThread(id: string): ChatThread {
