@@ -88,6 +88,14 @@
     "today": "Today",
     "yesterday": "Yesterday"
   },
+  "updates": {
+    "title": "Update available",
+    "message": "A new version of the app is ready.",
+    "later": "Later",
+    "updateNow": "Update now",
+    "downloading": "Downloading...",
+    "restarting": "Restarting..."
+  },
   "notifications": {
     "title": "Notifications",
     "empty": "No notifications yet",

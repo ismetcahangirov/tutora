@@ -88,6 +88,14 @@
     "today": "Bu gün",
     "yesterday": "Dünən"
   },
+  "updates": {
+    "title": "Yeni versiya var",
+    "message": "Tətbiqin yeni versiyası hazırdır.",
+    "later": "Sonra",
+    "updateNow": "Yenilə",
+    "downloading": "Yüklənir...",
+    "restarting": "Tətbiq yenilənir..."
+  },
   "notifications": {
     "title": "Bildirişlər",
     "empty": "Hələ bildiriş yoxdur",

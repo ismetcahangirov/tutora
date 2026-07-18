@@ -43,11 +43,19 @@
         {
           "iosUrlScheme": "com.googleusercontent.apps.808774514256-fp6lpvvdpshfefrvvpn734b8tsvfqeij"
         }
-      ]
+      ],
+      "./plugins/withReleaseSigning"
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "a94bdf36-a00e-49a9-98b1-ef1d399e92b0"
+      }
+    },
+    "owner": "rockdrago"
   }
 }

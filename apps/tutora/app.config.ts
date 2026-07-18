@@ -24,6 +24,10 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       // The update endpoint is derived from the EAS project id, populated by
       // `eas init`. Left unset until then so dev builds don't point at a stub.
       ...(easProjectId ? { url: `https://u.expo.dev/${easProjectId}` } : {}),
+      // `eas build` would normally stamp the channel from eas.json; since
+      // release APKs here are built by plain Gradle in CI (no EAS Build),
+      // this header does that job instead.
+      requestHeaders: { 'expo-channel-name': 'production' },
     },
     extra: {
       ...config.extra,
