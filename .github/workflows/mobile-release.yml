@@ -1,0 +1,118 @@
+name: Mobile Release
+
+# Builds and releases the Android app without EAS Build: a push to main
+# always publishes a free EAS Update (JS-only changes), and additionally
+# builds + signs a release APK only when apps/tutora/app.json's version was
+# bumped — the same signal the app's runtimeVersion:{policy:"appVersion"}
+# already relies on for OTA compatibility.
+on:
+  push:
+    branches: [main]
+    paths: ['apps/tutora/**']
+  workflow_dispatch:
+
+concurrency:
+  group: mobile-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  version-check:
+    name: Check for a native-affecting version bump
+    runs-on: ubuntu-latest
+    outputs:
+      native_changed: ${{ steps.compare.outputs.native_changed }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Compare expo.version against the parent commit
+        id: compare
+        run: |
+          CURRENT=$(jq -r '.expo.version' apps/tutora/app.json)
+          PREVIOUS=$(git show HEAD~1:apps/tutora/app.json 2>/dev/null | jq -r '.expo.version' 2>/dev/null || echo "none")
+          echo "current=$CURRENT previous=$PREVIOUS"
+          if [ "$CURRENT" != "$PREVIOUS" ]; then
+            echo "native_changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "native_changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  ota-update:
+    name: Publish OTA update
+    runs-on: ubuntu-latest
+    env:
+      EAS_PROJECT_ID: ${{ vars.EAS_PROJECT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup
+
+      - uses: expo/expo-github-action@v8
+        with:
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Publish update
+        working-directory: apps/tutora
+        run: |
+          eas update --branch production --channel production \
+            --environment production --non-interactive \
+            --message "${{ github.event.head_commit.message }}"
+
+  build-apk:
+    name: Build & release APK
+    needs: version-check
+    if: needs.version-check.outputs.native_changed == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    env:
+      EAS_PROJECT_ID: ${{ vars.EAS_PROJECT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Accept SDK licenses
+        run: yes | sdkmanager --licenses > /dev/null || true
+
+      - name: Restore keystore
+        working-directory: apps/tutora
+        run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > release.keystore
+
+      - name: Bump versionCode
+        working-directory: apps/tutora
+        run: |
+          node -e "
+            const fs = require('fs');
+            const config = JSON.parse(fs.readFileSync('app.json', 'utf8'));
+            config.expo.android = config.expo.android || {};
+            config.expo.android.versionCode = ${{ github.run_number }};
+            fs.writeFileSync('app.json', JSON.stringify(config, null, 2) + '\n');
+          "
+
+      - name: Prebuild
+        working-directory: apps/tutora
+        run: npx expo prebuild --platform android --no-install
+
+      - name: Build release APK
+        working-directory: apps/tutora/android
+        env:
+          ANDROID_RELEASE_KEYSTORE_PATH: ../release.keystore
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: ./gradlew assembleRelease
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: android-v${{ github.run_number }}
+          name: Android v${{ github.run_number }}
+          make_latest: true
+          files: apps/tutora/android/app/build/outputs/apk/release/app-release.apk
