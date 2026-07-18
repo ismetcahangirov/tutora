@@ -11,6 +11,8 @@ import { getUnreadCount } from '@features/notifications/api/notifications.api';
 import { useUnreadNotificationsCount } from '../useUnreadNotificationsCount';
 
 jest.mock('@features/notifications/api/notifications.api', () => ({ getUnreadCount: jest.fn() }));
+// The hook gates its query on the session; a signed-in user keeps it enabled.
+jest.mock('@features/auth', () => ({ useAuth: () => ({ isAuthenticated: true }) }));
 const mockedGetUnreadCount = getUnreadCount as jest.MockedFunction<typeof getUnreadCount>;
 
 function createWrapper() {
