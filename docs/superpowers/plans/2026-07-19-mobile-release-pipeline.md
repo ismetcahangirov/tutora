@@ -7,18 +7,20 @@ JS-only changes as free EAS Update OTA updates, and replace the app's silent
 background-reload hook with a visible update prompt (progress bar, graceful
 restart).
 
-**Architecture:** A new `mobile-release.yml` workflow runs a `fingerprint` job
-that decides whether native code changed since the last release; an
-`ota-update` job always publishes to EAS Update; a conditional `build-apk` job
-regenerates the native Android project (`expo prebuild`), signs it with a
-CI-held keystore via a small local config plugin, and uploads the APK to
-GitHub Releases. On-device, `expo-updates`' official `useUpdates()` hook
-drives a new `UpdatePromptModal` (Yenilə/Sonra → progress bar → branded
-restart overlay), replacing the current `useOtaUpdates` silent-reload hook.
+**Architecture:** A new `mobile-release.yml` workflow runs a `version-check`
+job that decides whether `apps/tutora/app.json`'s `expo.version` changed since
+the parent commit (the same signal the app's existing `runtimeVersion:
+{"policy": "appVersion"}` already relies on); an `ota-update` job always
+publishes to EAS Update; a conditional `build-apk` job regenerates the native
+Android project (`expo prebuild`), signs it with a CI-held keystore via a
+small local config plugin, and uploads the APK to GitHub Releases. On-device,
+`expo-updates`' official `useUpdates()` hook drives a new `UpdatePromptModal`
+(Yenilə/Sonra → progress bar → branded restart overlay), replacing the
+current `useOtaUpdates` silent-reload hook.
 
-**Tech Stack:** Expo SDK 57 (`expo-updates` ~57.0.6), `@expo/fingerprint`,
-`@expo/config-plugins` (already transitive via `expo`), `eas-cli` /
-`expo/expo-github-action@v8`, GitHub Actions, Jest + `@testing-library/react-native`.
+**Tech Stack:** Expo SDK 57 (`expo-updates` ~57.0.6), `@expo/config-plugins`
+(already transitive via `expo`), `eas-cli` / `expo/expo-github-action@v8`,
+GitHub Actions, Jest + `@testing-library/react-native`.
 
 **Reference spec:** `docs/superpowers/specs/2026-07-19-mobile-release-pipeline-design.md`
 
@@ -41,9 +43,32 @@ If this hasn't happened yet, stop here and do it before Task 1.
 
 **Files:**
 
-- Modify: `apps/tutora/app.json`
+- Modify: `apps/tutora/app.config.ts`
+- Modify: `apps/tutora/.env` (git-ignored, local only)
 
-- [ ] **Step 1: Log in to EAS**
+**Context discovered mid-implementation:** `apps/tutora/app.config.ts` already
+exists (from the earlier #90/#92 devops PR) and already derives
+`runtimeVersion: {"policy": "appVersion"}`, `updates.url`, and
+`extra.eas.projectId` from an `EAS_PROJECT_ID` environment variable — none of
+that needs to be hand-written into `app.json`. This task only needs to (a)
+obtain a real project id via `eas init`, (b) set `EAS_PROJECT_ID` wherever the
+build runs, and (c) add the missing `updates.requestHeaders` channel key.
+
+- [ ] **Step 1: Log out of any existing eas-cli session first**
+
+```bash
+cd apps/tutora
+npx eas-cli whoami
+```
+
+If this prints an account that isn't the one you intend to use for this
+project, log out before continuing:
+
+```bash
+npx eas-cli logout
+```
+
+- [ ] **Step 2: Log in to EAS**
 
 Run (interactively, in a real terminal — this opens a login prompt):
 
@@ -54,72 +79,81 @@ npx eas-cli login
 
 Expected: prints `Logged in as <your-username>`.
 
-- [ ] **Step 2: Configure the project for EAS Update**
+- [ ] **Step 3: Create the EAS project**
 
 ```bash
-npx eas-cli update:configure
+npx eas-cli init
 ```
 
-Expected output includes something like `Created EAS project <owner>/tutora`
-and a confirmation that `app.json` was updated. This command **writes**
-`runtimeVersion`, `updates.url`, and `extra.eas.projectId` into
-`apps/tutora/app.json` for you — do not hand-edit those three fields, only
-verify they now exist.
+Expected: prompts to create a new project (confirm yes), then prints the new
+project's id (a UUID). Copy it.
 
-- [ ] **Step 3: Verify and check in the resulting app.json**
+- [ ] **Step 4: Set `EAS_PROJECT_ID` locally**
+
+Add to `apps/tutora/.env` (create the line if the file doesn't have it yet):
+
+```
+EAS_PROJECT_ID=<the-uuid-from-step-3>
+```
+
+- [ ] **Step 5: Add the update channel to app.config.ts**
+
+In `apps/tutora/app.config.ts`, find the `updates` block inside `withUpdates`
+and add `requestHeaders` (this is what makes a manually-built APK announce
+itself as being on the `production` channel, since we never run `eas build`,
+which is what would normally set this):
+
+```ts
+  const withUpdates: ExpoConfig = {
+    ...(config as ExpoConfig),
+    // Serve an update only to builds of the same app version, so a JS bundle is
+    // never delivered to a native binary it is incompatible with.
+    runtimeVersion: { policy: 'appVersion' },
+    updates: {
+      ...config.updates,
+      // The update endpoint is derived from the EAS project id, populated by
+      // `eas init`. Left unset until then so dev builds don't point at a stub.
+      ...(easProjectId ? { url: `https://u.expo.dev/${easProjectId}` } : {}),
+      requestHeaders: { 'expo-channel-name': 'production' },
+    },
+```
+
+- [ ] **Step 6: Verify the config resolves**
 
 ```bash
-cat apps/tutora/app.json
+cd apps/tutora
+npx expo config --type public --json | grep -A3 '"updates"'
 ```
 
-Confirm it now contains an `updates.url` (starts with
-`https://u.expo.dev/`) and `extra.eas.projectId`. If `runtimeVersion` was set
-to anything other than `{"policy": "fingerprint"}` (e.g. `{"policy":
-"sdkVersion"}`, which is the CLI's default), edit it by hand now:
+Expected: shows `"url": "https://u.expo.dev/<your-project-id>"` and
+`"requestHeaders": { "expo-channel-name": "production" }`.
 
-```json
-"runtimeVersion": { "policy": "fingerprint" },
-```
-
-- [ ] **Step 4: Set the update channel**
-
-Add this key to the top-level `expo` object in `apps/tutora/app.json` (this is
-what makes a manually-built APK announce itself as being on the `production`
-channel, since we never run `eas build`, which is what would normally set this
-for you):
-
-```json
-"updates": {
-  "url": "https://u.expo.dev/<the-projectId-from-step-2>",
-  "requestHeaders": {
-    "expo-channel-name": "production"
-  }
-}
-```
-
-(Merge this into the `updates` key `eas init` already created — don't
-duplicate the key.)
-
-- [ ] **Step 5: Commit**
+- [ ] **Step 7: Commit the code change (not the .env)**
 
 ```bash
-git add apps/tutora/app.json
-git commit -m "feat(mobile): link project to EAS Update, set fingerprint runtime + production channel"
+git add apps/tutora/app.config.ts
+git commit -m "feat(mobile): set the EAS Update production channel header"
 ```
 
-- [ ] **Step 6: Create the CI access token**
+- [ ] **Step 8: Create the CI access token**
 
 At https://expo.dev → your account → Access Tokens → "Create token". Copy it.
-**Do not paste it into chat** — go straight to step 7.
+**Do not paste it into chat** — go straight to step 9.
 
-- [ ] **Step 7: Store it as a GitHub secret (you run this, not the agent)**
+- [ ] **Step 9: Store secrets/variables as a GitHub secret/variable (you run this, not the agent)**
 
 ```bash
 gh secret set EXPO_TOKEN
 ```
 
 (It will prompt for the value on stdin — paste the token there, not on the
-command line, so it never lands in shell history.)
+command line, so it never lands in shell history.) Then, since a project id
+isn't sensitive, store it as a plain repository **variable** (not a secret) so
+the CI workflow can read it:
+
+```bash
+gh variable set EAS_PROJECT_ID --body "<the-uuid-from-step-3>"
+```
 
 ---
 
@@ -407,62 +441,7 @@ git commit -m "feat(mobile): inject release signing config via a local Expo plug
 
 ---
 
-### Task 4: Native-change fingerprint script
-
-**Files:**
-
-- Create: `apps/tutora/scripts/print-fingerprint.js`
-- Modify: `apps/tutora/package.json` (add `@expo/fingerprint` devDependency)
-
-- [ ] **Step 1: Add the dependency**
-
-```bash
-cd apps/tutora
-pnpm add -D @expo/fingerprint
-```
-
-- [ ] **Step 2: Write the script**
-
-Create `apps/tutora/scripts/print-fingerprint.js`:
-
-```js
-// Prints the project's native fingerprint hash to stdout — used by CI to
-// decide whether a native rebuild (new APK) is needed, or the change is
-// JS-only (OTA update via EAS Update is enough). Not a Jest-covered unit
-// (it's a thin CLI wrapper); verified by running it, see Task 6.
-const { createFingerprintAsync } = require('@expo/fingerprint');
-
-createFingerprintAsync(process.cwd())
-  .then((fingerprint) => {
-    process.stdout.write(fingerprint.hash);
-  })
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  });
-```
-
-- [ ] **Step 3: Run it locally to confirm it works**
-
-```bash
-cd apps/tutora
-node scripts/print-fingerprint.js
-```
-
-Expected: prints a single hex hash string (e.g. `a1b2c3...`) with no error.
-
-- [ ] **Step 4: Commit**
-
-Run from the repo root (not `apps/tutora`):
-
-```bash
-git add apps/tutora/scripts/print-fingerprint.js apps/tutora/package.json pnpm-lock.yaml
-git commit -m "feat(mobile): add native fingerprint script for CI rebuild detection"
-```
-
----
-
-### Task 5: `mobile-release.yml` workflow
+### Task 4: `mobile-release.yml` workflow
 
 **Files:**
 
@@ -486,44 +465,23 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  fingerprint:
-    name: Check native fingerprint
+  version-check:
+    name: Check for a native-affecting version bump
     runs-on: ubuntu-latest
     outputs:
       native_changed: ${{ steps.compare.outputs.native_changed }}
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          fetch-depth: 2
 
-      - uses: pnpm/action-setup@v4
-
-      - name: Install deps
-        run: pnpm install --frozen-lockfile
-
-      - name: Compute current fingerprint
-        id: current
-        working-directory: apps/tutora
-        run: echo "hash=$(node scripts/print-fingerprint.js)" >> "$GITHUB_OUTPUT"
-
-      - name: Fetch previous release fingerprint
-        id: previous
-        run: |
-          gh release download --pattern fingerprint.txt --dir /tmp/prev-release --clobber 2>/dev/null || true
-          if [ -f /tmp/prev-release/fingerprint.txt ]; then
-            echo "hash=$(cat /tmp/prev-release/fingerprint.txt)" >> "$GITHUB_OUTPUT"
-          else
-            echo "hash=none" >> "$GITHUB_OUTPUT"
-          fi
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Compare
+      - name: Compare expo.version against the parent commit
         id: compare
         run: |
-          if [ "${{ steps.current.outputs.hash }}" != "${{ steps.previous.outputs.hash }}" ]; then
+          CURRENT=$(jq -r '.expo.version' apps/tutora/app.json)
+          PREVIOUS=$(git show HEAD~1:apps/tutora/app.json 2>/dev/null | jq -r '.expo.version' 2>/dev/null || echo "none")
+          echo "current=$CURRENT previous=$PREVIOUS"
+          if [ "$CURRENT" != "$PREVIOUS" ]; then
             echo "native_changed=true" >> "$GITHUB_OUTPUT"
           else
             echo "native_changed=false" >> "$GITHUB_OUTPUT"
@@ -532,6 +490,8 @@ jobs:
   ota-update:
     name: Publish OTA update
     runs-on: ubuntu-latest
+    env:
+      EAS_PROJECT_ID: ${{ vars.EAS_PROJECT_ID }}
     steps:
       - uses: actions/checkout@v4
 
@@ -557,9 +517,11 @@ jobs:
 
   build-apk:
     name: Build & release APK
-    needs: fingerprint
-    if: needs.fingerprint.outputs.native_changed == 'true' || github.event_name == 'workflow_dispatch'
+    needs: version-check
+    if: needs.version-check.outputs.native_changed == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    env:
+      EAS_PROJECT_ID: ${{ vars.EAS_PROJECT_ID }}
     steps:
       - uses: actions/checkout@v4
 
@@ -610,19 +572,13 @@ jobs:
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: ./gradlew assembleRelease
 
-      - name: Save fingerprint for next run's comparison
-        working-directory: apps/tutora
-        run: node scripts/print-fingerprint.js > fingerprint.txt
-
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: android-v${{ github.run_number }}
           name: Android v${{ github.run_number }}
           make_latest: true
-          files: |
-            apps/tutora/android/app/build/outputs/apk/release/app-release.apk
-            apps/tutora/fingerprint.txt
+          files: apps/tutora/android/app/build/outputs/apk/release/app-release.apk
 ```
 
 - [ ] **Step 2: Commit**
@@ -640,22 +596,22 @@ gh workflow run "Mobile Release"
 gh run watch
 ```
 
-Expected: `fingerprint` job succeeds and reports `native_changed=true` (no
-prior release exists yet), `ota-update` succeeds, `build-apk` runs and
+Expected: `version-check` job succeeds and reports `native_changed=true` (no
+parent release commit yet), `ota-update` succeeds, `build-apk` runs and
 succeeds, and a new GitHub Release `android-v<N>` appears with
-`app-release.apk` + `fingerprint.txt` attached. If any step fails, fix it and
-re-run before moving to Task 6 — the client-side work in Tasks 6-9 is only
-useful once this pipeline actually produces a working signed APK.
+`app-release.apk` attached. If any step fails, fix it and re-run before moving
+to Task 5 — the client-side work in Tasks 5-8 is only useful once this
+pipeline actually produces a working signed APK.
 
 ---
 
-### Task 6: `useAppUpdates` hook (replaces `useOtaUpdates`)
+### Task 5: `useAppUpdates` hook (replaces `useOtaUpdates`)
 
 **Files:**
 
 - Create: `apps/tutora/src/features/updates/hooks/useAppUpdates.ts`
 - Test: `apps/tutora/src/features/updates/hooks/__tests__/useAppUpdates.test.ts`
-- Delete (later, in Task 8): `apps/tutora/src/shared/hooks/useOtaUpdates.ts` and its test
+- Delete (later, in Task 7): `apps/tutora/src/shared/hooks/useOtaUpdates.ts` and its test
 
 - [ ] **Step 1: Write the failing test**
 
@@ -911,7 +867,7 @@ git commit -m "feat(mobile): add useAppUpdates hook with visible status states"
 
 ---
 
-### Task 7: `UpdatePromptModal` component + i18n keys
+### Task 6: `UpdatePromptModal` component + i18n keys
 
 **Files:**
 
@@ -1176,7 +1132,7 @@ git commit -m "feat(mobile): add UpdatePromptModal with progress bar and i18n co
 
 ---
 
-### Task 8: `UpdatesBridge` + wire into root layout, remove the old hook
+### Task 7: `UpdatesBridge` + wire into root layout, remove the old hook
 
 **Files:**
 
@@ -1286,7 +1242,7 @@ git commit -m "feat(mobile): wire UpdatesBridge into root layout, remove silent 
 
 ---
 
-### Task 9: End-to-end verification (manual, on a real device)
+### Task 8: End-to-end verification (manual, on a real device)
 
 **Files:** none — this is a verification pass, not a code change.
 
@@ -1310,9 +1266,10 @@ not Expo Go).
 
 - [ ] **Step 2: Ship a JS-only change and confirm the OTA prompt appears**
 
-Make any trivial JS/text change on `main` (e.g. a copy tweak) and push it.
-Confirm in `gh run watch` that `fingerprint` reports `native_changed=false`
-and only `ota-update` ran (no new GitHub Release was created). Foreground the
+Make any trivial JS/text change on `main` (e.g. a copy tweak) — **without**
+bumping `apps/tutora/app.json`'s `version` — and push it. Confirm in
+`gh run watch` that `version-check` reports `native_changed=false` and only
+`ota-update` ran (no new GitHub Release was created). Foreground the
 installed app (background it, then bring it back) and confirm:
 
 - The **"Yeni versiya var"** modal appears with **Yenilə** / **Sonra**.
@@ -1324,13 +1281,13 @@ installed app (background it, then bring it back) and confirm:
 
 - [ ] **Step 3: Confirm a native change triggers a real rebuild**
 
-Add a trivial native-affecting change (e.g. bump a dependency version in
-`apps/tutora/package.json`) and push to `main`. Confirm `fingerprint` reports
-`native_changed=true`, `build-apk` runs, and a new GitHub Release with a new
-APK appears. Confirm the **old** installed APK does **not** get an OTA prompt
-for this change (different `runtimeVersion` — expected and correct), and that
-installing the **new** APK (`adb install -r`, no uninstall) succeeds without
-a signature mismatch error (this is the real proof the keystore reuse from
+Bump `apps/tutora/app.json`'s `expo.version` (e.g. `1.0.0` → `1.0.1`) and push
+to `main`. Confirm `version-check` reports `native_changed=true`, `build-apk`
+runs, and a new GitHub Release with a new APK appears. Confirm the **old**
+installed APK does **not** get an OTA prompt for this change (different
+`runtimeVersion` — expected and correct), and that installing the **new** APK
+(`adb install -r`, no uninstall) succeeds without a signature mismatch error
+(this is the real proof the keystore reuse from
 Task 2 is wired correctly end to end).
 
 ---
