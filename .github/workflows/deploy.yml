@@ -104,3 +104,22 @@ jobs:
             "cd '$DEPLOY_PATH' && \
              docker compose -f docker-compose.prod.yml pull && \
              docker compose -f docker-compose.prod.yml up -d --remove-orphans"
+
+  # Render's own GitHub App auto-deploy has proven unreliable for this repo
+  # (Auto-Deploy is "On Commit" in its settings, but no deploy has ever fired
+  # from a push — every deploy in its history was manual). Rather than debug
+  # an opaque third-party webhook, drive it explicitly from the pipeline that
+  # already gates on a successful image build: a Render deploy hook is just a
+  # POST URL, so hitting it here is the same trigger a working webhook would
+  # send, minus the dependency on Render's GitHub integration actually working.
+  # Set the repo secret RENDER_DEPLOY_HOOK_URL (Render dashboard → tutora
+  # service → Settings → Deploy → Deploy Hook) to enable; unset, this is skipped.
+  deploy-render-api:
+    name: trigger Render deploy (api)
+    needs: build-push
+    if: ${{ secrets.RENDER_DEPLOY_HOOK_URL != '' }}
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Call the Render deploy hook
+        run: curl -fsS -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
