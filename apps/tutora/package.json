@@ -48,6 +48,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@expo/config-plugins": "~57.0.3",
     "@testing-library/react-native": "^14.0.1",
     "@tutora/config": "workspace:*",
     "@types/jest": "~29.5.14",
