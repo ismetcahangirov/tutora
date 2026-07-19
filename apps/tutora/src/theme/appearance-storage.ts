@@ -8,11 +8,9 @@
  * the student's light/dark/system choice survives app restarts. Kept out of the
  * theme barrel so importing tokens/hooks stays free of a storage dependency.
  */
-import { createMMKV, type MMKV } from 'react-native-mmkv';
+import { storage } from '@/shared/lib';
 
 import type { ThemePreference } from './theme';
-
-const storage: MMKV = createMMKV({ id: 'tutora' });
 
 const APPEARANCE_KEY = 'settings.appearance';
 const VALID_PREFERENCES: readonly ThemePreference[] = ['system', 'light', 'dark'];
