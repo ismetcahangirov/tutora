@@ -11,6 +11,9 @@ on:
     paths: ['apps/tutora/**']
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 concurrency:
   group: mobile-release-${{ github.ref }}
   cancel-in-progress: false
@@ -65,6 +68,8 @@ jobs:
     needs: version-check
     if: needs.version-check.outputs.native_changed == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     env:
       EAS_PROJECT_ID: ${{ vars.EAS_PROJECT_ID }}
     steps:
