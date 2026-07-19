@@ -55,10 +55,12 @@ jobs:
 
       - name: Publish update
         working-directory: apps/tutora
+        env:
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
           eas update --branch production --channel production \
             --environment production --non-interactive \
-            --message "${{ github.event.head_commit.message }}"
+            --message "$COMMIT_MESSAGE"
 
   build-apk:
     name: Build & release APK
