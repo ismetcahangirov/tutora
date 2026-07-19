@@ -138,7 +138,9 @@ describe('Users self-service (integration)', () => {
     expect(res.body).toMatchObject({ name: 'Ada L.' });
   });
 
-  it('PATCH /me sets the role and completes onboarding', async () => {
+  it('PATCH /me sets the role and completes onboarding for a not-yet-onboarded user', async () => {
+    prismaMock.user.findUnique.mockResolvedValueOnce({ ...dbUser, onboardingCompleted: false });
+
     const res = await request(httpServer)
       .patch('/api/v1/users/me')
       .set('Authorization', `Bearer ${signAccessToken()}`)
@@ -150,6 +152,15 @@ describe('Users self-service (integration)', () => {
       where: { id: 'user-1' },
       data: { role: 'TUTOR', onboardingCompleted: true },
     });
+  });
+
+  it('PATCH /me rejects a role change once onboarding is already complete, with 403', async () => {
+    await request(httpServer)
+      .patch('/api/v1/users/me')
+      .set('Authorization', `Bearer ${signAccessToken()}`)
+      .send({ role: 'TUTOR' })
+      .expect(403);
+    expect(prismaMock.user.update).not.toHaveBeenCalled();
   });
 
   it('DELETE /me soft-deletes the account and returns 204', async () => {

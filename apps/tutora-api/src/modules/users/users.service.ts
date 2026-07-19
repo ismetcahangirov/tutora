@@ -1,4 +1,10 @@
-import { Injectable, Logger, NotFoundException, Optional } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  Logger,
+  NotFoundException,
+  Optional,
+} from '@nestjs/common';
 import { Prisma, type User } from '@prisma/client';
 import { PrismaService } from '@/prisma/prisma.service';
 import { MailService } from '@modules/mail/mail.service';
@@ -31,9 +37,13 @@ export class UsersService {
 
   /**
    * Updates the authenticated user's own editable fields. Every field is
-   * optional; supplying `role` also completes onboarding (#23). The id always
-   * comes from the verified token, never the client, and `UpdateMeDto` rejects
-   * non-selectable roles so this endpoint cannot escalate privilege.
+   * optional; supplying `role` also completes onboarding (#23) — but only
+   * once. The id always comes from the verified token, never the client, and
+   * `UpdateMeDto` rejects non-selectable roles so this endpoint cannot escalate
+   * privilege *to* ADMIN. Without also checking the user's current state, it
+   * could still silently downgrade an out-of-band role (ADMIN, or a repeat
+   * onboarding call) to STUDENT/TUTOR — so a role change is refused once
+   * onboarding is already complete.
    */
   async updateMe(id: string, dto: UpdateMeDto): Promise<UserSummary> {
     const data: Prisma.UserUpdateInput = {};
@@ -41,6 +51,13 @@ export class UsersService {
     if (dto.avatarUrl !== undefined) data.avatarUrl = dto.avatarUrl;
     if (dto.locale !== undefined) data.locale = dto.locale;
     if (dto.role !== undefined) {
+      const current = await this.prisma.user.findUnique({ where: { id } });
+      if (!current) {
+        throw new NotFoundException('User not found');
+      }
+      if (current.onboardingCompleted) {
+        throw new ForbiddenException('Role can only be chosen once, during onboarding');
+      }
       data.role = dto.role;
       data.onboardingCompleted = true;
     }

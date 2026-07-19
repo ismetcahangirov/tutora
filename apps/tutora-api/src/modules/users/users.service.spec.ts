@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { PrismaService } from '@/prisma/prisma.service';
 import { MailService } from '@modules/mail/mail.service';
@@ -163,6 +163,11 @@ describe('UsersService.getSummaryById', () => {
 describe('UsersService.updateMe', () => {
   it('sets the chosen role, completes onboarding, and returns the summary', async () => {
     const prisma = buildPrismaMock();
+    prisma.user.findUnique.mockResolvedValueOnce({
+      ...summaryUser,
+      role: null,
+      onboardingCompleted: false,
+    });
     prisma.user.update.mockResolvedValueOnce({ ...summaryUser, role: 'TUTOR' });
 
     const { service } = await buildService(prisma);
@@ -173,6 +178,34 @@ describe('UsersService.updateMe', () => {
       data: { role: 'TUTOR', onboardingCompleted: true },
     });
     expect(result).toMatchObject({ id: 'u1', role: 'TUTOR', onboardingCompleted: true });
+  });
+
+  it('rejects a role change once onboarding is already complete, protecting an out-of-band role like ADMIN from being overwritten', async () => {
+    const prisma = buildPrismaMock();
+    prisma.user.findUnique.mockResolvedValueOnce({
+      ...summaryUser,
+      role: 'ADMIN',
+      onboardingCompleted: true,
+    });
+
+    const { service } = await buildService(prisma);
+
+    await expect(service.updateMe('u1', { role: 'TUTOR' })).rejects.toBeInstanceOf(
+      ForbiddenException,
+    );
+    expect(prisma.user.update).not.toHaveBeenCalled();
+  });
+
+  it('throws NotFoundException (fails closed) when choosing a role for a user that no longer exists', async () => {
+    const prisma = buildPrismaMock();
+    prisma.user.findUnique.mockResolvedValueOnce(null);
+
+    const { service } = await buildService(prisma);
+
+    await expect(service.updateMe('missing', { role: 'TUTOR' })).rejects.toBeInstanceOf(
+      NotFoundException,
+    );
+    expect(prisma.user.update).not.toHaveBeenCalled();
   });
 
   it('updates only the provided profile fields without touching onboarding', async () => {
