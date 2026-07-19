@@ -8,12 +8,11 @@
  * The store owns id + timestamp generation so callers pass only the meaningful
  * fields, and it enforces the `SAVED_SEARCH_LIMIT` cap by rejecting further saves.
  */
-import { createMMKV, type MMKV } from 'react-native-mmkv';
+import { storage } from '@/shared/lib';
 
 import { SAVED_SEARCH_LIMIT, SAVED_SEARCH_STORAGE_KEY } from '../constants';
 import type { NewSavedSearch, SavedSearch } from '../types';
 
-const storage: MMKV = createMMKV({ id: 'tutora' });
 const listeners = new Set<() => void>();
 
 // Monotonic suffix so two saves in the same millisecond still get distinct ids.

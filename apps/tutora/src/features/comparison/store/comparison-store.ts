@@ -12,12 +12,11 @@
  * appear left-to-right in the order the student added them. Adding is capped at
  * `COMPARISON_LIMIT`.
  */
-import { createMMKV, type MMKV } from 'react-native-mmkv';
+import { storage } from '@/shared/lib';
 
 import { COMPARISON_LIMIT, COMPARISON_STORAGE_KEY } from '../constants';
 import type { ComparisonEntry } from '../types';
 
-const storage: MMKV = createMMKV({ id: 'tutora' });
 const listeners = new Set<() => void>();
 
 // Stable in-memory snapshot; hydrated lazily from MMKV, replaced only on write.

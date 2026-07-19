@@ -11,7 +11,7 @@
  * Mirrors the thin-wrapper-over-MMKV idiom used by the i18n layer, so MMKV is
  * mocked in tests via the same jest stub.
  */
-import { createMMKV, type MMKV } from 'react-native-mmkv';
+import { storage } from '@/shared/lib';
 
 import type { FavoriteTutor } from '../types';
 
@@ -20,7 +20,6 @@ type FavoriteMap = Record<string, FavoriteTutor>;
 
 const STORAGE_KEY = 'favorites.tutors';
 
-const storage: MMKV = createMMKV({ id: 'tutora' });
 const listeners = new Set<() => void>();
 
 // Stable in-memory snapshot; hydrated lazily from MMKV, replaced only on write.

@@ -1,11 +1,4 @@
-import { createMMKV, type MMKV } from 'react-native-mmkv';
-
-/**
- * Persistent key-value store for the app (MMKV — issue #82). Mirrors the storage
- * seam the theme provider anticipated; kept behind this thin wrapper so callers
- * depend on a small API, not MMKV directly, and it can be mocked/swapped freely.
- */
-const storage: MMKV = createMMKV({ id: 'tutora' });
+import { storage } from '@/shared/lib';
 
 const LANGUAGE_KEY = 'settings.language';
 
