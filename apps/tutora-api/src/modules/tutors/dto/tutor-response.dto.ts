@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CertificateStatus, LessonFormat, VerificationStatus, Weekday } from '@prisma/client';
+import {
+  CertificateStatus,
+  LessonFormat,
+  PricingPeriod,
+  VerificationStatus,
+  Weekday,
+} from '@prisma/client';
 
 /**
  * Response shapes for the tutors endpoints. These mirror the view interfaces in
@@ -23,7 +29,16 @@ export class AvailabilitySlotViewDto {
   endMinute!: number;
 }
 
-/** A subject the tutor teaches, with an optional per-subject price override. */
+/** One (period → amount) price point, e.g. an hourly or a monthly rate. */
+export class PricingTierViewDto {
+  @ApiProperty({ enum: PricingPeriod, enumName: 'PricingPeriod' })
+  period!: PricingPeriod;
+
+  @ApiProperty({ description: 'Amount for this billing period.' })
+  amount!: number;
+}
+
+/** A subject the tutor teaches, with optional per-subject price-override tiers. */
 export class TutorSubjectViewDto {
   @ApiProperty({ description: 'Subject id.' })
   subjectId!: string;
@@ -35,11 +50,10 @@ export class TutorSubjectViewDto {
   slug!: string;
 
   @ApiProperty({
-    type: Number,
-    nullable: true,
-    description: 'Price for this subject overriding the base rate, if set.',
+    type: [PricingTierViewDto],
+    description: 'Price-override tiers for this subject; empty means "use the base rate".',
   })
-  priceOverride!: number | null;
+  pricingTiers!: PricingTierViewDto[];
 }
 
 /** A service district the tutor covers. */
@@ -122,8 +136,15 @@ export class TutorProfileViewDto {
   @ApiProperty({ description: 'Years of teaching experience.' })
   experienceYears!: number;
 
-  @ApiProperty({ description: 'Base hourly rate.' })
-  hourlyRate!: number;
+  @ApiProperty({
+    type: Number,
+    nullable: true,
+    description: 'The HOURLY base tier’s amount, or null if not set.',
+  })
+  hourlyRate!: number | null;
+
+  @ApiProperty({ type: [PricingTierViewDto], description: 'The base rate, one entry per period.' })
+  pricingTiers!: PricingTierViewDto[];
 
   @ApiProperty({ description: 'ISO currency code.', example: 'AZN' })
   currency!: string;
@@ -192,8 +213,15 @@ export class PublicTutorViewDto {
   @ApiProperty({ description: 'Years of teaching experience.' })
   experienceYears!: number;
 
-  @ApiProperty({ description: 'Base hourly rate.' })
-  hourlyRate!: number;
+  @ApiProperty({
+    type: Number,
+    nullable: true,
+    description: 'The HOURLY base tier’s amount, or null if not set.',
+  })
+  hourlyRate!: number | null;
+
+  @ApiProperty({ type: [PricingTierViewDto], description: 'The base rate, one entry per period.' })
+  pricingTiers!: PricingTierViewDto[];
 
   @ApiProperty({ description: 'ISO currency code.', example: 'AZN' })
   currency!: string;
@@ -254,8 +282,12 @@ export class AdminTutorListItemDto {
   @ApiProperty({ type: String, nullable: true, description: 'Avatar URL, if set.' })
   avatarUrl!: string | null;
 
-  @ApiProperty({ description: 'Base hourly rate.' })
-  hourlyRate!: number;
+  @ApiProperty({
+    type: Number,
+    nullable: true,
+    description: 'The HOURLY base tier’s amount, or null if not set.',
+  })
+  hourlyRate!: number | null;
 
   @ApiProperty({ description: 'ISO currency code.', example: 'AZN' })
   currency!: string;

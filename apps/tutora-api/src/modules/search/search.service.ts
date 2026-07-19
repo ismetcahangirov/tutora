@@ -10,8 +10,11 @@ import type { TutorSearchItem } from './search.types';
  * Public tutor discovery (#31). Filters the marketplace of published tutors by
  * district, subject, language, format, price band, minimum rating and free
  * text, then paginates and sorts. Every filter column is indexed at the schema
- * level (hourlyRate, ratingAvg, verificationStatus+isPublished, and the join
- * tables), so the query stays cheap as the catalogue grows.
+ * level (hourlyRateCache, ratingAvg, verificationStatus+isPublished, and the
+ * join tables), so the query stays cheap as the catalogue grows. Price
+ * filtering/sorting reads `hourlyRateCache` — a denormalized mirror of the
+ * tutor's HOURLY PricingTier, kept in sync on write (#178) so this can stay a
+ * plain indexed column instead of a per-row subquery into PricingTier.
  */
 @Injectable()
 export class SearchService {
@@ -53,7 +56,7 @@ export class SearchService {
     if (query.format) where.formats = { has: query.format };
 
     if (query.minPrice !== undefined || query.maxPrice !== undefined) {
-      where.hourlyRate = {
+      where.hourlyRateCache = {
         ...(query.minPrice !== undefined ? { gte: query.minPrice } : {}),
         ...(query.maxPrice !== undefined ? { lte: query.maxPrice } : {}),
       };
@@ -71,13 +74,25 @@ export class SearchService {
     return where;
   }
 
-  /** Maps the sort option to a stable, tie-broken Prisma ordering. */
+  /**
+   * Maps the sort option to a stable, tie-broken Prisma ordering. Price sorts
+   * push tutors with no HOURLY rate set to the back regardless of direction —
+   * an unpriced tutor isn't meaningfully "cheapest" or "priciest".
+   */
   private orderFor(sort: TutorSort): Prisma.TutorProfileOrderByWithRelationInput[] {
     switch (sort) {
       case TutorSort.PriceAsc:
-        return [{ hourlyRate: 'asc' }, { ratingAvg: 'desc' }, { id: 'asc' }];
+        return [
+          { hourlyRateCache: { sort: 'asc', nulls: 'last' } },
+          { ratingAvg: 'desc' },
+          { id: 'asc' },
+        ];
       case TutorSort.PriceDesc:
-        return [{ hourlyRate: 'desc' }, { ratingAvg: 'desc' }, { id: 'asc' }];
+        return [
+          { hourlyRateCache: { sort: 'desc', nulls: 'last' } },
+          { ratingAvg: 'desc' },
+          { id: 'asc' },
+        ];
       case TutorSort.Newest:
         return [{ createdAt: 'desc' }, { id: 'asc' }];
       case TutorSort.Rating:

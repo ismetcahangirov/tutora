@@ -17,7 +17,8 @@ export type TutorCardData = {
   avatarUrl: string | null;
   ratingAvg: number;
   ratingCount: number;
-  hourlyRate: number;
+  /** The tutor's HOURLY base rate, or null if they haven't set one. */
+  hourlyRate: number | null;
   currency: string;
   isVerified: boolean;
   subjectNames: string[];

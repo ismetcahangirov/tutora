@@ -71,6 +71,11 @@ describe('adminTutorSchema', () => {
       false,
     );
   });
+
+  it('accepts a null hourlyRate for a tutor with no HOURLY tier set (#178)', () => {
+    const tutor = adminTutorSchema.parse({ ...rawTutor, hourlyRate: null });
+    expect(tutor.hourlyRate).toBeNull();
+  });
 });
 
 describe('CERTIFICATE_DECISIONS', () => {

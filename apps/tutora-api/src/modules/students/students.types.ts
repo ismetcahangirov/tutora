@@ -18,7 +18,8 @@ export interface FavoriteTutorView {
   tutorId: string;
   name: string | null;
   avatarUrl: string | null;
-  hourlyRate: number;
+  /** The tutor's HOURLY base rate, or null if they haven't set one. */
+  hourlyRate: number | null;
   currency: string;
   ratingAvg: number;
   verificationStatus: VerificationStatus;

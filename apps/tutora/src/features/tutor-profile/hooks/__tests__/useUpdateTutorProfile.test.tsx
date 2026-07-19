@@ -26,6 +26,7 @@ const updated: MyTutorProfile = {
   bio: null,
   experienceYears: 3,
   hourlyRate: 45,
+  pricingTiers: [{ period: 'HOURLY', amount: 45 }],
   currency: 'AZN',
   formats: ['ONLINE'],
   verificationStatus: 'VERIFIED',
@@ -51,9 +52,15 @@ describe('useUpdateTutorProfile (#53)', () => {
 
     const { result } = await renderHook(() => useUpdateTutorProfile(), { wrapper });
 
-    await result.current.update({ hourlyRate: 45, isPublished: true });
+    await result.current.update({
+      pricingTiers: [{ period: 'HOURLY', amount: 45 }],
+      isPublished: true,
+    });
 
     await waitFor(() => expect(client.getQueryData(tutorProfileKeys.me())).toEqual(updated));
-    expect(mockedUpdate).toHaveBeenCalledWith({ hourlyRate: 45, isPublished: true });
+    expect(mockedUpdate).toHaveBeenCalledWith({
+      pricingTiers: [{ period: 'HOURLY', amount: 45 }],
+      isPublished: true,
+    });
   });
 });

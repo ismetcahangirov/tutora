@@ -29,7 +29,7 @@ function makeRow(overrides: Record<string, unknown> = {}) {
     id: 'tp1',
     bio: 'Experienced maths tutor',
     experienceYears: 5,
-    hourlyRate: 30,
+    hourlyRateCache: 30,
     currency: 'AZN',
     formats: ['ONLINE'],
     verificationStatus: 'VERIFIED',
@@ -84,7 +84,7 @@ describe('SearchService.searchTutors', () => {
           districts: { some: { districtId: 'd1' } },
           languages: { some: { languageId: 'l1' } },
           formats: { has: 'ONLINE' },
-          hourlyRate: { gte: 10, lte: 50 },
+          hourlyRateCache: { gte: 10, lte: 50 },
           ratingAvg: { gte: 4 },
           OR: [
             { user: { name: { contains: 'ada', mode: 'insensitive' } } },
@@ -107,7 +107,7 @@ describe('SearchService.searchTutors', () => {
           verificationStatus: 'VERIFIED',
           isPublished: true,
           deletedAt: null,
-          hourlyRate: { gte: 20 },
+          hourlyRateCache: { gte: 20 },
         },
       }),
     );
@@ -121,7 +121,11 @@ describe('SearchService.searchTutors', () => {
 
     expect(prisma.tutorProfile.findMany).toHaveBeenCalledWith(
       expect.objectContaining({
-        orderBy: [{ hourlyRate: 'asc' }, { ratingAvg: 'desc' }, { id: 'asc' }],
+        orderBy: [
+          { hourlyRateCache: { sort: 'asc', nulls: 'last' } },
+          { ratingAvg: 'desc' },
+          { id: 'asc' },
+        ],
       }),
     );
   });

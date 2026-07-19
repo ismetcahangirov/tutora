@@ -78,11 +78,19 @@ function ColumnAttributes({ t, tutor }: { t: TFunction; tutor: TutorProfile }) {
 
       <Attribute label={t('comparison.attributes.price')}>
         <Text variant="label" color="primary">
-          {formatPrice(tutor.hourlyRate, tutor.currency)}
-          <Text variant="caption" color="textSecondary">
-            {' '}
-            {t('tutors.perHour')}
-          </Text>
+          {tutor.hourlyRate === null ? (
+            <Text variant="caption" color="textSecondary">
+              {t('tutors.noPriceSet')}
+            </Text>
+          ) : (
+            <>
+              {formatPrice(tutor.hourlyRate, tutor.currency)}
+              <Text variant="caption" color="textSecondary">
+                {' '}
+                {t('tutors.pricePeriod.HOURLY')}
+              </Text>
+            </>
+          )}
         </Text>
       </Attribute>
 

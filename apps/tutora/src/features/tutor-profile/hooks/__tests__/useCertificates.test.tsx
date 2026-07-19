@@ -71,6 +71,7 @@ const baseProfile: MyTutorProfile = {
   bio: null,
   experienceYears: 6,
   hourlyRate: 30,
+  pricingTiers: [{ period: 'HOURLY', amount: 30 }],
   currency: 'AZN',
   formats: ['ONLINE'],
   verificationStatus: 'VERIFIED',

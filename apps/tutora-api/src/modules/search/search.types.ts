@@ -29,7 +29,8 @@ export interface TutorSearchItem {
   avatarUrl: string | null;
   bio: string | null;
   experienceYears: number;
-  hourlyRate: number;
+  /** The tutor's HOURLY base rate, or null if they haven't set one. */
+  hourlyRate: number | null;
   currency: string;
   formats: LessonFormat[];
   verificationStatus: VerificationStatus;

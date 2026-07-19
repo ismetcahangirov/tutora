@@ -26,9 +26,15 @@ export const tutorSummary: TutorSummary = {
 export const tutorProfile: TutorProfile = {
   ...tutorSummary,
   subjects: [
-    { subjectId: 's1', name: 'Mathematics', slug: 'mathematics', priceOverride: null },
-    { subjectId: 's2', name: 'Physics', slug: 'physics', priceOverride: 45 },
+    { subjectId: 's1', name: 'Mathematics', slug: 'mathematics', pricingTiers: [] },
+    {
+      subjectId: 's2',
+      name: 'Physics',
+      slug: 'physics',
+      pricingTiers: [{ period: 'HOURLY', amount: 45 }],
+    },
   ],
+  pricingTiers: [{ period: 'HOURLY', amount: 30 }],
   certificates: [
     {
       id: 'c1',

@@ -14,7 +14,8 @@ export type FavoriteTutor = {
   avatarUrl: string | null;
   ratingAvg: number;
   ratingCount: number;
-  hourlyRate: number;
+  /** The tutor's HOURLY base rate, or null if they haven't set one. */
+  hourlyRate: number | null;
   currency: string;
   isVerified: boolean;
   /** Subject display names, already resolved. */

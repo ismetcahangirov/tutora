@@ -6,6 +6,7 @@ import type { AdminUpdateTutorDto } from './dto/admin-update-tutor.dto';
 import type { ListTutorsQueryDto } from './dto/list-tutors-query.dto';
 import type { ReviewCertificateDto } from './dto/review-certificate.dto';
 import type { SetVerificationDto } from './dto/set-verification.dto';
+import { assertUniquePricingPeriods, resolveHourlyRateCache } from './pricing.util';
 import {
   TUTOR_LIST_SELECT,
   TUTOR_PROFILE_INCLUDE,
@@ -65,7 +66,14 @@ export class AdminTutorsService {
     const data: Prisma.TutorProfileUpdateInput = {};
     if (dto.bio !== undefined) data.bio = dto.bio;
     if (dto.experienceYears !== undefined) data.experienceYears = dto.experienceYears;
-    if (dto.hourlyRate !== undefined) data.hourlyRate = dto.hourlyRate;
+    if (dto.pricingTiers !== undefined) {
+      assertUniquePricingPeriods(dto.pricingTiers);
+      data.hourlyRateCache = resolveHourlyRateCache(dto.pricingTiers);
+      data.pricingTiers = {
+        deleteMany: { tutorSubjectId: null },
+        create: dto.pricingTiers.map((t) => ({ period: t.period, amount: t.amount })),
+      };
+    }
     if (dto.currency !== undefined) data.currency = dto.currency;
     if (dto.formats !== undefined) data.formats = { set: dto.formats };
     if (dto.isPublished !== undefined) data.isPublished = dto.isPublished;

@@ -78,11 +78,19 @@ export function TutorCard({
 
           <View style={styles.metaRow}>
             <Text variant="label" color="primary">
-              {formatPrice(tutor.hourlyRate, tutor.currency)}
-              <Text variant="caption" color="textSecondary">
-                {' '}
-                {t('tutors.perHour')}
-              </Text>
+              {tutor.hourlyRate === null ? (
+                <Text variant="caption" color="textSecondary">
+                  {t('tutors.noPriceSet')}
+                </Text>
+              ) : (
+                <>
+                  {formatPrice(tutor.hourlyRate, tutor.currency)}
+                  <Text variant="caption" color="textSecondary">
+                    {' '}
+                    {t('tutors.pricePeriod.HOURLY')}
+                  </Text>
+                </>
+              )}
             </Text>
             {tutor.formats.length > 0 ? (
               <Text

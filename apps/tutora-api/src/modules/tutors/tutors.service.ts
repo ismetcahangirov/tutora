@@ -2,6 +2,7 @@ import { ConflictException, Injectable, NotFoundException } from '@nestjs/common
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '@/prisma/prisma.service';
 import type { UpdateTutorProfileDto } from './dto/update-tutor-profile.dto';
+import { assertUniquePricingPeriods, resolveHourlyRateCache } from './pricing.util';
 import {
   TUTOR_PROFILE_INCLUDE,
   type TutorProfileWithRelations,
@@ -39,7 +40,14 @@ export class TutorsService {
     const data: Prisma.TutorProfileUpdateInput = {};
     if (dto.bio !== undefined) data.bio = dto.bio;
     if (dto.experienceYears !== undefined) data.experienceYears = dto.experienceYears;
-    if (dto.hourlyRate !== undefined) data.hourlyRate = dto.hourlyRate;
+    if (dto.pricingTiers !== undefined) {
+      assertUniquePricingPeriods(dto.pricingTiers);
+      data.hourlyRateCache = resolveHourlyRateCache(dto.pricingTiers);
+      data.pricingTiers = {
+        deleteMany: { tutorSubjectId: null },
+        create: dto.pricingTiers.map((t) => ({ period: t.period, amount: t.amount })),
+      };
+    }
     if (dto.currency !== undefined) data.currency = dto.currency;
     if (dto.formats !== undefined) data.formats = { set: dto.formats };
     if (dto.isPublished !== undefined) data.isPublished = dto.isPublished;
@@ -102,7 +110,7 @@ export class TutorsService {
     }
     try {
       return await this.prisma.tutorProfile.create({
-        data: { userId, hourlyRate: 0 },
+        data: { userId },
         include: TUTOR_PROFILE_INCLUDE,
       });
     } catch (error) {

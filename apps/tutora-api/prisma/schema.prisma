@@ -103,6 +103,14 @@ enum DevicePlatform {
   WEB
 }
 
+/// A billing cadence a tutor can price a subject (or their base rate) at (#178).
+enum PricingPeriod {
+  HOURLY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
 /// Classifies an audit-log entry so the admin log view can filter privileged
 /// actions (ADMIN), authentication / permission events (SECURITY), and
 /// system-configuration changes such as feature-flag or setting edits (SYSTEM).
@@ -197,13 +205,27 @@ model Subject {
   @@index([categoryId])
 }
 
+/// A city grouping districts for the cascading city → district picker (#177).
+model City {
+  id        String     @id @default(cuid())
+  name      String
+  slug      String     @unique
+  districts District[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
 model District {
   id             String          @id @default(cuid())
   name           String
   slug           String          @unique
+  cityId         String
+  city           City            @relation(fields: [cityId], references: [id], onDelete: Cascade)
   tutorDistricts TutorDistrict[]
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
+
+  @@index([cityId])
 }
 
 model Language {
@@ -223,7 +245,11 @@ model TutorProfile {
   user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   bio                String?
   experienceYears    Int                @default(0)
-  hourlyRate         Decimal            @db.Decimal(10, 2)
+  /// Denormalized copy of the HOURLY-period base PricingTier amount, kept in
+  /// sync on write (#178). Search filters/sorts/indexes on this column instead
+  /// of querying the normalized PricingTier table per row; PricingTier remains
+  /// the source of truth.
+  hourlyRateCache    Decimal?           @db.Decimal(10, 2)
   currency           String             @default("AZN")
   formats            LessonFormat[]
   verificationStatus VerificationStatus @default(UNVERIFIED)
@@ -245,8 +271,9 @@ model TutorProfile {
   applications Application[]
   reviews      Review[]
   chatThreads  ChatThread[]
+  pricingTiers PricingTier[]
 
-  @@index([hourlyRate])
+  @@index([hourlyRateCache])
   @@index([ratingAvg])
   @@index([verificationStatus, isPublished])
   @@index([deletedAt])
@@ -273,16 +300,38 @@ model StudentProfile {
 // ---------- Tutor owned / joins ----------
 
 model TutorSubject {
-  id            String       @id @default(cuid())
-  tutorId       String
-  tutor         TutorProfile @relation(fields: [tutorId], references: [id], onDelete: Cascade)
-  subjectId     String
-  subject       Subject      @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-  priceOverride Decimal?     @db.Decimal(10, 2)
-  createdAt     DateTime     @default(now())
+  id           String        @id @default(cuid())
+  tutorId      String
+  tutor        TutorProfile  @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  subjectId    String
+  subject      Subject       @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  createdAt    DateTime      @default(now())
+  pricingTiers PricingTier[]
 
   @@unique([tutorId, subjectId])
   @@index([subjectId])
+}
+
+/// One (period → amount) price point, either a tutor's base rate
+/// (`tutorSubjectId` null) or an override scoped to one taught subject (#178).
+/// The base-rate uniqueness invariant (one row per tutor+period when
+/// `tutorSubjectId` is null) is enforced by a partial unique index added in the
+/// migration, since Postgres treats NULLs as distinct under a plain composite
+/// unique constraint.
+model PricingTier {
+  id             String        @id @default(cuid())
+  tutorId        String
+  tutor          TutorProfile  @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  tutorSubjectId String?
+  tutorSubject   TutorSubject? @relation(fields: [tutorSubjectId], references: [id], onDelete: Cascade)
+  period         PricingPeriod
+  amount         Decimal       @db.Decimal(10, 2)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@unique([tutorId, tutorSubjectId, period])
+  @@index([tutorSubjectId])
+  @@index([tutorId, period])
 }
 
 model TutorDistrict {

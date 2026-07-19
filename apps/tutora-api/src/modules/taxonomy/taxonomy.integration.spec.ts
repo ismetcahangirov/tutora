@@ -42,6 +42,7 @@ describe('Taxonomy module (integration)', () => {
       create: jest.fn().mockResolvedValue({ id: 'c2', name: 'Arts', slug: 'arts' }),
     },
     subject: { findMany: jest.fn().mockResolvedValue([]) },
+    city: { findMany: jest.fn().mockResolvedValue([{ id: 'cty1', name: 'Baku', slug: 'baku' }]) },
     district: { findMany: jest.fn().mockResolvedValue([]) },
     language: { findMany: jest.fn().mockResolvedValue([]) },
   };
@@ -82,6 +83,18 @@ describe('Taxonomy module (integration)', () => {
   it('GET /categories is public', async () => {
     const res = await request(httpServer).get('/api/v1/categories').expect(200);
     expect(res.body).toEqual([{ id: 'c1', name: 'Sciences', slug: 'sciences' }]);
+  });
+
+  it('GET /cities is public', async () => {
+    const res = await request(httpServer).get('/api/v1/cities').expect(200);
+    expect(res.body).toEqual([{ id: 'cty1', name: 'Baku', slug: 'baku' }]);
+  });
+
+  it('GET /districts?cityId= forwards the filter', async () => {
+    await request(httpServer).get('/api/v1/districts').query({ cityId: 'cty1' }).expect(200);
+    expect(prismaMock.district.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { cityId: 'cty1' } }),
+    );
   });
 
   it('POST /admin/taxonomy/categories forbids a non-admin', async () => {

@@ -11,6 +11,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import {
   fetchCategories,
+  fetchCities,
   fetchDistricts,
   fetchLanguages,
   fetchSubjects,
@@ -33,10 +34,18 @@ export function useSubjects(categoryId?: string) {
   });
 }
 
-export function useDistricts() {
+export function useCities() {
   return useQuery({
-    queryKey: taxonomyKeys.districts(),
-    queryFn: fetchDistricts,
+    queryKey: taxonomyKeys.cities(),
+    queryFn: fetchCities,
+    staleTime: TAXONOMY_STALE_TIME,
+  });
+}
+
+export function useDistricts(cityId?: string) {
+  return useQuery({
+    queryKey: taxonomyKeys.districts(cityId),
+    queryFn: () => fetchDistricts(cityId),
     staleTime: TAXONOMY_STALE_TIME,
   });
 }

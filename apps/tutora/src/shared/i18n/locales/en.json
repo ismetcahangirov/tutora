@@ -108,7 +108,13 @@
   "tutors": {
     "unnamed": "Tutor",
     "verified": "Verified",
-    "perHour": "/hr",
+    "noPriceSet": "No price set",
+    "pricePeriod": {
+      "HOURLY": "/hr",
+      "WEEKLY": "/wk",
+      "MONTHLY": "/mo",
+      "YEARLY": "/yr"
+    },
     "rating": {
       "new": "New",
       "count": "({{count}})"
@@ -350,18 +356,28 @@
         "bioHelper": "{{count}}/{{max}}",
         "experienceLabel": "Years of experience",
         "experienceError": "Enter a whole number between 0 and {{max}}.",
-        "rateLabel": "Hourly rate",
-        "rateError": "Enter an amount between 0 and {{max}}.",
+        "pricingTitle": "Base rate",
         "currencyLabel": "Currency",
         "formatsLabel": "Lesson formats",
         "saved": "Profile updated."
+      },
+      "pricing": {
+        "period": {
+          "HOURLY": "Hourly",
+          "WEEKLY": "Weekly",
+          "MONTHLY": "Monthly",
+          "YEARLY": "Yearly"
+        },
+        "amountPlaceholder": "Amount ({{currency}})",
+        "amountError": "Enter an amount between 0 and {{max}}."
       },
       "subjects": {
         "title": "Subjects & pricing",
         "empty": "Add the subjects you teach and set a price for each.",
         "add": "Add subject",
         "remove": "Remove {{subject}}",
-        "basePrice": "Base rate ({{currency}})",
+        "noOverride": "Uses the base rate",
+        "editPricing": "Edit pricing for {{subject}}",
         "pickerTitle": "Add a subject",
         "search": "Search subjects",
         "pickerEmpty": "No subjects found."
@@ -371,6 +387,9 @@
         "empty": "Add the districts where you teach in person.",
         "add": "Add district",
         "remove": "Remove {{district}}",
+        "cityPickerTitle": "Choose a city",
+        "citySearch": "Search cities",
+        "cityPickerEmpty": "No cities found.",
         "pickerTitle": "Add a district",
         "search": "Search districts",
         "pickerEmpty": "No districts found."

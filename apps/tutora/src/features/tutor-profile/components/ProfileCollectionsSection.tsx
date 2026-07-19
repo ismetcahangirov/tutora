@@ -13,7 +13,7 @@ import { StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { Button, Card, Text, useToast } from '@/components/ui';
-import { useDistricts, useLanguages, useSubjects } from '@features/taxonomy';
+import { useCities, useDistricts, useLanguages, useSubjects } from '@features/taxonomy';
 import { spacing } from '@/theme';
 
 import { useTutorProfileCollections } from '../hooks/useTutorProfileCollections';
@@ -26,15 +26,22 @@ export type ProfileCollectionsSectionProps = {
   profile: MyTutorProfile;
 };
 
-type OpenPicker = 'subject' | 'district' | 'language' | null;
+/**
+ * Adding a district is a two-step flow: pick a city, then pick from that
+ * city's districts (#177). `district-city` is the first step; `district` is
+ * the second, gated by `districtCityId`.
+ */
+type OpenPicker = 'subject' | 'district-city' | 'district' | 'language' | null;
 
 export function ProfileCollectionsSection({ profile }: ProfileCollectionsSectionProps) {
   const { t } = useTranslation();
   const toast = useToast();
   const [openPicker, setOpenPicker] = useState<OpenPicker>(null);
+  const [districtCityId, setDistrictCityId] = useState<string | null>(null);
 
   const { data: subjects = [] } = useSubjects();
-  const { data: districts = [] } = useDistricts();
+  const { data: cities = [] } = useCities();
+  const { data: districts = [] } = useDistricts(districtCityId ?? undefined);
   const { data: languages = [] } = useLanguages();
 
   const collections = useTutorProfileCollections();
@@ -63,9 +70,9 @@ export function ProfileCollectionsSection({ profile }: ProfileCollectionsSection
               subject={subject}
               currency={profile.currency}
               disabled={collections.isSubjectMutating}
-              onSetPrice={(priceOverride) =>
+              onChangeTiers={(pricingTiers) =>
                 void run(() =>
-                  collections.upsertSubject({ subjectId: subject.subjectId, priceOverride }),
+                  collections.upsertSubject({ subjectId: subject.subjectId, pricingTiers }),
                 )
               }
               onRemove={() => void run(() => collections.removeSubject(subject.subjectId))}
@@ -91,7 +98,7 @@ export function ProfileCollectionsSection({ profile }: ProfileCollectionsSection
           emptyLabel={t('tutor.profile.districts.empty')}
           removeLabel={(name) => t('tutor.profile.districts.remove', { district: name })}
           disabled={collections.isDistrictMutating}
-          onAdd={() => setOpenPicker('district')}
+          onAdd={() => setOpenPicker('district-city')}
           onRemove={(id) => void run(() => collections.removeDistrict(id))}
         />
       </Card>
@@ -121,6 +128,19 @@ export function ProfileCollectionsSection({ profile }: ProfileCollectionsSection
         onClose={() => setOpenPicker(null)}
       />
       <TaxonomyPickerSheet
+        visible={openPicker === 'district-city'}
+        title={t('tutor.profile.districts.cityPickerTitle')}
+        options={cities.map((c) => ({ id: c.id, name: c.name }))}
+        selectedIds={[]}
+        searchPlaceholder={t('tutor.profile.districts.citySearch')}
+        emptyLabel={t('tutor.profile.districts.cityPickerEmpty')}
+        onSelect={(id) => {
+          setDistrictCityId(id);
+          setOpenPicker('district');
+        }}
+        onClose={() => setOpenPicker(null)}
+      />
+      <TaxonomyPickerSheet
         visible={openPicker === 'district'}
         title={t('tutor.profile.districts.pickerTitle')}
         options={districts.map((d) => ({ id: d.id, name: d.name }))}
@@ -129,7 +149,10 @@ export function ProfileCollectionsSection({ profile }: ProfileCollectionsSection
         emptyLabel={t('tutor.profile.districts.pickerEmpty')}
         isMutating={collections.isDistrictMutating}
         onSelect={(id) => void run(() => collections.addDistrict(id))}
-        onClose={() => setOpenPicker(null)}
+        onClose={() => {
+          setOpenPicker(null);
+          setDistrictCityId(null);
+        }}
       />
       <TaxonomyPickerSheet
         visible={openPicker === 'language'}

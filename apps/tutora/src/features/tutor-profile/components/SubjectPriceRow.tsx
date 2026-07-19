@@ -1,26 +1,29 @@
 /**
- * SubjectPriceRow — one taught subject with its optional price override
- * (tutor epic #51, #56).
+ * SubjectPriceRow — one taught subject with its optional price-override tiers
+ * (tutor epic #51, #56; QA follow-up #178).
  *
- * Shows the subject name, an inline price field (empty = fall back to the base
- * hourly rate), and a remove affordance. The override commits on blur: a valid
- * number sets it, a cleared field removes it, and an invalid entry snaps back to
- * the last good value so a typo never reaches the API.
+ * Collapsed by default: shows the subject name, a one-line price summary (or a
+ * "uses the base rate" placeholder when no override is set), and a remove
+ * affordance. Tapping the row expands a `PricingTierEditor` so a tutor can set
+ * a different amount per billing period; each change commits immediately (the
+ * backend returns the refreshed profile, so there is no separate "save").
  */
 import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-import { Icon, Input, Text } from '@/components/ui';
-import { HOURLY_RATE_MAX, HOURLY_RATE_MIN } from '../constants';
+import { Icon, Text } from '@/components/ui';
+import { formatPrice, pickDisplayTier } from '@/shared';
 import { spacing, useColors } from '@/theme';
-import type { TutorProfileSubject } from '../types';
+
+import { PricingTierEditor } from './PricingTierEditor';
+import type { PricingTier, TutorProfileSubject } from '../types';
 
 export type SubjectPriceRowProps = {
   subject: TutorProfileSubject;
   currency: string;
   disabled?: boolean;
-  onSetPrice: (priceOverride: number | undefined) => void;
+  onChangeTiers: (pricingTiers: PricingTier[]) => void;
   onRemove: () => void;
 };
 
@@ -28,77 +31,73 @@ export function SubjectPriceRow({
   subject,
   currency,
   disabled = false,
-  onSetPrice,
+  onChangeTiers,
   onRemove,
 }: SubjectPriceRowProps) {
   const { t } = useTranslation();
   const colors = useColors();
-  const [price, setPrice] = useState(
-    subject.priceOverride != null ? String(subject.priceOverride) : '',
-  );
+  const [expanded, setExpanded] = useState(false);
 
-  const commit = () => {
-    const trimmed = price.trim();
-    if (trimmed === '') {
-      onSetPrice(undefined);
-      return;
-    }
-    const value = Number(trimmed);
-    if (Number.isNaN(value) || value < HOURLY_RATE_MIN || value > HOURLY_RATE_MAX) {
-      // Reject a typo silently by restoring the last persisted value.
-      setPrice(subject.priceOverride != null ? String(subject.priceOverride) : '');
-      return;
-    }
-    onSetPrice(value);
-  };
+  const displayTier = pickDisplayTier(subject.pricingTiers);
+  const summary =
+    displayTier === null
+      ? t('tutor.profile.subjects.noOverride')
+      : `${formatPrice(displayTier.amount, currency)}${t(`tutors.pricePeriod.${displayTier.period}`)}`;
 
   return (
-    <View style={[styles.row, { borderColor: colors.border }]}>
-      <View style={styles.name}>
-        <Text variant="body" numberOfLines={1}>
-          {subject.name}
-        </Text>
+    <View style={[styles.container, { borderColor: colors.border }]}>
+      <View style={styles.row}>
+        <Pressable
+          style={styles.summary}
+          onPress={() => setExpanded((value) => !value)}
+          accessibilityRole="button"
+          accessibilityLabel={t('tutor.profile.subjects.editPricing', { subject: subject.name })}
+          accessibilityState={{ expanded }}
+        >
+          <Text variant="body" numberOfLines={1} style={styles.name}>
+            {subject.name}
+          </Text>
+          <View style={styles.priceRow}>
+            <Text variant="bodySmall" color="textSecondary" numberOfLines={1}>
+              {summary}
+            </Text>
+            <Icon name={expanded ? 'chevron-down' : 'chevron-right'} size={16} color="muted" />
+          </View>
+        </Pressable>
+
+        <Pressable
+          onPress={onRemove}
+          disabled={disabled}
+          accessibilityRole="button"
+          accessibilityLabel={t('tutor.profile.subjects.remove', { subject: subject.name })}
+          hitSlop={8}
+          style={styles.remove}
+        >
+          <Icon name="trash" size={20} color="danger" />
+        </Pressable>
       </View>
 
-      <Input
-        containerStyle={styles.priceField}
-        value={price}
-        onChangeText={setPrice}
-        onBlur={commit}
-        onEndEditing={commit}
-        keyboardType="decimal-pad"
-        placeholder={t('tutor.profile.subjects.basePrice', { currency })}
-        disabled={disabled}
-      />
-
-      <Pressable
-        onPress={onRemove}
-        disabled={disabled}
-        accessibilityRole="button"
-        accessibilityLabel={t('tutor.profile.subjects.remove', { subject: subject.name })}
-        hitSlop={8}
-        style={styles.remove}
-      >
-        <Icon name="trash" size={20} color="danger" />
-      </Pressable>
+      {expanded ? (
+        <PricingTierEditor
+          tiers={subject.pricingTiers}
+          currency={currency}
+          disabled={disabled}
+          onChange={onChangeTiers}
+        />
+      ) : null}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.md,
+  container: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
     paddingVertical: spacing.sm,
+    gap: spacing.sm,
   },
-  name: {
-    flex: 1,
-  },
-  priceField: {
-    width: 120,
-  },
-  remove: {
-    padding: spacing.xs,
-  },
+  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
+  summary: { flex: 1, gap: 2 },
+  name: { flexShrink: 1 },
+  priceRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
+  remove: { padding: spacing.xs },
 });

@@ -22,11 +22,19 @@ export type Subject = {
   categoryId: string | null;
 };
 
-/** A geographic district a tutor teaches in. */
+/** A city grouping districts for the cascading city → district picker. */
+export type City = {
+  id: string;
+  name: string;
+  slug: string;
+};
+
+/** A geographic district a tutor teaches in, scoped to one city. */
 export type District = {
   id: string;
   name: string;
   slug: string;
+  cityId: string;
 };
 
 /** A language of instruction. `code` is an ISO-639-style code. */

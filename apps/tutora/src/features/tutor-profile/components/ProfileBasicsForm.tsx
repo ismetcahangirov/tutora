@@ -1,11 +1,13 @@
 /**
- * ProfileBasicsForm — the scalar profile fields + formats (tutor epic #51, #53, #56).
+ * ProfileBasicsForm — the scalar profile fields + formats (tutor epic #51, #53,
+ * #56; QA follow-up #178).
  *
- * Owns local, controlled state seeded from the profile: bio, years of experience,
- * base hourly rate + currency, and the lesson formats. Validates against the same
- * bounds the backend enforces and only sends the *changed* fields on save, so an
- * untouched field is never overwritten. Save is disabled until the form is both
- * dirty and valid; the parent owns the request (and its in-flight state).
+ * Owns local, controlled state seeded from the profile: bio, years of
+ * experience, base pricing tiers + currency, and the lesson formats. Validates
+ * against the same bounds the backend enforces and only sends the *changed*
+ * fields on save, so an untouched field is never overwritten. Save is disabled
+ * until the form is both dirty and valid; the parent owns the request (and its
+ * in-flight state).
  */
 import { useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -20,11 +22,10 @@ import {
   DEFAULT_CURRENCY,
   EXPERIENCE_MAX_YEARS,
   EXPERIENCE_MIN_YEARS,
-  HOURLY_RATE_MAX,
-  HOURLY_RATE_MIN,
 } from '../constants';
-import type { MyTutorProfile, UpdateTutorProfileInput } from '../types';
+import type { MyTutorProfile, PricingTier, UpdateTutorProfileInput } from '../types';
 import { FormatSelector } from './FormatSelector';
+import { PricingTierEditor } from './PricingTierEditor';
 
 export type ProfileBasicsFormProps = {
   profile: MyTutorProfile;
@@ -37,17 +38,26 @@ function sameFormats(a: LessonFormat[], b: LessonFormat[]): boolean {
   return a.length === b.length && a.every((format) => b.includes(format));
 }
 
+/** Two tier sets are equal when they hold the same (period, amount) pairs. */
+function sameTiers(a: PricingTier[], b: PricingTier[]): boolean {
+  return (
+    a.length === b.length &&
+    a.every((tier) =>
+      b.some((other) => other.period === tier.period && other.amount === tier.amount),
+    )
+  );
+}
+
 export function ProfileBasicsForm({ profile, isSaving, onSave }: ProfileBasicsFormProps) {
   const { t } = useTranslation();
 
   const [bio, setBio] = useState(profile.bio ?? '');
   const [experience, setExperience] = useState(String(profile.experienceYears));
-  const [rate, setRate] = useState(String(profile.hourlyRate));
+  const [pricingTiers, setPricingTiers] = useState<PricingTier[]>(profile.pricingTiers);
   const [currency, setCurrency] = useState(profile.currency || DEFAULT_CURRENCY);
   const [formats, setFormats] = useState<LessonFormat[]>(profile.formats);
 
   const experienceNum = Number(experience);
-  const rateNum = Number(rate);
 
   const experienceError =
     !Number.isInteger(experienceNum) ||
@@ -56,17 +66,12 @@ export function ProfileBasicsForm({ profile, isSaving, onSave }: ProfileBasicsFo
       ? t('tutor.profile.basics.experienceError', { max: EXPERIENCE_MAX_YEARS })
       : undefined;
 
-  const rateError =
-    Number.isNaN(rateNum) || rateNum < HOURLY_RATE_MIN || rateNum > HOURLY_RATE_MAX
-      ? t('tutor.profile.basics.rateError', { max: HOURLY_RATE_MAX })
-      : undefined;
-
-  const isValid = !experienceError && !rateError && currency.trim().length === 3;
+  const isValid = !experienceError && currency.trim().length === 3;
 
   const isDirty =
     bio.trim() !== (profile.bio ?? '') ||
     experienceNum !== profile.experienceYears ||
-    rateNum !== profile.hourlyRate ||
+    !sameTiers(pricingTiers, profile.pricingTiers) ||
     currency.trim().toUpperCase() !== profile.currency ||
     !sameFormats(formats, profile.formats);
 
@@ -78,8 +83,8 @@ export function ProfileBasicsForm({ profile, isSaving, onSave }: ProfileBasicsFo
     if (experienceNum !== profile.experienceYears) {
       next.experienceYears = experienceNum;
     }
-    if (rateNum !== profile.hourlyRate) {
-      next.hourlyRate = rateNum;
+    if (!sameTiers(pricingTiers, profile.pricingTiers)) {
+      next.pricingTiers = pricingTiers;
     }
     if (currency.trim().toUpperCase() !== profile.currency) {
       next.currency = currency.trim().toUpperCase();
@@ -88,7 +93,7 @@ export function ProfileBasicsForm({ profile, isSaving, onSave }: ProfileBasicsFo
       next.formats = formats;
     }
     return next;
-  }, [bio, experienceNum, rateNum, currency, formats, profile]);
+  }, [bio, experienceNum, pricingTiers, currency, formats, profile]);
 
   const handleSave = () => {
     if (!isValid || !isDirty || isSaving) {
@@ -123,24 +128,22 @@ export function ProfileBasicsForm({ profile, isSaving, onSave }: ProfileBasicsFo
         errorText={experienceError}
       />
 
-      <View style={styles.priceRow}>
-        <Input
-          containerStyle={styles.priceField}
-          label={t('tutor.profile.basics.rateLabel')}
-          value={rate}
-          onChangeText={setRate}
-          keyboardType="decimal-pad"
+      <Input
+        label={t('tutor.profile.basics.currencyLabel')}
+        value={currency}
+        onChangeText={(text) => setCurrency(text.toUpperCase())}
+        autoCapitalize="characters"
+        maxLength={3}
+        disabled={isSaving}
+      />
+
+      <View style={styles.field}>
+        <Text variant="label">{t('tutor.profile.basics.pricingTitle')}</Text>
+        <PricingTierEditor
+          tiers={pricingTiers}
+          currency={currency}
           disabled={isSaving}
-          errorText={rateError}
-        />
-        <Input
-          containerStyle={styles.currencyField}
-          label={t('tutor.profile.basics.currencyLabel')}
-          value={currency}
-          onChangeText={(text) => setCurrency(text.toUpperCase())}
-          autoCapitalize="characters"
-          maxLength={3}
-          disabled={isSaving}
+          onChange={setPricingTiers}
         />
       </View>
 
@@ -166,15 +169,5 @@ const styles = StyleSheet.create({
   },
   field: {
     gap: spacing.sm,
-  },
-  priceRow: {
-    flexDirection: 'row',
-    gap: spacing.md,
-  },
-  priceField: {
-    flex: 1,
-  },
-  currencyField: {
-    width: 96,
   },
 });

@@ -9,6 +9,8 @@
  */
 import type { LessonFormat } from '@features/tutors';
 
+import type { PricingPeriod } from './types';
+
 /** Authenticated tutor self-management endpoints, appended to `EXPO_PUBLIC_API_URL`. */
 export const TUTOR_PROFILE_ENDPOINTS = {
   me: '/api/v1/tutors/me',
@@ -57,8 +59,15 @@ export const DEFAULT_CURRENCY = 'AZN';
 export const BIO_MAX_LENGTH = 2000;
 export const EXPERIENCE_MIN_YEARS = 0;
 export const EXPERIENCE_MAX_YEARS = 80;
-export const HOURLY_RATE_MIN = 0;
-export const HOURLY_RATE_MAX = 100_000;
+
+/** Pricing-tier bounds — kept in lockstep with the backend `PricingTierDto` (#178). */
+export const PRICING_AMOUNT_MIN = 0;
+export const PRICING_AMOUNT_MAX = 100_000;
+
+/** Every billing period a tutor can price, in display order. */
+export const PRICING_PERIODS: PricingPeriod[] = ['HOURLY', 'WEEKLY', 'MONTHLY', 'YEARLY'];
+/** One tier per billing period, at most. */
+export const MAX_PRICING_TIERS = PRICING_PERIODS.length;
 
 /**
  * Structured, stable query key. There is a single per-user resource (`me`), so one
