@@ -70,4 +70,21 @@ describe('getTutorById (#44)', () => {
 
     await expect(getTutorById('tutor-1')).rejects.toBe(boom);
   });
+
+  it('defaults pricing tiers to [] when the API predates #178', async () => {
+    // The mobile client ships over OTA; the API deploys separately. During that
+    // window a server still on the pre-#178 shape omits `pricingTiers` entirely
+    // (both the base rate and each subject's override) rather than sending [].
+    const { pricingTiers: _base, subjects, ...legacyRest } = tutorProfile;
+    const legacyProfile = {
+      ...legacyRest,
+      subjects: subjects.map(({ pricingTiers: _sub, ...subject }) => subject),
+    };
+    mockedGet.mockResolvedValueOnce({ data: legacyProfile });
+
+    const result = await getTutorById('tutor-1');
+
+    expect(result.pricingTiers).toEqual([]);
+    expect(result.subjects[0]?.pricingTiers).toEqual([]);
+  });
 });

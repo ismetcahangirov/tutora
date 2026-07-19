@@ -125,4 +125,21 @@ describe('tutor-profile API (#53)', () => {
     expect(mocked.post).toHaveBeenCalledWith(TUTOR_PROFILE_ENDPOINTS.verification);
     expect(result.verificationStatus).toBe('PENDING');
   });
+
+  it('defaults pricing tiers to [] when the API predates #178', async () => {
+    // The mobile client ships over OTA; the API deploys separately. During that
+    // window a server still on the pre-#178 shape omits `pricingTiers` entirely
+    // (both the base rate and each subject's override) rather than sending [].
+    const { pricingTiers: _base, subjects, ...legacyRest } = profile;
+    const legacyProfile = {
+      ...legacyRest,
+      subjects: subjects.map(({ pricingTiers: _sub, ...subject }) => subject),
+    };
+    mocked.get.mockResolvedValueOnce({ data: legacyProfile });
+
+    const result = await getMyTutorProfile();
+
+    expect(result.pricingTiers).toEqual([]);
+    expect(result.subjects[0]?.pricingTiers).toEqual([]);
+  });
 });

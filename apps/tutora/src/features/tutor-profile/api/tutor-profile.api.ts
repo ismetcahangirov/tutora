@@ -13,10 +13,27 @@ import { apiClient } from '@/shared/lib';
 import { TUTOR_PROFILE_ENDPOINTS } from '../constants';
 import type { MyTutorProfile, UpdateTutorProfileInput, UpsertTutorSubjectInput } from '../types';
 
+/**
+ * Backfills pricing-tier arrays a not-yet-upgraded API can omit. The client
+ * ships over OTA (near-instant) while the API deploys separately (#178), so
+ * there is a real window where the server response predates these fields —
+ * default to "no tiers set" rather than crashing the profile screen.
+ */
+function normalizeProfile(profile: MyTutorProfile): MyTutorProfile {
+  return {
+    ...profile,
+    pricingTiers: profile.pricingTiers ?? [],
+    subjects: profile.subjects.map((subject) => ({
+      ...subject,
+      pricingTiers: subject.pricingTiers ?? [],
+    })),
+  };
+}
+
 /** GET the caller's own tutor profile. */
 export async function getMyTutorProfile(): Promise<MyTutorProfile> {
   const { data } = await apiClient.get<MyTutorProfile>(TUTOR_PROFILE_ENDPOINTS.me);
-  return data;
+  return normalizeProfile(data);
 }
 
 /** PATCH editable profile fields and return the updated profile. */
@@ -24,13 +41,13 @@ export async function updateMyTutorProfile(
   input: UpdateTutorProfileInput,
 ): Promise<MyTutorProfile> {
   const { data } = await apiClient.patch<MyTutorProfile>(TUTOR_PROFILE_ENDPOINTS.me, input);
-  return data;
+  return normalizeProfile(data);
 }
 
 /** PUT a subject (add it, or change its price override) and return the profile (#56). */
 export async function upsertTutorSubject(input: UpsertTutorSubjectInput): Promise<MyTutorProfile> {
   const { data } = await apiClient.put<MyTutorProfile>(TUTOR_PROFILE_ENDPOINTS.subjects, input);
-  return data;
+  return normalizeProfile(data);
 }
 
 /** DELETE a subject from the profile and return the updated profile. */
@@ -38,7 +55,7 @@ export async function removeTutorSubject(subjectId: string): Promise<MyTutorProf
   const { data } = await apiClient.delete<MyTutorProfile>(
     TUTOR_PROFILE_ENDPOINTS.subjectById(subjectId),
   );
-  return data;
+  return normalizeProfile(data);
 }
 
 /** PUT a service district and return the updated profile. */
@@ -46,7 +63,7 @@ export async function addTutorDistrict(districtId: string): Promise<MyTutorProfi
   const { data } = await apiClient.put<MyTutorProfile>(TUTOR_PROFILE_ENDPOINTS.districts, {
     districtId,
   });
-  return data;
+  return normalizeProfile(data);
 }
 
 /** DELETE a service district and return the updated profile. */
@@ -54,7 +71,7 @@ export async function removeTutorDistrict(districtId: string): Promise<MyTutorPr
   const { data } = await apiClient.delete<MyTutorProfile>(
     TUTOR_PROFILE_ENDPOINTS.districtById(districtId),
   );
-  return data;
+  return normalizeProfile(data);
 }
 
 /** PUT a spoken language and return the updated profile. */
@@ -62,7 +79,7 @@ export async function addTutorLanguage(languageId: string): Promise<MyTutorProfi
   const { data } = await apiClient.put<MyTutorProfile>(TUTOR_PROFILE_ENDPOINTS.languages, {
     languageId,
   });
-  return data;
+  return normalizeProfile(data);
 }
 
 /** DELETE a spoken language and return the updated profile. */
@@ -70,7 +87,7 @@ export async function removeTutorLanguage(languageId: string): Promise<MyTutorPr
   const { data } = await apiClient.delete<MyTutorProfile>(
     TUTOR_PROFILE_ENDPOINTS.languageById(languageId),
   );
-  return data;
+  return normalizeProfile(data);
 }
 
 /**
@@ -80,5 +97,5 @@ export async function removeTutorLanguage(languageId: string): Promise<MyTutorPr
  */
 export async function submitTutorVerification(): Promise<MyTutorProfile> {
   const { data } = await apiClient.post<MyTutorProfile>(TUTOR_PROFILE_ENDPOINTS.verification);
-  return data;
+  return normalizeProfile(data);
 }

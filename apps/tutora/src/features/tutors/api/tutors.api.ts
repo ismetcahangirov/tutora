@@ -20,6 +20,23 @@ export class TutorNotFoundError extends Error {
   }
 }
 
+/**
+ * Backfills pricing-tier arrays a not-yet-upgraded API can omit. The client
+ * ships over OTA (near-instant) while the API deploys separately (#178), so
+ * there is a real window where the server response predates these fields —
+ * default to "no override tiers" rather than crashing the detail screen.
+ */
+function normalizeTutorProfile(profile: TutorProfile): TutorProfile {
+  return {
+    ...profile,
+    pricingTiers: profile.pricingTiers ?? [],
+    subjects: profile.subjects.map((subject) => ({
+      ...subject,
+      pricingTiers: subject.pricingTiers ?? [],
+    })),
+  };
+}
+
 /** Drop `undefined`/empty values so only active filters hit the wire. */
 function toQueryParams(params: TutorSearchParams): Record<string, string | number> {
   const query: Record<string, string | number> = {};
@@ -43,7 +60,7 @@ export async function searchTutors(params: TutorSearchParams): Promise<Paginated
 export async function getTutorById(id: string): Promise<TutorProfile> {
   try {
     const { data } = await apiClient.get<TutorProfile>(TUTOR_ENDPOINTS.byId(id));
-    return data;
+    return normalizeTutorProfile(data);
   } catch (error) {
     if (isAxiosError(error) && error.response?.status === 404) {
       throw new TutorNotFoundError(id);

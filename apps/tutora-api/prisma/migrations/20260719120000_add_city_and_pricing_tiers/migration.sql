@@ -90,10 +90,13 @@ ALTER TABLE "TutorProfile" ADD COLUMN "hourlyRateCache" DECIMAL(10,2);
 
 UPDATE "TutorProfile" SET "hourlyRateCache" = "hourlyRate";
 
+-- Dropping this column also drops "TutorProfile_hourlyRate_idx", the
+-- single-column index Postgres implicitly removes along with it — the
+-- explicit DropIndex below would otherwise error with "index does not exist".
 ALTER TABLE "TutorProfile" DROP COLUMN "hourlyRate";
 
 -- DropIndex
-DROP INDEX "TutorProfile_hourlyRate_idx";
+DROP INDEX IF EXISTS "TutorProfile_hourlyRate_idx";
 
 -- CreateIndex
 CREATE INDEX "TutorProfile_hourlyRateCache_idx" ON "TutorProfile"("hourlyRateCache");
