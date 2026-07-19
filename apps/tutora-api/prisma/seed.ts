@@ -4,6 +4,7 @@ import {
   EducationLevel,
   LessonFormat,
   PlanTier,
+  PricingPeriod,
   Prisma,
   PrismaClient,
   ReviewStatus,
@@ -14,7 +15,42 @@ import {
 
 const prisma = new PrismaClient();
 
-const DISTRICTS = ['Nasimi', 'Yasamal', 'Sabail', 'Narimanov', 'Binagadi', 'Xatai', 'Nizami'];
+type SeedDistrict = { name: string; slug: string };
+/** A district name with no explicit slug derives one via `.toLowerCase()`, matching the original Baku list. */
+function district(name: string, slug = name.toLowerCase()): SeedDistrict {
+  return { name, slug };
+}
+
+const CITIES: Array<{ name: string; slug: string; districts: SeedDistrict[] }> = [
+  {
+    name: 'Baku',
+    slug: 'baku',
+    districts: ['Nasimi', 'Yasamal', 'Sabail', 'Narimanov', 'Binagadi', 'Xatai', 'Nizami'].map(
+      (n) => district(n),
+    ),
+  },
+  {
+    name: 'Ganja',
+    slug: 'ganja',
+    districts: [district('Kepez'), district('Nizami', 'ganja-nizami')],
+  },
+  {
+    name: 'Sumgayit',
+    slug: 'sumgayit',
+    districts: [district('Sumgayit Merkezi', 'sumgayit-merkezi')],
+  },
+  {
+    name: 'Mingachevir',
+    slug: 'mingachevir',
+    districts: [district('Mingachevir Merkezi', 'mingachevir-merkezi')],
+  },
+  { name: 'Sheki', slug: 'sheki', districts: [district('Sheki Merkezi', 'sheki-merkezi')] },
+  {
+    name: 'Lankaran',
+    slug: 'lankaran',
+    districts: [district('Lankaran Merkezi', 'lankaran-merkezi')],
+  },
+];
 const LANGUAGES: Array<[name: string, code: string]> = [
   ['Azerbaijani', 'az'],
   ['English', 'en'],
@@ -657,9 +693,19 @@ const CHAT_THREADS: Array<{
 ];
 
 async function main(): Promise<void> {
-  for (const name of DISTRICTS) {
-    const slug = name.toLowerCase();
-    await prisma.district.upsert({ where: { slug }, update: {}, create: { name, slug } });
+  for (const city of CITIES) {
+    const createdCity = await prisma.city.upsert({
+      where: { slug: city.slug },
+      update: {},
+      create: { name: city.name, slug: city.slug },
+    });
+    for (const d of city.districts) {
+      await prisma.district.upsert({
+        where: { slug: d.slug },
+        update: { cityId: createdCity.id },
+        create: { name: d.name, slug: d.slug, cityId: createdCity.id },
+      });
+    }
   }
 
   for (const [name, code] of LANGUAGES) {
@@ -732,7 +778,7 @@ async function main(): Promise<void> {
       update: {
         bio: t.bio,
         experienceYears: t.experienceYears,
-        hourlyRate: t.hourlyRate,
+        hourlyRateCache: t.hourlyRate,
         formats: t.formats,
         verificationStatus: t.verificationStatus,
         isPublished: t.isPublished,
@@ -741,13 +787,22 @@ async function main(): Promise<void> {
         userId: user.id,
         bio: t.bio,
         experienceYears: t.experienceYears,
-        hourlyRate: t.hourlyRate,
+        hourlyRateCache: t.hourlyRate,
         formats: t.formats,
         verificationStatus: t.verificationStatus,
         isPublished: t.isPublished,
       },
     });
     tutorProfileByEmail.set(t.email, tutorProfile);
+
+    // A nullable field inside a composite `@@unique` can't drive Prisma's
+    // upsert-by-compound-key typing, so the base rate is replaced instead.
+    await prisma.pricingTier.deleteMany({
+      where: { tutorId: tutorProfile.id, tutorSubjectId: null, period: PricingPeriod.HOURLY },
+    });
+    await prisma.pricingTier.create({
+      data: { tutorId: tutorProfile.id, period: PricingPeriod.HOURLY, amount: t.hourlyRate },
+    });
 
     for (const subjectSlug of t.subjectSlugs) {
       const subject = subjectBySlug.get(subjectSlug);
@@ -941,7 +996,7 @@ async function main(): Promise<void> {
   }
 
   console.log(
-    'Seed complete: districts, languages, categories, subjects, plans, feature flags, settings, ' +
+    'Seed complete: cities, districts, languages, categories, subjects, plans, feature flags, settings, ' +
       `${TUTORS.length} tutors, ${STUDENTS.length} students, applications, reviews, favorites, chats.`,
   );
 }

@@ -108,7 +108,13 @@
   "tutors": {
     "unnamed": "Repetitor",
     "verified": "Təsdiqlənib",
-    "perHour": "/saat",
+    "noPriceSet": "Qiymət yoxdur",
+    "pricePeriod": {
+      "HOURLY": "/saat",
+      "WEEKLY": "/həftə",
+      "MONTHLY": "/ay",
+      "YEARLY": "/il"
+    },
     "rating": {
       "new": "Yeni",
       "count": "({{count}})"
@@ -350,18 +356,28 @@
         "bioHelper": "{{count}}/{{max}}",
         "experienceLabel": "Təcrübə (il)",
         "experienceError": "0 ilə {{max}} arasında tam ədəd daxil edin.",
-        "rateLabel": "Saatlıq qiymət",
-        "rateError": "0 ilə {{max}} arasında məbləğ daxil edin.",
+        "pricingTitle": "Əsas qiymət",
         "currencyLabel": "Valyuta",
         "formatsLabel": "Dərs formatları",
         "saved": "Profil yeniləndi."
+      },
+      "pricing": {
+        "period": {
+          "HOURLY": "Saatlıq",
+          "WEEKLY": "Həftəlik",
+          "MONTHLY": "Aylıq",
+          "YEARLY": "İllik"
+        },
+        "amountPlaceholder": "Məbləğ ({{currency}})",
+        "amountError": "0 ilə {{max}} arasında məbləğ daxil edin."
       },
       "subjects": {
         "title": "Fənlər və qiymət",
         "empty": "Tədris etdiyiniz fənləri əlavə edin və hər biri üçün qiymət təyin edin.",
         "add": "Fənn əlavə et",
         "remove": "{{subject}} fənnini sil",
-        "basePrice": "Əsas qiymət ({{currency}})",
+        "noOverride": "Əsas qiymətdən istifadə olunur",
+        "editPricing": "{{subject}} üçün qiymətləri düzəlt",
         "pickerTitle": "Fənn əlavə et",
         "search": "Fənləri axtar",
         "pickerEmpty": "Fənn tapılmadı."
@@ -371,6 +387,9 @@
         "empty": "Əyani dərs verdiyiniz rayonları əlavə edin.",
         "add": "Rayon əlavə et",
         "remove": "{{district}} rayonunu sil",
+        "cityPickerTitle": "Şəhər seç",
+        "citySearch": "Şəhərləri axtar",
+        "cityPickerEmpty": "Şəhər tapılmadı.",
         "pickerTitle": "Rayon əlavə et",
         "search": "Rayonları axtar",
         "pickerEmpty": "Rayon tapılmadı."

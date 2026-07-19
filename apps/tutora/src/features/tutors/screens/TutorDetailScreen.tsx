@@ -19,7 +19,7 @@ import { type ChatThread, NoActiveApplicationError, useStartThreadWithTutor } fr
 import { FavoriteButton, useFavorites } from '@features/favorites';
 import { ReviewsPreview } from '@features/reviews';
 import { Button, EmptyState, ErrorState, LoadingState, Text, useToast } from '@/components/ui';
-import { formatPrice, useRefreshControl } from '@/shared';
+import { formatPrice, pickDisplayTier, useRefreshControl } from '@/shared';
 import { spacing, useColors } from '@/theme';
 
 import { TutorNotFoundError } from '../api/tutors.api';
@@ -133,18 +133,21 @@ export function TutorDetailScreen({ id, onBack, onContact }: TutorDetailScreenPr
         {tutor.subjects.length > 0 ? (
           <ProfileSection title={t('tutors.detail.subjects')}>
             <TagRow>
-              {tutor.subjects.map((subject) => (
-                <InfoTag
-                  key={subject.subjectId}
-                  icon="book-open"
-                  label={subject.name}
-                  note={
-                    subject.priceOverride !== null
-                      ? formatPrice(subject.priceOverride, tutor.currency)
-                      : undefined
-                  }
-                />
-              ))}
+              {tutor.subjects.map((subject) => {
+                const tier = pickDisplayTier(subject.pricingTiers);
+                return (
+                  <InfoTag
+                    key={subject.subjectId}
+                    icon="book-open"
+                    label={subject.name}
+                    note={
+                      tier
+                        ? `${formatPrice(tier.amount, tutor.currency)}${t(`tutors.pricePeriod.${tier.period}`)}`
+                        : undefined
+                    }
+                  />
+                );
+              })}
             </TagRow>
           </ProfileSection>
         ) : null}

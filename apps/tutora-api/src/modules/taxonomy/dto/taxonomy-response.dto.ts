@@ -34,6 +34,18 @@ export class SubjectViewDto {
   categoryId!: string | null;
 }
 
+/** A city grouping districts for the cascading city → district picker. */
+export class CityViewDto {
+  @ApiProperty({ description: 'City id.' })
+  id!: string;
+
+  @ApiProperty({ description: 'Localized city name.' })
+  name!: string;
+
+  @ApiProperty({ description: 'URL-safe city slug.', example: 'baku' })
+  slug!: string;
+}
+
 /** A geographic district used for offline lesson matching. */
 export class DistrictViewDto {
   @ApiProperty({ description: 'District id.' })
@@ -44,6 +56,9 @@ export class DistrictViewDto {
 
   @ApiProperty({ description: 'URL-safe district slug.', example: 'nasimi' })
   slug!: string;
+
+  @ApiProperty({ description: 'Owning city id.' })
+  cityId!: string;
 }
 
 /** A language a tutor can teach in. */

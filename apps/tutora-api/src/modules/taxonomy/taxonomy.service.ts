@@ -8,14 +8,22 @@ import { Prisma } from '@prisma/client';
 import { PrismaService } from '@/prisma/prisma.service';
 import { CacheService } from '@common/cache/cache.service';
 import type { CreateCategoryDto } from './dto/create-category.dto';
+import type { CreateCityDto } from './dto/create-city.dto';
 import type { CreateDistrictDto } from './dto/create-district.dto';
 import type { CreateLanguageDto } from './dto/create-language.dto';
 import type { CreateSubjectDto } from './dto/create-subject.dto';
 import type { UpdateCategoryDto } from './dto/update-category.dto';
+import type { UpdateCityDto } from './dto/update-city.dto';
 import type { UpdateDistrictDto } from './dto/update-district.dto';
 import type { UpdateLanguageDto } from './dto/update-language.dto';
 import type { UpdateSubjectDto } from './dto/update-subject.dto';
-import type { CategoryView, DistrictView, LanguageView, SubjectView } from './taxonomy.types';
+import type {
+  CategoryView,
+  CityView,
+  DistrictView,
+  LanguageView,
+  SubjectView,
+} from './taxonomy.types';
 
 const CATEGORY_FIELDS = { id: true, name: true, slug: true } satisfies Prisma.CategorySelect;
 const SUBJECT_FIELDS = {
@@ -24,7 +32,13 @@ const SUBJECT_FIELDS = {
   slug: true,
   categoryId: true,
 } satisfies Prisma.SubjectSelect;
-const DISTRICT_FIELDS = { id: true, name: true, slug: true } satisfies Prisma.DistrictSelect;
+const CITY_FIELDS = { id: true, name: true, slug: true } satisfies Prisma.CitySelect;
+const DISTRICT_FIELDS = {
+  id: true,
+  name: true,
+  slug: true,
+  cityId: true,
+} satisfies Prisma.DistrictSelect;
 const LANGUAGE_FIELDS = { id: true, name: true, code: true } satisfies Prisma.LanguageSelect;
 
 // Every key lives under this namespace so a single prefix invalidates the lot.
@@ -103,11 +117,38 @@ export class TaxonomyService {
     await this.write('Subject', () => this.prisma.subject.delete({ where: { id } }));
   }
 
+  // ---------- Cities ----------
+
+  listCities(): Promise<CityView[]> {
+    return this.cache.getOrSet(`${CACHE_PREFIX}cities`, CACHE_TTL_SECONDS, () =>
+      this.prisma.city.findMany({ select: CITY_FIELDS, orderBy: { name: 'asc' } }),
+    );
+  }
+
+  async createCity(dto: CreateCityDto): Promise<CityView> {
+    return this.write('City', () => this.prisma.city.create({ data: dto, select: CITY_FIELDS }));
+  }
+
+  async updateCity(id: string, dto: UpdateCityDto): Promise<CityView> {
+    return this.write('City', () =>
+      this.prisma.city.update({ where: { id }, data: dto, select: CITY_FIELDS }),
+    );
+  }
+
+  async deleteCity(id: string): Promise<void> {
+    await this.write('City', () => this.prisma.city.delete({ where: { id } }));
+  }
+
   // ---------- Districts ----------
 
-  listDistricts(): Promise<DistrictView[]> {
-    return this.cache.getOrSet(`${CACHE_PREFIX}districts`, CACHE_TTL_SECONDS, () =>
-      this.prisma.district.findMany({ select: DISTRICT_FIELDS, orderBy: { name: 'asc' } }),
+  listDistricts(cityId?: string): Promise<DistrictView[]> {
+    const key = cityId ? `${CACHE_PREFIX}districts:${cityId}` : `${CACHE_PREFIX}districts`;
+    return this.cache.getOrSet(key, CACHE_TTL_SECONDS, () =>
+      this.prisma.district.findMany({
+        where: cityId ? { cityId } : undefined,
+        select: DISTRICT_FIELDS,
+        orderBy: { name: 'asc' },
+      }),
     );
   }
 
@@ -170,7 +211,7 @@ export class TaxonomyService {
           throw new NotFoundException(`${entity} not found`);
         }
         if (error.code === 'P2003') {
-          throw new BadRequestException('Referenced category does not exist');
+          throw new BadRequestException('Referenced parent record does not exist');
         }
       }
       throw error;

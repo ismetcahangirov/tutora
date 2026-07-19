@@ -55,7 +55,9 @@ export function VerificationQueueTable({
         header: t('verifications.columns.rate'),
         cell: ({ row }) => (
           <span className="whitespace-nowrap text-sm text-foreground">
-            {row.original.hourlyRate} {row.original.currency}
+            {row.original.hourlyRate === null
+              ? '—'
+              : `${row.original.hourlyRate} ${row.original.currency}`}
           </span>
         ),
       },

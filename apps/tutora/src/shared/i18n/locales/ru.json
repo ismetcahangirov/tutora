@@ -108,7 +108,13 @@
   "tutors": {
     "unnamed": "Репетитор",
     "verified": "Проверен",
-    "perHour": "/час",
+    "noPriceSet": "Цена не указана",
+    "pricePeriod": {
+      "HOURLY": "/час",
+      "WEEKLY": "/нед",
+      "MONTHLY": "/мес",
+      "YEARLY": "/год"
+    },
     "rating": {
       "new": "Новый",
       "count": "({{count}})"
@@ -350,18 +356,28 @@
         "bioHelper": "{{count}}/{{max}}",
         "experienceLabel": "Опыт (лет)",
         "experienceError": "Введите целое число от 0 до {{max}}.",
-        "rateLabel": "Ставка в час",
-        "rateError": "Введите сумму от 0 до {{max}}.",
+        "pricingTitle": "Базовая ставка",
         "currencyLabel": "Валюта",
         "formatsLabel": "Форматы занятий",
         "saved": "Профиль обновлён."
+      },
+      "pricing": {
+        "period": {
+          "HOURLY": "Почасовая",
+          "WEEKLY": "Понедельная",
+          "MONTHLY": "Помесячная",
+          "YEARLY": "Годовая"
+        },
+        "amountPlaceholder": "Сумма ({{currency}})",
+        "amountError": "Введите сумму от 0 до {{max}}."
       },
       "subjects": {
         "title": "Предметы и цены",
         "empty": "Добавьте предметы, которые вы преподаёте, и укажите цену для каждого.",
         "add": "Добавить предмет",
         "remove": "Удалить {{subject}}",
-        "basePrice": "Базовая ставка ({{currency}})",
+        "noOverride": "Используется базовая ставка",
+        "editPricing": "Изменить цены для {{subject}}",
         "pickerTitle": "Добавить предмет",
         "search": "Поиск предметов",
         "pickerEmpty": "Предметы не найдены."
@@ -371,6 +387,9 @@
         "empty": "Добавьте районы, где вы преподаёте очно.",
         "add": "Добавить район",
         "remove": "Удалить {{district}}",
+        "cityPickerTitle": "Выберите город",
+        "citySearch": "Поиск городов",
+        "cityPickerEmpty": "Города не найдены.",
         "pickerTitle": "Добавить район",
         "search": "Поиск районов",
         "pickerEmpty": "Районы не найдены."

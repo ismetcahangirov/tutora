@@ -8,7 +8,7 @@
 import { apiClient } from '@/shared/lib';
 
 import { TAXONOMY_ENDPOINTS } from '../constants';
-import type { Category, District, Language, Subject } from '../types';
+import type { Category, City, District, Language, Subject } from '../types';
 
 /** GET all categories, alphabetized by the backend. */
 export async function fetchCategories(): Promise<Category[]> {
@@ -24,9 +24,17 @@ export async function fetchSubjects(categoryId?: string): Promise<Subject[]> {
   return data;
 }
 
-/** GET all districts. */
-export async function fetchDistricts(): Promise<District[]> {
-  const { data } = await apiClient.get<District[]>(TAXONOMY_ENDPOINTS.districts);
+/** GET all cities. */
+export async function fetchCities(): Promise<City[]> {
+  const { data } = await apiClient.get<City[]>(TAXONOMY_ENDPOINTS.cities);
+  return data;
+}
+
+/** GET districts, optionally scoped to a single city. */
+export async function fetchDistricts(cityId?: string): Promise<District[]> {
+  const { data } = await apiClient.get<District[]>(TAXONOMY_ENDPOINTS.districts, {
+    params: cityId ? { cityId } : undefined,
+  });
   return data;
 }
 

@@ -55,8 +55,12 @@ export class FavoriteTutorViewDto {
   @ApiProperty({ nullable: true, type: String, description: 'Tutor avatar URL, if set.' })
   avatarUrl!: string | null;
 
-  @ApiProperty({ description: 'Advertised hourly rate.' })
-  hourlyRate!: number;
+  @ApiProperty({
+    type: Number,
+    nullable: true,
+    description: 'Advertised hourly rate, or null if the tutor hasn’t set one.',
+  })
+  hourlyRate!: number | null;
 
   @ApiProperty({ description: 'ISO 4217 currency code for the hourly rate.', example: 'AZN' })
   currency!: string;

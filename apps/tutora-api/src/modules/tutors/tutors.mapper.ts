@@ -4,17 +4,25 @@ import type {
   AdminTutorView,
   AvailabilitySlotView,
   CertificateView,
+  PricingTierView,
   PublicTutorView,
   TutorProfileView,
 } from './tutors.types';
 
+const PRICING_TIER_SELECT = { period: true, amount: true } satisfies Prisma.PricingTierSelect;
+
 /** Relations eagerly loaded whenever a full tutor profile is returned. */
 export const TUTOR_PROFILE_INCLUDE = {
   user: { select: { name: true, avatarUrl: true, email: true } },
-  subjects: { include: { subject: true }, orderBy: { createdAt: 'asc' } },
+  subjects: {
+    include: { subject: true, pricingTiers: { select: PRICING_TIER_SELECT } },
+    orderBy: { createdAt: 'asc' },
+  },
   districts: { include: { district: true } },
   languages: { include: { language: true } },
   certificates: { orderBy: { createdAt: 'desc' } },
+  // Base-rate tiers: PricingTier rows scoped to the profile with no subject.
+  pricingTiers: { where: { tutorSubjectId: null }, select: PRICING_TIER_SELECT },
 } satisfies Prisma.TutorProfileInclude;
 
 export type TutorProfileWithRelations = Prisma.TutorProfileGetPayload<{
@@ -25,7 +33,7 @@ export type TutorProfileWithRelations = Prisma.TutorProfileGetPayload<{
 export const TUTOR_LIST_SELECT = {
   id: true,
   userId: true,
-  hourlyRate: true,
+  hourlyRateCache: true,
   currency: true,
   verificationStatus: true,
   isPublished: true,
@@ -56,6 +64,13 @@ export function toAvailabilitySlotView(a: TutorAvailability): AvailabilitySlotVi
   };
 }
 
+function toPricingTierView(t: {
+  period: PricingTierView['period'];
+  amount: Prisma.Decimal;
+}): PricingTierView {
+  return { period: t.period, amount: num(t.amount) };
+}
+
 export function toCertificateView(c: Certificate): CertificateView {
   return {
     id: c.id,
@@ -77,7 +92,8 @@ export function toTutorProfileView(p: TutorProfileWithRelations): TutorProfileVi
     avatarUrl: p.user.avatarUrl,
     bio: p.bio,
     experienceYears: p.experienceYears,
-    hourlyRate: num(p.hourlyRate),
+    hourlyRate: numOrNull(p.hourlyRateCache),
+    pricingTiers: p.pricingTiers.map(toPricingTierView),
     currency: p.currency,
     formats: p.formats,
     verificationStatus: p.verificationStatus,
@@ -90,7 +106,7 @@ export function toTutorProfileView(p: TutorProfileWithRelations): TutorProfileVi
       subjectId: s.subjectId,
       name: s.subject.name,
       slug: s.subject.slug,
-      priceOverride: numOrNull(s.priceOverride),
+      pricingTiers: s.pricingTiers.map(toPricingTierView),
     })),
     districts: p.districts.map((d) => ({
       districtId: d.districtId,
@@ -117,6 +133,7 @@ export function toPublicTutorView(p: TutorProfileWithRelations): PublicTutorView
     bio: full.bio,
     experienceYears: full.experienceYears,
     hourlyRate: full.hourlyRate,
+    pricingTiers: full.pricingTiers,
     currency: full.currency,
     formats: full.formats,
     verificationStatus: full.verificationStatus,
@@ -141,7 +158,7 @@ export function toAdminTutorListItem(p: TutorListRow): AdminTutorListItem {
     name: p.user.name,
     email: p.user.email,
     avatarUrl: p.user.avatarUrl,
-    hourlyRate: num(p.hourlyRate),
+    hourlyRate: numOrNull(p.hourlyRateCache),
     currency: p.currency,
     verificationStatus: p.verificationStatus,
     isPublished: p.isPublished,

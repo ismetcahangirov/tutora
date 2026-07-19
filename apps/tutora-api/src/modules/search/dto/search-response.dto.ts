@@ -64,8 +64,12 @@ export class TutorSearchItemDto {
   @ApiProperty({ description: 'Years of teaching experience.' })
   experienceYears!: number;
 
-  @ApiProperty({ description: 'Base hourly rate.' })
-  hourlyRate!: number;
+  @ApiProperty({
+    type: Number,
+    nullable: true,
+    description: 'The tutor’s HOURLY base rate, or null if not set.',
+  })
+  hourlyRate!: number | null;
 
   @ApiProperty({ description: 'ISO currency code.', example: 'AZN' })
   currency!: string;

@@ -10,7 +10,7 @@ function makeFullProfile(overrides: Record<string, unknown> = {}) {
     userId: 'u1',
     bio: null,
     experienceYears: 2,
-    hourlyRate: 20,
+    hourlyRateCache: 20,
     currency: 'AZN',
     formats: ['ONLINE'],
     verificationStatus: 'PENDING',
@@ -26,6 +26,7 @@ function makeFullProfile(overrides: Record<string, unknown> = {}) {
     districts: [],
     languages: [],
     certificates: [],
+    pricingTiers: [],
     ...overrides,
   };
 }
@@ -61,7 +62,7 @@ describe('AdminTutorsService.list', () => {
       {
         id: 'tp1',
         userId: 'u1',
-        hourlyRate: 20,
+        hourlyRateCache: 20,
         currency: 'AZN',
         verificationStatus: 'VERIFIED',
         isPublished: true,
@@ -82,6 +83,30 @@ describe('AdminTutorsService.list', () => {
     );
     expect(result.data[0]).toMatchObject({ id: 'tp1', email: 'ada@example.com', hourlyRate: 20 });
     expect(result.meta.total).toBe(1);
+  });
+});
+
+describe('AdminTutorsService.update', () => {
+  it('replaces the base pricing tiers and syncs hourlyRateCache', async () => {
+    const prisma = buildPrismaMock();
+    prisma.tutorProfile.findUnique.mockResolvedValueOnce(makeFullProfile());
+    prisma.tutorProfile.update.mockResolvedValueOnce(makeFullProfile());
+
+    const service = await buildService(prisma);
+    await service.update('tp1', { pricingTiers: [{ period: 'HOURLY', amount: 35 }] });
+
+    expect(prisma.tutorProfile.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: 'tp1' },
+        data: {
+          hourlyRateCache: 35,
+          pricingTiers: {
+            deleteMany: { tutorSubjectId: null },
+            create: [{ period: 'HOURLY', amount: 35 }],
+          },
+        },
+      }),
+    );
   });
 });
 

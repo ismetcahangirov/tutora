@@ -83,7 +83,7 @@ function TutorSummary({ tutor, locale }: { tutor: AdminTutor; locale: string }) 
         <Fact label={t('verifications.detail.experience')} value={String(tutor.experienceYears)} />
         <Fact
           label={t('verifications.detail.rate')}
-          value={`${tutor.hourlyRate} ${tutor.currency}`}
+          value={tutor.hourlyRate === null ? '—' : `${tutor.hourlyRate} ${tutor.currency}`}
         />
         <Fact
           label={t('verifications.detail.rating')}

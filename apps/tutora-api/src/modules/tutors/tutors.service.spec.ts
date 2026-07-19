@@ -1,4 +1,4 @@
-import { ConflictException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { PrismaService } from '@/prisma/prisma.service';
 import { TutorsService } from './tutors.service';
@@ -9,7 +9,7 @@ function makeProfile(overrides: Record<string, unknown> = {}) {
     userId: 'u1',
     bio: null,
     experienceYears: 0,
-    hourlyRate: 0,
+    hourlyRateCache: null,
     currency: 'AZN',
     formats: [],
     verificationStatus: 'UNVERIFIED',
@@ -25,6 +25,7 @@ function makeProfile(overrides: Record<string, unknown> = {}) {
     districts: [],
     languages: [],
     certificates: [],
+    pricingTiers: [],
     ...overrides,
   };
 }
@@ -55,7 +56,7 @@ describe('TutorsService.getOwnProfile', () => {
     const service = await buildService(prisma);
     const result = await service.getOwnProfile('u1');
 
-    expect(result).toMatchObject({ id: 'tp1', userId: 'u1', name: 'Ada', hourlyRate: 0 });
+    expect(result).toMatchObject({ id: 'tp1', userId: 'u1', name: 'Ada', hourlyRate: null });
     expect(prisma.tutorProfile.create).not.toHaveBeenCalled();
   });
 
@@ -68,7 +69,7 @@ describe('TutorsService.getOwnProfile', () => {
     await service.getOwnProfile('u1');
 
     expect(prisma.tutorProfile.create).toHaveBeenCalledWith(
-      expect.objectContaining({ data: { userId: 'u1', hourlyRate: 0 } }),
+      expect.objectContaining({ data: { userId: 'u1' } }),
     );
   });
 });
@@ -117,6 +118,52 @@ describe('TutorsService.updateOwnProfile', () => {
         data: { bio: 'Hi', formats: { set: ['ONLINE'] } },
       }),
     );
+  });
+
+  it('replaces the base pricing tiers and syncs hourlyRateCache', async () => {
+    const prisma = buildPrismaMock();
+    prisma.tutorProfile.findUnique.mockResolvedValueOnce(makeProfile());
+    prisma.tutorProfile.update.mockResolvedValueOnce(makeProfile());
+
+    const service = await buildService(prisma);
+    await service.updateOwnProfile('u1', {
+      pricingTiers: [
+        { period: 'HOURLY', amount: 25 },
+        { period: 'MONTHLY', amount: 400 },
+      ],
+    });
+
+    expect(prisma.tutorProfile.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { userId: 'u1' },
+        data: {
+          hourlyRateCache: 25,
+          pricingTiers: {
+            deleteMany: { tutorSubjectId: null },
+            create: [
+              { period: 'HOURLY', amount: 25 },
+              { period: 'MONTHLY', amount: 400 },
+            ],
+          },
+        },
+      }),
+    );
+  });
+
+  it('rejects duplicate pricing tier periods with BadRequest', async () => {
+    const prisma = buildPrismaMock();
+    prisma.tutorProfile.findUnique.mockResolvedValueOnce(makeProfile());
+
+    const service = await buildService(prisma);
+    await expect(
+      service.updateOwnProfile('u1', {
+        pricingTiers: [
+          { period: 'HOURLY', amount: 25 },
+          { period: 'HOURLY', amount: 30 },
+        ],
+      }),
+    ).rejects.toBeInstanceOf(BadRequestException);
+    expect(prisma.tutorProfile.update).not.toHaveBeenCalled();
   });
 });
 

@@ -43,6 +43,7 @@ const profile: MyTutorProfile = {
   bio: 'Riyaziyyat müəllimi',
   experienceYears: 6,
   hourlyRate: 30,
+  pricingTiers: [{ period: 'HOURLY', amount: 30 }],
   currency: 'AZN',
   formats: ['ONLINE'],
   verificationStatus: 'VERIFIED',
@@ -50,7 +51,7 @@ const profile: MyTutorProfile = {
   ratingCount: 12,
   profileViews: 340,
   isPublished: true,
-  subjects: [{ subjectId: 's-1', name: 'Riyaziyyat', slug: 'math', priceOverride: null }],
+  subjects: [{ subjectId: 's-1', name: 'Riyaziyyat', slug: 'math', pricingTiers: [] }],
   districts: [{ districtId: 'd-1', name: 'Nəsimi', slug: 'nasimi' }],
   languages: [{ languageId: 'l-1', name: 'Azərbaycan', code: 'az' }],
   certificates: [],
@@ -69,22 +70,28 @@ describe('tutor-profile API (#53)', () => {
   it('patches only the fields it is given', async () => {
     mocked.patch.mockResolvedValueOnce({ data: profile });
 
-    await updateMyTutorProfile({ hourlyRate: 35, formats: ['ONLINE', 'AT_TUTOR_PLACE'] });
+    await updateMyTutorProfile({
+      pricingTiers: [{ period: 'HOURLY', amount: 35 }],
+      formats: ['ONLINE', 'AT_TUTOR_PLACE'],
+    });
 
     expect(mocked.patch).toHaveBeenCalledWith(TUTOR_PROFILE_ENDPOINTS.me, {
-      hourlyRate: 35,
+      pricingTiers: [{ period: 'HOURLY', amount: 35 }],
       formats: ['ONLINE', 'AT_TUTOR_PLACE'],
     });
   });
 
-  it('upserts a subject with its optional price override (#56)', async () => {
+  it('upserts a subject with its optional price-override tiers (#56, #178)', async () => {
     mocked.put.mockResolvedValueOnce({ data: profile });
 
-    await upsertTutorSubject({ subjectId: 's-2', priceOverride: 40 });
+    await upsertTutorSubject({
+      subjectId: 's-2',
+      pricingTiers: [{ period: 'HOURLY', amount: 40 }],
+    });
 
     expect(mocked.put).toHaveBeenCalledWith(TUTOR_PROFILE_ENDPOINTS.subjects, {
       subjectId: 's-2',
-      priceOverride: 40,
+      pricingTiers: [{ period: 'HOURLY', amount: 40 }],
     });
   });
 

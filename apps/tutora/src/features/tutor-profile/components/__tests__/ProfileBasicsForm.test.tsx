@@ -17,6 +17,7 @@ const profile: MyTutorProfile = {
   bio: 'Existing bio',
   experienceYears: 5,
   hourlyRate: 30,
+  pricingTiers: [{ period: 'HOURLY', amount: 30 }],
   currency: 'AZN',
   formats: ['ONLINE'],
   verificationStatus: 'VERIFIED',
@@ -32,18 +33,20 @@ const profile: MyTutorProfile = {
   updatedAt: '2026-01-01T00:00:00.000Z',
 };
 
-describe('ProfileBasicsForm (#53)', () => {
+describe('ProfileBasicsForm (#53, #178)', () => {
   it('sends only the changed field on save', async () => {
     const onSave = jest.fn();
     await renderWithProviders(
       <ProfileBasicsForm profile={profile} isSaving={false} onSave={onSave} />,
     );
 
-    await fireEvent.changeText(screen.getByLabelText('Hourly rate'), '45');
+    const hourlyField = screen.getByLabelText('Hourly');
+    await fireEvent.changeText(hourlyField, '45');
+    await fireEvent(hourlyField, 'blur');
     await fireEvent.press(screen.getByRole('button', { name: 'Save' }));
 
     expect(onSave).toHaveBeenCalledTimes(1);
-    expect(onSave).toHaveBeenCalledWith({ hourlyRate: 45 });
+    expect(onSave).toHaveBeenCalledWith({ pricingTiers: [{ period: 'HOURLY', amount: 45 }] });
   });
 
   it('does not save an untouched form', async () => {
@@ -57,13 +60,15 @@ describe('ProfileBasicsForm (#53)', () => {
     expect(onSave).not.toHaveBeenCalled();
   });
 
-  it('does not save while an invalid rate is entered', async () => {
+  it('reverts an invalid rate on blur and does not save', async () => {
     const onSave = jest.fn();
     await renderWithProviders(
       <ProfileBasicsForm profile={profile} isSaving={false} onSave={onSave} />,
     );
 
-    await fireEvent.changeText(screen.getByLabelText('Hourly rate'), 'abc');
+    const hourlyField = screen.getByLabelText('Hourly');
+    await fireEvent.changeText(hourlyField, 'abc');
+    await fireEvent(hourlyField, 'blur');
     await fireEvent.press(screen.getByRole('button', { name: 'Save' }));
 
     expect(onSave).not.toHaveBeenCalled();

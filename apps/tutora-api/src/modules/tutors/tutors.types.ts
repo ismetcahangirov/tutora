@@ -1,4 +1,10 @@
-import type { CertificateStatus, LessonFormat, VerificationStatus, Weekday } from '@prisma/client';
+import type {
+  CertificateStatus,
+  LessonFormat,
+  PricingPeriod,
+  VerificationStatus,
+  Weekday,
+} from '@prisma/client';
 
 /** A recurring weekly availability window (minutes from local midnight). */
 export interface AvailabilitySlotView {
@@ -8,11 +14,18 @@ export interface AvailabilitySlotView {
   endMinute: number;
 }
 
+/** One (period → amount) price point. */
+export interface PricingTierView {
+  period: PricingPeriod;
+  amount: number;
+}
+
 export interface TutorSubjectView {
   subjectId: string;
   name: string;
   slug: string;
-  priceOverride: number | null;
+  /** Price-override tiers for this subject; empty means "use the base rate". */
+  pricingTiers: PricingTierView[];
 }
 
 export interface TutorDistrictView {
@@ -47,7 +60,10 @@ export interface TutorProfileView {
   avatarUrl: string | null;
   bio: string | null;
   experienceYears: number;
-  hourlyRate: number;
+  /** The HOURLY base tier's amount, or null if the tutor hasn't set one. */
+  hourlyRate: number | null;
+  /** The tutor's full base rate, one entry per period they've priced. */
+  pricingTiers: PricingTierView[];
   currency: string;
   formats: LessonFormat[];
   verificationStatus: VerificationStatus;
@@ -72,7 +88,10 @@ export interface PublicTutorView {
   avatarUrl: string | null;
   bio: string | null;
   experienceYears: number;
-  hourlyRate: number;
+  /** The HOURLY base tier's amount, or null if the tutor hasn't set one. */
+  hourlyRate: number | null;
+  /** The tutor's full base rate, one entry per period they've priced. */
+  pricingTiers: PricingTierView[];
   currency: string;
   formats: LessonFormat[];
   verificationStatus: VerificationStatus;
@@ -97,7 +116,7 @@ export interface AdminTutorListItem {
   name: string | null;
   email: string;
   avatarUrl: string | null;
-  hourlyRate: number;
+  hourlyRate: number | null;
   currency: string;
   verificationStatus: VerificationStatus;
   isPublished: boolean;

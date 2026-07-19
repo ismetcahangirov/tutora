@@ -1,14 +1,22 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ListDistrictsQueryDto } from './dto/list-districts-query.dto';
 import { ListSubjectsQueryDto } from './dto/list-subjects-query.dto';
 import {
   CategoryViewDto,
+  CityViewDto,
   DistrictViewDto,
   LanguageViewDto,
   SubjectViewDto,
 } from './dto/taxonomy-response.dto';
 import { TaxonomyService } from './taxonomy.service';
-import type { CategoryView, DistrictView, LanguageView, SubjectView } from './taxonomy.types';
+import type {
+  CategoryView,
+  CityView,
+  DistrictView,
+  LanguageView,
+  SubjectView,
+} from './taxonomy.types';
 
 /**
  * Public reference data used by filter UIs and tutor profile assignment. No
@@ -33,11 +41,18 @@ export class TaxonomyPublicController {
     return this.taxonomy.listSubjects(query.categoryId);
   }
 
+  @Get('cities')
+  @ApiOperation({ summary: 'List all cities' })
+  @ApiOkResponse({ description: 'All cities.', type: [CityViewDto] })
+  cities(): Promise<CityView[]> {
+    return this.taxonomy.listCities();
+  }
+
   @Get('districts')
-  @ApiOperation({ summary: 'List all districts' })
-  @ApiOkResponse({ description: 'All districts.', type: [DistrictViewDto] })
-  districts(): Promise<DistrictView[]> {
-    return this.taxonomy.listDistricts();
+  @ApiOperation({ summary: 'List districts, optionally filtered by city' })
+  @ApiOkResponse({ description: 'Matching districts.', type: [DistrictViewDto] })
+  districts(@Query() query: ListDistrictsQueryDto): Promise<DistrictView[]> {
+    return this.taxonomy.listDistricts(query.cityId);
   }
 
   @Get('languages')

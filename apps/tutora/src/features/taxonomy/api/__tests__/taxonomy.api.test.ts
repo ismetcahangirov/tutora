@@ -4,7 +4,13 @@
 import { apiClient } from '@/shared/lib';
 import { TAXONOMY_ENDPOINTS } from '@features/taxonomy/constants';
 
-import { fetchCategories, fetchDistricts, fetchLanguages, fetchSubjects } from '../taxonomy.api';
+import {
+  fetchCategories,
+  fetchCities,
+  fetchDistricts,
+  fetchLanguages,
+  fetchSubjects,
+} from '../taxonomy.api';
 
 jest.mock('@/shared/lib', () => ({
   apiClient: { get: jest.fn() },
@@ -33,11 +39,25 @@ describe('taxonomy API (#40)', () => {
     });
   });
 
-  it('fetches districts and languages', async () => {
+  it('fetches cities and languages', async () => {
     mockedGet.mockResolvedValue({ data: [] });
-    await fetchDistricts();
+    await fetchCities();
     await fetchLanguages();
-    expect(mockedGet).toHaveBeenCalledWith(TAXONOMY_ENDPOINTS.districts);
+    expect(mockedGet).toHaveBeenCalledWith(TAXONOMY_ENDPOINTS.cities);
     expect(mockedGet).toHaveBeenCalledWith(TAXONOMY_ENDPOINTS.languages);
+  });
+
+  it('fetches all districts with no params when no city is given', async () => {
+    mockedGet.mockResolvedValueOnce({ data: [] });
+    await fetchDistricts();
+    expect(mockedGet).toHaveBeenCalledWith(TAXONOMY_ENDPOINTS.districts, { params: undefined });
+  });
+
+  it('scopes districts to a city when given', async () => {
+    mockedGet.mockResolvedValueOnce({ data: [] });
+    await fetchDistricts('city-1');
+    expect(mockedGet).toHaveBeenCalledWith(TAXONOMY_ENDPOINTS.districts, {
+      params: { cityId: 'city-1' },
+    });
   });
 });

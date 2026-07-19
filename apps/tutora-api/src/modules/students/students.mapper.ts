@@ -36,7 +36,7 @@ export const FAVORITE_INCLUDE = {
   tutor: {
     select: {
       id: true,
-      hourlyRate: true,
+      hourlyRateCache: true,
       currency: true,
       ratingAvg: true,
       verificationStatus: true,
@@ -85,7 +85,7 @@ export function toFavoriteTutorView(f: FavoriteWithTutor): FavoriteTutorView {
     tutorId: f.tutor.id,
     name: f.tutor.user.name,
     avatarUrl: f.tutor.user.avatarUrl,
-    hourlyRate: Number(f.tutor.hourlyRate),
+    hourlyRate: f.tutor.hourlyRateCache === null ? null : Number(f.tutor.hourlyRateCache),
     currency: f.tutor.currency,
     ratingAvg: Number(f.tutor.ratingAvg),
     verificationStatus: f.tutor.verificationStatus,

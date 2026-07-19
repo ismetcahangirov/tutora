@@ -11,10 +11,17 @@ export interface SubjectView {
   categoryId: string | null;
 }
 
+export interface CityView {
+  id: string;
+  name: string;
+  slug: string;
+}
+
 export interface DistrictView {
   id: string;
   name: string;
   slug: string;
+  cityId: string;
 }
 
 export interface LanguageView {

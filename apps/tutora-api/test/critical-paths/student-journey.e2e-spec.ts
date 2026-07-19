@@ -19,7 +19,7 @@ function tutorSearchRow() {
     id: 'tp1',
     bio: 'Experienced maths tutor',
     experienceYears: 5,
-    hourlyRate: 30,
+    hourlyRateCache: 30,
     currency: 'AZN',
     formats: ['ONLINE'],
     verificationStatus: 'VERIFIED',

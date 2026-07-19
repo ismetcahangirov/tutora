@@ -22,7 +22,7 @@ function makeProfile(overrides: Record<string, unknown> = {}) {
     userId: 'u1',
     bio: null,
     experienceYears: 0,
-    hourlyRate: 0,
+    hourlyRateCache: null,
     currency: 'AZN',
     formats: [],
     verificationStatus: 'VERIFIED',
@@ -38,6 +38,7 @@ function makeProfile(overrides: Record<string, unknown> = {}) {
     districts: [],
     languages: [],
     certificates: [],
+    pricingTiers: [],
     ...overrides,
   };
 }
@@ -132,11 +133,11 @@ describe('Tutors module (integration)', () => {
       .expect(409);
   });
 
-  it('PATCH /tutors/me validates hourlyRate bounds with 400', async () => {
+  it('PATCH /tutors/me validates pricingTiers amount bounds with 400', async () => {
     await request(httpServer)
       .patch('/api/v1/tutors/me')
       .set('Authorization', `Bearer ${token('TUTOR')}`)
-      .send({ hourlyRate: -5 })
+      .send({ pricingTiers: [{ period: 'HOURLY', amount: -5 }] })
       .expect(400);
   });
 

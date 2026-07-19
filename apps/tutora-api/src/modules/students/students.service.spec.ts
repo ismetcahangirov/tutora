@@ -126,7 +126,7 @@ describe('StudentsService favorites', () => {
         createdAt: new Date('2026-02-01T00:00:00Z'),
         tutor: {
           id: 'tp1',
-          hourlyRate: 25,
+          hourlyRateCache: 25,
           currency: 'AZN',
           ratingAvg: 4.8,
           verificationStatus: 'VERIFIED',

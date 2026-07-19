@@ -16,13 +16,22 @@ export type {
   TutorCertificate,
 } from '@features/tutors';
 
-/** A subject the tutor teaches, carrying an optional subject-specific price (#56). */
+/** A billing cadence a tutor can price a subject (or their base rate) at (#178). */
+export type PricingPeriod = 'HOURLY' | 'WEEKLY' | 'MONTHLY' | 'YEARLY';
+
+/** One (period → amount) price point. */
+export type PricingTier = {
+  period: PricingPeriod;
+  amount: number;
+};
+
+/** A subject the tutor teaches, carrying optional price-override tiers (#56, #178). */
 export type TutorProfileSubject = {
   subjectId: string;
   name: string;
   slug: string;
-  /** Overrides the base `hourlyRate` for this subject when set. */
-  priceOverride: number | null;
+  /** Price-override tiers for this subject; empty means "use the base rate". */
+  pricingTiers: PricingTier[];
 };
 
 /** A district the tutor teaches in. */
@@ -51,7 +60,10 @@ export type MyTutorProfile = {
   avatarUrl: string | null;
   bio: string | null;
   experienceYears: number;
-  hourlyRate: number;
+  /** The HOURLY base tier's amount, or null if not set. */
+  hourlyRate: number | null;
+  /** The tutor's full base rate, one entry per period they've priced. */
+  pricingTiers: PricingTier[];
   currency: string;
   formats: LessonFormat[];
   verificationStatus: VerificationStatus;
@@ -75,17 +87,18 @@ export type MyTutorProfile = {
 export type UpdateTutorProfileInput = {
   bio?: string;
   experienceYears?: number;
-  hourlyRate?: number;
+  /** Replaces the base pricing tiers (one per period) with this set. */
+  pricingTiers?: PricingTier[];
   currency?: string;
   formats?: LessonFormat[];
   isPublished?: boolean;
 };
 
-/** Body of `PUT /api/v1/tutors/me/subjects` — add a subject or change its price (#56). */
+/** Body of `PUT /api/v1/tutors/me/subjects` — add a subject or change its price (#56, #178). */
 export type UpsertTutorSubjectInput = {
   subjectId: string;
-  /** Omit or send `undefined` to fall back to the base hourly rate. */
-  priceOverride?: number;
+  /** Omit or send an empty array to fall back to the base rate for every period. */
+  pricingTiers?: PricingTier[];
 };
 
 /** What a signed upload is for. Mirrors the backend `MediaPurpose` (#37). */

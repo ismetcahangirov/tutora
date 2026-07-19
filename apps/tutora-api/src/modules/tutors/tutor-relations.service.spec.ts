@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { PrismaService } from '@/prisma/prisma.service';
 import { TutorRelationsService } from './tutor-relations.service';
@@ -50,14 +50,43 @@ describe('TutorRelationsService subjects', () => {
     prisma.subject.findUnique.mockResolvedValueOnce({ id: 's1' });
 
     const { service } = await buildService(prisma);
-    const result = await service.upsertSubject('u1', { subjectId: 's1', priceOverride: 30 });
+    const result = await service.upsertSubject('u1', {
+      subjectId: 's1',
+      pricingTiers: [{ period: 'HOURLY', amount: 30 }],
+    });
 
     expect(prisma.tutorSubject.upsert).toHaveBeenCalledWith({
       where: { tutorId_subjectId: { tutorId: 'tp1', subjectId: 's1' } },
-      create: { tutorId: 'tp1', subjectId: 's1', priceOverride: 30 },
-      update: { priceOverride: 30 },
+      create: {
+        tutorId: 'tp1',
+        subjectId: 's1',
+        pricingTiers: { create: [{ tutorId: 'tp1', period: 'HOURLY', amount: 30 }] },
+      },
+      update: {
+        pricingTiers: {
+          deleteMany: {},
+          create: [{ tutorId: 'tp1', period: 'HOURLY', amount: 30 }],
+        },
+      },
     });
     expect(result).toBe(PROFILE_VIEW);
+  });
+
+  it('rejects duplicate pricing tier periods with BadRequest', async () => {
+    const prisma = buildPrismaMock();
+    prisma.subject.findUnique.mockResolvedValueOnce({ id: 's1' });
+
+    const { service } = await buildService(prisma);
+    await expect(
+      service.upsertSubject('u1', {
+        subjectId: 's1',
+        pricingTiers: [
+          { period: 'HOURLY', amount: 30 },
+          { period: 'HOURLY', amount: 40 },
+        ],
+      }),
+    ).rejects.toBeInstanceOf(BadRequestException);
+    expect(prisma.tutorSubject.upsert).not.toHaveBeenCalled();
   });
 
   it('rejects a subject that does not exist with NotFound', async () => {

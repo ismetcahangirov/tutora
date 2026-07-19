@@ -25,6 +25,9 @@ export function TutorProfileHero({ tutor }: TutorProfileHeroProps) {
   const colors = useColors();
   const displayName = tutor.name ?? t('tutors.unnamed');
   const isVerified = tutor.verificationStatus === 'VERIFIED';
+  // The headline stat is always the HOURLY tier; any other periods the tutor
+  // has priced are listed underneath so the full rate card is still visible.
+  const otherTiers = tutor.pricingTiers.filter((tier) => tier.period !== 'HOURLY');
 
   return (
     <View style={styles.hero}>
@@ -42,10 +45,12 @@ export function TutorProfileHero({ tutor }: TutorProfileHeroProps) {
       <View style={[styles.stats, { borderColor: colors.border }]}>
         <View style={styles.stat}>
           <Text variant="title" color="primary">
-            {formatPrice(tutor.hourlyRate, tutor.currency)}
+            {tutor.hourlyRate === null
+              ? t('tutors.noPriceSet')
+              : formatPrice(tutor.hourlyRate, tutor.currency)}
           </Text>
           <Text variant="caption" color="textSecondary">
-            {t('tutors.perHour')}
+            {t('tutors.pricePeriod.HOURLY')}
           </Text>
         </View>
 
@@ -61,6 +66,17 @@ export function TutorProfileHero({ tutor }: TutorProfileHeroProps) {
           </Text>
         </View>
       </View>
+
+      {otherTiers.length > 0 ? (
+        <View style={styles.otherTiers}>
+          {otherTiers.map((tier) => (
+            <Text key={tier.period} variant="bodySmall" color="textSecondary">
+              {formatPrice(tier.amount, tutor.currency)}
+              {t(`tutors.pricePeriod.${tier.period}`)}
+            </Text>
+          ))}
+        </View>
+      ) : null}
     </View>
   );
 }
@@ -107,5 +123,11 @@ const styles = StyleSheet.create({
   divider: {
     width: 1,
     alignSelf: 'stretch',
+  },
+  otherTiers: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: spacing.md,
   },
 });

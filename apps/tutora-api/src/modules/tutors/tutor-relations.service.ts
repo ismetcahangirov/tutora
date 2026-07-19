@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import type { CreateCertificateDto } from './dto/create-certificate.dto';
 import type { UpsertTutorSubjectDto } from './dto/upsert-tutor-subject.dto';
+import { assertUniquePricingPeriods } from './pricing.util';
 import { toCertificateView } from './tutors.mapper';
 import { TutorsService } from './tutors.service';
 import type { CertificateView, TutorProfileView } from './tutors.types';
@@ -18,15 +19,28 @@ export class TutorRelationsService {
     private readonly tutors: TutorsService,
   ) {}
 
-  /** Idempotently attaches a subject (optionally with a price override). */
+  /** Idempotently attaches a subject (optionally with price-override tiers). */
   async upsertSubject(userId: string, dto: UpsertTutorSubjectDto): Promise<TutorProfileView> {
     const profile = await this.tutors.ensureProfile(userId);
     await this.assertExists('subject', dto.subjectId);
+    const tiers = dto.pricingTiers ?? [];
+    assertUniquePricingPeriods(tiers);
 
     await this.prisma.tutorSubject.upsert({
       where: { tutorId_subjectId: { tutorId: profile.id, subjectId: dto.subjectId } },
-      create: { tutorId: profile.id, subjectId: dto.subjectId, priceOverride: dto.priceOverride },
-      update: { priceOverride: dto.priceOverride ?? null },
+      create: {
+        tutorId: profile.id,
+        subjectId: dto.subjectId,
+        pricingTiers: {
+          create: tiers.map((t) => ({ tutorId: profile.id, period: t.period, amount: t.amount })),
+        },
+      },
+      update: {
+        pricingTiers: {
+          deleteMany: {},
+          create: tiers.map((t) => ({ tutorId: profile.id, period: t.period, amount: t.amount })),
+        },
+      },
     });
     return this.tutors.viewByUserId(userId);
   }

@@ -20,6 +20,15 @@ export type VerificationStatus = 'UNVERIFIED' | 'PENDING' | 'VERIFIED' | 'REJECT
 /** Certificate moderation state. Public profiles expose `VERIFIED` only. */
 export type CertificateStatus = 'PENDING' | 'VERIFIED' | 'REJECTED';
 
+/** A billing cadence a tutor can price a subject (or their base rate) at (#178). */
+export type PricingPeriod = 'HOURLY' | 'WEEKLY' | 'MONTHLY' | 'YEARLY';
+
+/** One (period → amount) price point. */
+export type PricingTier = {
+  period: PricingPeriod;
+  amount: number;
+};
+
 /** A subject on a tutor summary. */
 export type TutorSubject = {
   subjectId: string;
@@ -27,9 +36,10 @@ export type TutorSubject = {
   slug: string;
 };
 
-/** A subject on a full profile, carrying an optional subject-specific price. */
+/** A subject on a full profile, carrying optional price-override tiers. */
 export type TutorProfileSubject = TutorSubject & {
-  priceOverride: number | null;
+  /** Price-override tiers for this subject; empty means "use the base rate". */
+  pricingTiers: PricingTier[];
 };
 
 /** A district a tutor teaches in. */
@@ -64,7 +74,8 @@ type TutorBase = {
   avatarUrl: string | null;
   bio: string | null;
   experienceYears: number;
-  hourlyRate: number;
+  /** The tutor's HOURLY base rate, or null if they haven't set one. */
+  hourlyRate: number | null;
   currency: string;
   formats: LessonFormat[];
   verificationStatus: VerificationStatus;
@@ -83,6 +94,8 @@ export type TutorSummary = TutorBase & {
 export type TutorProfile = TutorBase & {
   subjects: TutorProfileSubject[];
   certificates: TutorCertificate[];
+  /** The tutor's full base rate, one entry per period they've priced (#178). */
+  pricingTiers: PricingTier[];
 };
 
 /** Sort orders accepted by the search endpoint. */
