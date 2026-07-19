@@ -112,12 +112,15 @@ jobs:
   # already gates on a successful image build: a Render deploy hook is just a
   # POST URL, so hitting it here is the same trigger a working webhook would
   # send, minus the dependency on Render's GitHub integration actually working.
-  # Set the repo secret RENDER_DEPLOY_HOOK_URL (Render dashboard → tutora
-  # service → Settings → Deploy → Deploy Hook) to enable; unset, this is skipped.
+  # Enable by setting the repository variable RENDER_DEPLOY_ENABLED=true and
+  # the secret RENDER_DEPLOY_HOOK_URL (Render dashboard → tutora service →
+  # Settings → Deploy → Deploy Hook). `if:` can't reference `secrets` directly
+  # (GitHub Actions rejects it as an unrecognized named-value there), hence
+  # the separate `vars` gate.
   deploy-render-api:
     name: trigger Render deploy (api)
     needs: build-push
-    if: ${{ secrets.RENDER_DEPLOY_HOOK_URL != '' }}
+    if: ${{ vars.RENDER_DEPLOY_ENABLED == 'true' }}
     runs-on: ubuntu-latest
     environment: production
     steps:
