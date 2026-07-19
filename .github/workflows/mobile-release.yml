@@ -46,6 +46,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       EAS_PROJECT_ID: ${{ vars.EAS_PROJECT_ID }}
+      EXPO_PUBLIC_API_URL: ${{ vars.EXPO_PUBLIC_API_URL }}
+      EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID: ${{ vars.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID }}
+      EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID: ${{ vars.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID }}
     steps:
       - uses: actions/checkout@v4
 
@@ -72,6 +75,9 @@ jobs:
       contents: write
     env:
       EAS_PROJECT_ID: ${{ vars.EAS_PROJECT_ID }}
+      EXPO_PUBLIC_API_URL: ${{ vars.EXPO_PUBLIC_API_URL }}
+      EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID: ${{ vars.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID }}
+      EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID: ${{ vars.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID }}
     steps:
       - uses: actions/checkout@v4
 
