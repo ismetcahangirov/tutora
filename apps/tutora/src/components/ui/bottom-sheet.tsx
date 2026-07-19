@@ -1,17 +1,24 @@
 /**
  * BottomSheet — controlled overlay built on `@gorhom/bottom-sheet` (issue #13).
  *
- * Driven by a `visible` prop (open at index 0, closed at -1). Pan-down and
- * backdrop taps both close it and call `onClose`, so callers keep a single source
- * of truth. Uses dynamic sizing when no `snapPoints` are given. Requires a
+ * Driven by a `visible` prop. Opening/closing is issued imperatively via gorhom's
+ * own ref methods (`snapToIndex`/`close`) rather than by diffing the `index` prop —
+ * `index` only reflects the *initial* render. A purely declarative `index` prop
+ * can desync from the sheet's actual animated position after a pan gesture
+ * settles mid-transition, silently swallowing the next open/close request; the
+ * imperative call always converges regardless of the sheet's current state (#176).
+ * Pan-down and backdrop taps both close it and call `onClose`, so callers keep a
+ * single source of truth. Uses dynamic sizing when no `snapPoints` are given, or
+ * pass `scrollable` for content that can exceed the sheet's height. Requires a
  * `GestureHandlerRootView` ancestor (added in the root layout).
  */
 import GorhomBottomSheet, {
   BottomSheetBackdrop,
+  BottomSheetScrollView,
   BottomSheetView,
   type BottomSheetBackdropProps,
 } from '@gorhom/bottom-sheet';
-import { useCallback, useRef, type ReactNode } from 'react';
+import { useCallback, useEffect, useRef, type ReactNode } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { radius, spacing, useTheme } from '@/theme';
@@ -24,10 +31,19 @@ export type BottomSheetProps = {
   /** Explicit snap points; omit to use dynamic content sizing. */
   snapPoints?: (string | number)[];
   title?: string;
+  /** Render content in a scrollable container — for content taller than the sheet. Defaults to false. */
+  scrollable?: boolean;
   children: ReactNode;
 };
 
-export function BottomSheet({ visible, onClose, snapPoints, title, children }: BottomSheetProps) {
+export function BottomSheet({
+  visible,
+  onClose,
+  snapPoints,
+  title,
+  scrollable = false,
+  children,
+}: BottomSheetProps) {
   const { colors } = useTheme();
   const ref = useRef<GorhomBottomSheet>(null);
 
@@ -53,10 +69,28 @@ export function BottomSheet({ visible, onClose, snapPoints, title, children }: B
     [onClose],
   );
 
+  // Sync external system: gorhom's sheet owns its own animated position, so
+  // opening/closing is a command, not a prop diff (see file doc comment).
+  // `snapToIndex(0)` (not `expand()`, which snaps to the *largest* point) keeps
+  // the original semantics of opening to the first snap point.
+  useEffect(() => {
+    if (visible) {
+      ref.current?.snapToIndex(0);
+    } else {
+      ref.current?.close();
+    }
+  }, [visible]);
+
+  const titleNode = title ? (
+    <Text variant="subtitle" style={styles.title}>
+      {title}
+    </Text>
+  ) : null;
+
   return (
     <GorhomBottomSheet
       ref={ref}
-      index={visible ? 0 : -1}
+      index={-1}
       snapPoints={snapPoints}
       enablePanDownToClose
       onChange={handleChange}
@@ -64,14 +98,17 @@ export function BottomSheet({ visible, onClose, snapPoints, title, children }: B
       handleIndicatorStyle={[styles.handle, { backgroundColor: colors.border }]}
       backgroundStyle={[styles.background, { backgroundColor: colors.card }]}
     >
-      <BottomSheetView style={styles.content} accessibilityViewIsModal>
-        {title ? (
-          <Text variant="subtitle" style={styles.title}>
-            {title}
-          </Text>
-        ) : null}
-        {children}
-      </BottomSheetView>
+      {scrollable ? (
+        <BottomSheetScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+          {titleNode}
+          {children}
+        </BottomSheetScrollView>
+      ) : (
+        <BottomSheetView style={styles.content} accessibilityViewIsModal>
+          {titleNode}
+          {children}
+        </BottomSheetView>
+      )}
     </GorhomBottomSheet>
   );
 }

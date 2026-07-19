@@ -16,12 +16,15 @@ import { ActivityIndicator, FlatList, StyleSheet, View, type ListRenderItem } fr
 
 import { useFavorites } from '@features/favorites';
 import { EmptyState, ErrorState, type IconName } from '@/components/ui';
+import { useRefreshControl } from '@/shared';
 import { spacing, useColors } from '@/theme';
 
 import { toFavoriteTutor, toTutorCardData } from '../mappers';
 import type { TutorSummary } from '../types';
 import { TutorCard } from './TutorCard';
 import { TutorCardSkeletonList } from './TutorCardSkeleton';
+
+const noop = () => {};
 
 export type TutorResultsListProps = {
   tutors: TutorSummary[];
@@ -31,6 +34,9 @@ export type TutorResultsListProps = {
   onPressTutor: (id: string) => void;
   onEndReached?: () => void;
   isFetchingNextPage?: boolean;
+  /** Pull-to-refresh; omit both to leave the list without a `RefreshControl`. */
+  isRefetching?: boolean;
+  onRefresh?: () => void;
   emptyIcon?: IconName;
   emptyTitle: string;
   emptyDescription?: string;
@@ -48,6 +54,8 @@ export function TutorResultsList({
   onPressTutor,
   onEndReached,
   isFetchingNextPage = false,
+  isRefetching = false,
+  onRefresh,
   emptyIcon = 'search',
   emptyTitle,
   emptyDescription,
@@ -58,6 +66,9 @@ export function TutorResultsList({
 }: TutorResultsListProps) {
   const colors = useColors();
   const { isFavorite, toggle } = useFavorites();
+  // Always called (Rules of Hooks); the element is only wired up when the
+  // caller opts in by passing `onRefresh`.
+  const refreshControl = useRefreshControl(isRefetching, onRefresh ?? noop);
 
   const renderItem = useCallback<ListRenderItem<TutorSummary>>(
     ({ item }) => (
@@ -113,6 +124,7 @@ export function TutorResultsList({
       contentContainerStyle={styles.content}
       ItemSeparatorComponent={ItemSeparator}
       showsVerticalScrollIndicator={false}
+      refreshControl={onRefresh ? refreshControl : undefined}
     />
   );
 }

@@ -78,6 +78,7 @@ export function TutorSearchScreen({
     total,
     isLoading,
     isError,
+    isRefetching,
     isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
@@ -169,6 +170,8 @@ export function TutorSearchScreen({
           }
         }}
         isFetchingNextPage={isFetchingNextPage}
+        isRefetching={isRefetching}
+        onRefresh={refetch}
         emptyIcon="search"
         emptyTitle={t('tutors.search.emptyTitle')}
         emptyDescription={t('tutors.search.emptyDescription')}

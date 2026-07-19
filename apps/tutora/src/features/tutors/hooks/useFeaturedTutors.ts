@@ -16,6 +16,7 @@ export type UseFeaturedTutorsResult = {
   tutors: TutorSummary[];
   isLoading: boolean;
   isError: boolean;
+  isRefetching: boolean;
   refetch: () => void;
 };
 
@@ -29,6 +30,7 @@ export function useFeaturedTutors(): UseFeaturedTutorsResult {
     tutors: query.data?.data ?? [],
     isLoading: query.isLoading,
     isError: query.isError,
+    isRefetching: query.isRefetching,
     refetch: () => void query.refetch(),
   };
 }

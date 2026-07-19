@@ -31,7 +31,7 @@ export function TutorProfileHero({ tutor }: TutorProfileHeroProps) {
       <Avatar uri={tutor.avatarUrl} name={tutor.name} size={96} />
 
       <View style={styles.nameRow}>
-        <Text variant="title" align="center">
+        <Text variant="title" align="center" numberOfLines={1} style={styles.name}>
           {displayName}
         </Text>
         {isVerified ? <VerificationBadge showLabel /> : null}
@@ -76,6 +76,11 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
     flexWrap: 'wrap',
     justifyContent: 'center',
+    alignSelf: 'stretch',
+    maxWidth: '100%',
+  },
+  name: {
+    flexShrink: 1,
   },
   stats: {
     flexDirection: 'row',

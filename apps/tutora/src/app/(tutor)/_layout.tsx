@@ -1,18 +1,20 @@
 /**
- * `(tutor)` route group — the tutor tab shell (tutor epic #51).
+ * `(tutor)` route group — the tutor tab shell (tutor epic #51; messages #171/#179).
  *
  * Guards the whole group in one place, exactly like the student shell: hold on a
  * loader while the session restores, then `resolveLandingRoute` redirects any
  * non-tutor destination away, so every tab underneath can assume an authenticated
- * tutor. Renders the three-tab bottom navigator (Dashboard · Applications ·
- * Profile), themed from design tokens and localized. Tab route names stay distinct
- * from the student group's (`account`, not `profile`) so the flat URLs never clash.
+ * tutor. Renders the four-tab bottom navigator (Dashboard · Applications ·
+ * Messages · Profile), themed from design tokens and localized. Tab route names
+ * stay distinct from the student group's (`account`, not `profile`) so the flat
+ * URLs never clash.
  */
 import { Redirect, Tabs } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
 import { Icon, type IconName } from '@/components/ui';
 import { useAuth } from '@features/auth';
+import { MessagesTabIcon } from '@features/chat';
 import { ROUTES, ScreenLoader, resolveLandingRoute } from '@/shared';
 import { useColors } from '@/theme';
 
@@ -25,6 +27,7 @@ type TutorTab = {
 const TABS: TutorTab[] = [
   { name: 'dashboard', icon: 'home', labelKey: 'tutor.tabs.dashboard' },
   { name: 'applications', icon: 'inbox', labelKey: 'tutor.tabs.applications' },
+  { name: 'messages', icon: 'message-circle', labelKey: 'tutor.tabs.messages' },
   { name: 'account', icon: 'user', labelKey: 'tutor.tabs.profile' },
 ];
 
@@ -60,9 +63,12 @@ export default function TutorLayout() {
           name={tab.name}
           options={{
             title: t(tab.labelKey),
-            tabBarIcon: ({ focused }) => (
-              <Icon name={tab.icon} size={24} color={focused ? 'primary' : 'muted'} />
-            ),
+            tabBarIcon: ({ focused }) =>
+              tab.name === 'messages' ? (
+                <MessagesTabIcon focused={focused} />
+              ) : (
+                <Icon name={tab.icon} size={24} color={focused ? 'primary' : 'muted'} />
+              ),
           }}
         />
       ))}

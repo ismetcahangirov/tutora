@@ -7,17 +7,19 @@
  * the four states explicitly: loading skeleton, "not found" (a 404 →
  * `TutorNotFoundError`), a generic error with retry, and success.
  *
- * The contact action is a placeholder toast until the chat surface (#47) and
- * applications land; it is wired here so the CTA is real, not dead.
+ * The contact CTA opens (or fetches) the real chat thread with this tutor and
+ * hands it to `onContact` for navigation; a caller with no active application
+ * gets a `NoActiveApplicationError`, surfaced as an error toast (#171/#173).
  */
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { type ChatThread, NoActiveApplicationError, useStartThreadWithTutor } from '@features/chat';
 import { FavoriteButton, useFavorites } from '@features/favorites';
 import { ReviewsPreview } from '@features/reviews';
 import { Button, EmptyState, ErrorState, LoadingState, Text, useToast } from '@/components/ui';
-import { formatPrice } from '@/shared';
+import { formatPrice, useRefreshControl } from '@/shared';
 import { spacing, useColors } from '@/theme';
 
 import { TutorNotFoundError } from '../api/tutors.api';
@@ -32,14 +34,18 @@ import { toFavoriteTutor } from '../mappers';
 export type TutorDetailScreenProps = {
   id: string;
   onBack: () => void;
+  /** Fires once the chat thread with this tutor is open, so the route can navigate. */
+  onContact: (thread: ChatThread) => void;
 };
 
-export function TutorDetailScreen({ id, onBack }: TutorDetailScreenProps) {
+export function TutorDetailScreen({ id, onBack, onContact }: TutorDetailScreenProps) {
   const { t } = useTranslation();
   const colors = useColors();
   const toast = useToast();
   const { isFavorite, toggle } = useFavorites();
-  const { data: tutor, isLoading, isError, error, refetch } = useTutorDetail(id);
+  const { data: tutor, isLoading, isError, error, isRefetching, refetch } = useTutorDetail(id);
+  const { startThread, isStarting } = useStartThreadWithTutor();
+  const refreshControl = useRefreshControl(isRefetching, () => void refetch());
 
   const header = (
     <TutorDetailHeader
@@ -87,15 +93,33 @@ export function TutorDetailScreen({ id, onBack }: TutorDetailScreenProps) {
     );
   }
 
-  const handleContact = () => {
-    toast.show({ message: t('tutors.detail.contactSoon'), type: 'info' });
+  const handleContact = async () => {
+    try {
+      const thread = await startThread(tutor.id);
+      onContact(thread);
+    } catch (contactError) {
+      toast.show({
+        message:
+          contactError instanceof NoActiveApplicationError
+            ? t('tutors.detail.contactNoApplication')
+            : t('tutors.detail.contactError'),
+        type: 'error',
+      });
+    }
   };
 
   return (
-    <SafeAreaView style={[styles.screen, { backgroundColor: colors.background }]} edges={['top']}>
+    <SafeAreaView
+      style={[styles.screen, { backgroundColor: colors.background }]}
+      edges={['top', 'bottom']}
+    >
       {header}
 
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+        refreshControl={refreshControl}
+      >
         <TutorProfileHero tutor={tutor} />
 
         {tutor.bio ? (
@@ -176,7 +200,8 @@ export function TutorDetailScreen({ id, onBack }: TutorDetailScreenProps) {
         <Button
           label={t('tutors.detail.contact')}
           leadingIcon="message-circle"
-          onPress={handleContact}
+          onPress={() => void handleContact()}
+          loading={isStarting}
           fullWidth
         />
       </View>

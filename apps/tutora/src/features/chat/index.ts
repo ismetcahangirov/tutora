@@ -11,5 +11,10 @@ export { ChatThreadScreen, type ChatThreadScreenProps } from './screens/ChatThre
 export { MessagesTabIcon, type MessagesTabIconProps } from './components/MessagesTabIcon';
 
 export { useUnreadCount, type UseUnreadCountResult } from './hooks/useUnreadCount';
+export {
+  useStartThreadWithTutor,
+  type UseStartThreadWithTutorResult,
+} from './hooks/useStartThreadWithTutor';
+export { NoActiveApplicationError } from './api/chat.api';
 
 export type { ChatThread, ChatMessage, ChatCounterpart } from './types';

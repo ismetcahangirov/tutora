@@ -170,7 +170,8 @@
       "reviews": "Reviews",
       "experienceYears": "years of experience",
       "contact": "Contact tutor",
-      "contactSoon": "Messaging is coming soon.",
+      "contactError": "Couldn’t start the conversation. Please try again.",
+      "contactNoApplication": "You can message a tutor once you have an application with them.",
       "errorTitle": "Couldn’t load this tutor",
       "notFoundTitle": "Tutor not found",
       "notFoundDescription": "This tutor may no longer be available."
@@ -291,6 +292,7 @@
     "tabs": {
       "dashboard": "Dashboard",
       "applications": "Applications",
+      "messages": "Messages",
       "profile": "Profile"
     },
     "dashboard": {

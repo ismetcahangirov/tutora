@@ -7,6 +7,7 @@
  */
 import { useLocalSearchParams, useRouter } from 'expo-router';
 
+import { type ChatThread } from '@features/chat';
 import { TutorDetailScreen } from '@features/tutors';
 
 export default function TutorDetailRoute() {
@@ -23,5 +24,16 @@ export default function TutorDetailRoute() {
     }
   };
 
-  return <TutorDetailScreen id={id ?? ''} onBack={handleBack} />;
+  const handleContact = (thread: ChatThread) => {
+    router.push({
+      pathname: '/chat/[id]',
+      params: {
+        id: thread.id,
+        name: thread.counterpart.name ?? '',
+        avatarUrl: thread.counterpart.avatarUrl ?? '',
+      },
+    });
+  };
+
+  return <TutorDetailScreen id={id ?? ''} onBack={handleBack} onContact={handleContact} />;
 }

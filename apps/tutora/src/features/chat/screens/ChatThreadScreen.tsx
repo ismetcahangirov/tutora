@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Avatar, Button, EmptyState, ErrorState, LoadingState, Text } from '@/components/ui';
-import { formatShortDate } from '@/shared';
+import { formatShortDate, useRefreshControl } from '@/shared';
 import { spacing, useColors } from '@/theme';
 
 import { DateSeparator } from '../components/DateSeparator';
@@ -45,10 +45,19 @@ export type ChatThreadScreenProps = {
 export function ChatThreadScreen({ threadId, title, avatarUrl, onBack }: ChatThreadScreenProps) {
   const { t } = useTranslation();
   const colors = useColors();
-  const { messages, isLoading, isError, isFetchingNextPage, hasNextPage, refetch, fetchNextPage } =
-    useThreadMessages(threadId);
+  const {
+    messages,
+    isLoading,
+    isError,
+    isRefetching,
+    isFetchingNextPage,
+    hasNextPage,
+    refetch,
+    fetchNextPage,
+  } = useThreadMessages(threadId);
   const { send, retry } = useSendMessage(threadId);
   const { markRead } = useMarkThreadRead(threadId);
+  const refreshControl = useRefreshControl(isRefetching, refetch);
 
   // Viewing a thread clears its unread messages. `markRead` is stable and the
   // screen mounts fresh per thread (route push), so this runs once on open.
@@ -122,6 +131,7 @@ export function ChatThreadScreen({ threadId, title, avatarUrl, onBack }: ChatThr
             showsVerticalScrollIndicator={false}
             onEndReached={handleEndReached}
             onEndReachedThreshold={0.4}
+            refreshControl={refreshControl}
             ListEmptyComponent={
               <EmptyState
                 icon="message-circle"

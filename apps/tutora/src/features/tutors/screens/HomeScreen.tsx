@@ -4,7 +4,8 @@
  * Three stacked sections: a tappable search prompt, quick subject filters (from
  * the taxonomy), and a preview of top-rated tutors. Navigation is injected so the
  * screen stays testable; favorite state is wired once here for the featured
- * cards. Each section owns its loading / error / empty treatment.
+ * cards. Each section owns its loading / error / empty treatment; pull-to-refresh
+ * re-reads both sources (#171/#175).
  */
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
@@ -14,6 +15,7 @@ import { useAuth } from '@features/auth';
 import { useFavorites } from '@features/favorites';
 import { useSubjects } from '@features/taxonomy';
 import { ErrorState, FilterChip, Icon, Skeleton, Text } from '@/components/ui';
+import { useRefreshControl } from '@/shared';
 import { radius, spacing, useColors } from '@/theme';
 
 import { TutorCard } from '../components/TutorCard';
@@ -34,13 +36,25 @@ export function HomeScreen({ onPressTutor, onPressSearch, onPressSubject }: Home
   const { user } = useAuth();
   const { isFavorite, toggle } = useFavorites();
 
-  const { data: subjects = [], isLoading: subjectsLoading } = useSubjects();
+  const {
+    data: subjects = [],
+    isLoading: subjectsLoading,
+    isRefetching: subjectsRefetching,
+    refetch: refetchSubjects,
+  } = useSubjects();
   const {
     tutors: featured,
     isLoading: featuredLoading,
     isError: featuredError,
+    isRefetching: featuredRefetching,
     refetch: refetchFeatured,
   } = useFeaturedTutors();
+
+  const handleRefresh = () => {
+    void refetchSubjects();
+    refetchFeatured();
+  };
+  const refreshControl = useRefreshControl(subjectsRefetching || featuredRefetching, handleRefresh);
 
   const firstName = user?.name?.trim().split(/\s+/)[0];
   const greeting = firstName
@@ -49,7 +63,11 @@ export function HomeScreen({ onPressTutor, onPressSearch, onPressSubject }: Home
 
   return (
     <SafeAreaView style={[styles.screen, { backgroundColor: colors.background }]} edges={['top']}>
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+        refreshControl={refreshControl}
+      >
         <View style={styles.header}>
           <Text variant="headline">{greeting}</Text>
           <Text variant="body" color="textSecondary">
