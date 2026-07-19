@@ -56,7 +56,7 @@ jobs:
       - name: Publish update
         working-directory: apps/tutora
         run: |
-          eas update --branch production --channel production \
+          eas update --channel production \
             --environment production --non-interactive \
             --message "$(git log -1 --pretty=%s)"
 
