@@ -1,7 +1,10 @@
 /**
- * chat API (#47) — the shared client is mocked; we assert the request shape
- * (endpoint + paging params) and the typed responses for every call.
+ * chat API (#47, #171/#173) — the shared client is mocked; we assert the request
+ * shape (endpoint + paging params), the typed responses for every call, and
+ * 403 → NoActiveApplicationError for opening a thread.
  */
+import { AxiosError, AxiosHeaders } from 'axios';
+
 import { apiClient } from '@/shared/lib';
 import type { Paginated } from '@/shared';
 import { CHAT_ENDPOINTS } from '@features/chat/constants';
@@ -12,8 +15,20 @@ import {
   listMessages,
   listThreads,
   markThreadRead,
+  NoActiveApplicationError,
   sendMessage,
+  startThreadWithTutor,
 } from '../chat.api';
+
+function forbidden(): AxiosError {
+  return new AxiosError('Forbidden', 'ERR_BAD_REQUEST', undefined, null, {
+    status: 403,
+    data: {},
+    statusText: '',
+    headers: {},
+    config: { headers: new AxiosHeaders() },
+  });
+}
 
 jest.mock('@/shared/lib', () => ({
   apiClient: { get: jest.fn(), post: jest.fn() },
@@ -109,5 +124,27 @@ describe('getUnreadCount', () => {
 
     await expect(getUnreadCount()).resolves.toEqual({ count: 5 });
     expect(mockedGet).toHaveBeenCalledWith(CHAT_ENDPOINTS.unreadCount);
+  });
+});
+
+describe('startThreadWithTutor (#171/#173)', () => {
+  it('posts the tutorId and returns the opened thread', async () => {
+    mockedPost.mockResolvedValueOnce({ data: thread });
+
+    await expect(startThreadWithTutor('tutor-1')).resolves.toEqual(thread);
+    expect(mockedPost).toHaveBeenCalledWith(CHAT_ENDPOINTS.threads, { tutorId: 'tutor-1' });
+  });
+
+  it('maps a 403 to NoActiveApplicationError', async () => {
+    mockedPost.mockRejectedValueOnce(forbidden());
+
+    await expect(startThreadWithTutor('tutor-1')).rejects.toBeInstanceOf(NoActiveApplicationError);
+  });
+
+  it('rethrows non-403 errors untouched', async () => {
+    const boom = new Error('network down');
+    mockedPost.mockRejectedValueOnce(boom);
+
+    await expect(startThreadWithTutor('tutor-1')).rejects.toBe(boom);
   });
 });

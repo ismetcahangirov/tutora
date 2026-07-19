@@ -170,7 +170,8 @@
       "reviews": "Rəylər",
       "experienceYears": "il təcrübə",
       "contact": "Repetitorla əlaqə",
-      "contactSoon": "Mesajlaşma tezliklə əlçatan olacaq.",
+      "contactError": "Söhbət başladıla bilmədi. Yenidən cəhd edin.",
+      "contactNoApplication": "Repetitora yalnız onunla müraciətiniz olduqda mesaj yaza bilərsiniz.",
       "errorTitle": "Bu repetitor yüklənmədi",
       "notFoundTitle": "Repetitor tapılmadı",
       "notFoundDescription": "Bu repetitor artıq əlçatan olmaya bilər."
@@ -291,6 +292,7 @@
     "tabs": {
       "dashboard": "Panel",
       "applications": "Müraciətlər",
+      "messages": "Mesajlar",
       "profile": "Profil"
     },
     "dashboard": {

@@ -37,6 +37,7 @@ function messagesResult(overrides: Partial<UseThreadMessagesResult>): UseThreadM
     messages: [],
     isLoading: false,
     isError: false,
+    isRefetching: false,
     isFetchingNextPage: false,
     hasNextPage: false,
     refetch: jest.fn(),

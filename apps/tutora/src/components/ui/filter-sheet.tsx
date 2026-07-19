@@ -75,7 +75,7 @@ export function FilterSheet({
   };
 
   return (
-    <BottomSheet visible={visible} onClose={onClose} title={title}>
+    <BottomSheet visible={visible} onClose={onClose} title={title} snapPoints={['75%']} scrollable>
       <View style={styles.sections}>
         {sections.map((section) => {
           const selected = value[section.key] ?? [];

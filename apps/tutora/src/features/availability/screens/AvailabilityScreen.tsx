@@ -15,6 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button, ErrorState, FilterChip, LoadingState, Text, useToast } from '@/components/ui';
 import { useMyTutorProfile } from '@features/tutor-profile';
+import { useRefreshControl } from '@/shared';
 import { spacing, useColors } from '@/theme';
 
 import { DayEditorSheet } from '../components/DayEditorSheet';
@@ -36,9 +37,10 @@ export function AvailabilityScreen({ onBack }: AvailabilityScreenProps) {
   const colors = useColors();
   const toast = useToast();
 
-  const { slots, isLoading, isError, refetch } = useAvailability();
+  const { slots, isLoading, isError, isRefetching, refetch } = useAvailability();
   const { save, isSaving } = useSetAvailability();
   const { profile } = useMyTutorProfile();
+  const refreshControl = useRefreshControl(isRefetching, refetch);
 
   const [editingWeekday, setEditingWeekday] = useState<Weekday | null>(null);
 
@@ -83,7 +85,11 @@ export function AvailabilityScreen({ onBack }: AvailabilityScreenProps) {
           onRetry={refetch}
         />
       ) : (
-        <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          contentContainerStyle={styles.content}
+          showsVerticalScrollIndicator={false}
+          refreshControl={refreshControl}
+        >
           <Text variant="body" color="textSecondary">
             {t('tutor.availability.subtitle')}
           </Text>

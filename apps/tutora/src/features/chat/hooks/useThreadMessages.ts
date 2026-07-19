@@ -19,6 +19,7 @@ export type UseThreadMessagesResult = {
   messages: ChatMessage[];
   isLoading: boolean;
   isError: boolean;
+  isRefetching: boolean;
   isFetchingNextPage: boolean;
   hasNextPage: boolean;
   refetch: () => void;
@@ -45,6 +46,7 @@ export function useThreadMessages(threadId: string): UseThreadMessagesResult {
     messages,
     isLoading: query.isLoading,
     isError: query.isError,
+    isRefetching: query.isRefetching,
     isFetchingNextPage: query.isFetchingNextPage,
     hasNextPage: query.hasNextPage,
     refetch: () => void query.refetch(),

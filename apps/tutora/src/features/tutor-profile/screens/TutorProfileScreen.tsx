@@ -15,6 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAuth } from '@features/auth';
 import { Avatar, Button, ErrorState, LoadingState, Text, useToast } from '@/components/ui';
+import { useRefreshControl } from '@/shared';
 import { LanguageSwitcher } from '@/shared/i18n';
 import { spacing, useColors } from '@/theme';
 
@@ -43,9 +44,10 @@ export function TutorProfileScreen({
   const toast = useToast();
   const { user, signOut } = useAuth();
 
-  const { profile, isLoading, isError, refetch } = useMyTutorProfile();
+  const { profile, isLoading, isError, isRefetching, refetch } = useMyTutorProfile();
   const { update, isUpdating } = useUpdateTutorProfile();
   const { submit, isSubmitting } = useSubmitTutorVerification();
+  const refreshControl = useRefreshControl(isRefetching, refetch);
 
   const runUpdate = async (input: UpdateTutorProfileInput, successKey: string) => {
     try {
@@ -85,6 +87,7 @@ export function TutorProfileScreen({
           contentContainerStyle={styles.content}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
+          refreshControl={refreshControl}
         >
           <View style={styles.header}>
             <Avatar uri={profile.avatarUrl} name={profile.name ?? user?.name ?? null} size={64} />

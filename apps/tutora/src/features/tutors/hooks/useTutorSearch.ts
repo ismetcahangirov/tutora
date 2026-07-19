@@ -20,6 +20,7 @@ export type UseTutorSearchResult = {
   total: number;
   isLoading: boolean;
   isError: boolean;
+  isRefetching: boolean;
   isFetchingNextPage: boolean;
   hasNextPage: boolean;
   refetch: () => void;
@@ -44,6 +45,7 @@ export function useTutorSearch(params: TutorSearchParams): UseTutorSearchResult 
     total,
     isLoading: query.isLoading,
     isError: query.isError,
+    isRefetching: query.isRefetching,
     isFetchingNextPage: query.isFetchingNextPage,
     hasNextPage: query.hasNextPage,
     refetch: () => void query.refetch(),

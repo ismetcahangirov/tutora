@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button, ErrorState, LoadingState, Modal, Text, useToast } from '@/components/ui';
-import { formatPrice } from '@/shared';
+import { formatPrice, useRefreshControl } from '@/shared';
 import { spacing, useColors } from '@/theme';
 
 import { CurrentSubscriptionCard } from '../components/CurrentSubscriptionCard';
@@ -47,6 +47,7 @@ export function SubscriptionScreen({ onBack }: SubscriptionScreenProps) {
 
   const isLoading = summary.isLoading || plans.isLoading;
   const isError = summary.isError || plans.isError;
+  const isRefetching = summary.isRefetching || plans.isRefetching || payments.isRefetching;
   const currentTier = summary.summary?.tier;
   const activeSubscription = summary.summary?.subscription ?? null;
 
@@ -55,6 +56,7 @@ export function SubscriptionScreen({ onBack }: SubscriptionScreenProps) {
     plans.refetch();
     payments.refetch();
   };
+  const refreshControl = useRefreshControl(isRefetching, retry);
 
   const closeSubscribe = () => {
     if (!isSubscribing) {
@@ -120,7 +122,11 @@ export function SubscriptionScreen({ onBack }: SubscriptionScreenProps) {
           onRetry={retry}
         />
       ) : (
-        <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          contentContainerStyle={styles.content}
+          showsVerticalScrollIndicator={false}
+          refreshControl={refreshControl}
+        >
           <Text variant="body" color="textSecondary">
             {t('tutor.subscription.subtitle')}
           </Text>
